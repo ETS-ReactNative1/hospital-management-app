@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'no-console': [1],
     'prefer-destructuring': [0],
+    'react/forbid-prop-types': [0],
     'react/jsx-filename-extension': [
       1,
       {

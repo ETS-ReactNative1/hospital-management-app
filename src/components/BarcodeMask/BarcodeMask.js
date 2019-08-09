@@ -3,6 +3,7 @@ import { Animated, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import styles from './BarcodeMaskStyles';
+import CustomButton from '../CustomButton/CustomButton';
 
 class BarcodeMask extends React.Component {
   constructor(props) {
@@ -98,7 +99,13 @@ class BarcodeMask extends React.Component {
     );
   };
 
+  onPressFlashOn = () => {
+    const { switchFlashState, flashState } = this.props;
+    switchFlashState(!flashState);
+  };
+
   render() {
+    // Icon.getImageSource('user', 20, 'red');
     return (
       <View style={[styles.container]}>
         <View
@@ -130,7 +137,13 @@ class BarcodeMask extends React.Component {
         </View>
 
         <View style={styles.maskOuter}>
-          <View style={[styles.maskRow, styles.maskFrame, this.applyMaskFrameTransparency()]} />
+          <View style={[styles.maskRow, styles.maskFrame, this.applyMaskFrameTransparency()]}>
+            <CustomButton
+              onPress={this.onPressFlashOn}
+              title={this.props.flashState ? 'Tắt flash' : 'Bật flash'}
+              iconName={this.props.flashState ? 'flash-off' : 'flash-on'}
+            />
+          </View>
           <View
             style={[{ height: this.props.height }, styles.maskCenter]}
             onLayout={this.onMaskCenterViewLayoutUpdated}
@@ -176,8 +189,8 @@ const defaultProps = {
   height: 250,
   edgeWidth: 30,
   edgeHeight: 30,
-  edgeColor: '#FFFFFF',
-  edgeBorderWidth: 3,
+  edgeColor: '#e3e3e3',
+  edgeBorderWidth: 2,
   transparency: 0.6,
   showAnimatedLine: true,
   animatedLineColor: '#FF0000',

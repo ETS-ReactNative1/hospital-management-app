@@ -12,23 +12,23 @@ const styles = StyleSheet.create({
   },
   topLeftEdge: {
     position: 'absolute',
-    top: 4,
-    left: 4
+    top: 8,
+    left: 8
   },
   topRightEdge: {
     position: 'absolute',
-    top: 4,
-    right: 4
+    top: 8,
+    right: 8
   },
   bottomLeftEdge: {
     position: 'absolute',
-    bottom: 4,
-    left: 4
+    bottom: 8,
+    left: 8
   },
   bottomRightEdge: {
     position: 'absolute',
-    bottom: 4,
-    right: 4
+    bottom: 8,
+    right: 8
   },
   maskOuter: {
     position: 'absolute',
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   maskFrame: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
     flex: 1
   },
   maskRow: {
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     textAlign: 'center',
     paddingTop: 8
-  }
+  },
+  flashButtonStyle: {}
 });
 
 export default styles;
