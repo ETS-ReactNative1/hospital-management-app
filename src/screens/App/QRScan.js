@@ -3,7 +3,7 @@ import { RNCamera } from 'react-native-camera';
 import { StyleSheet, Vibration, View } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 
-import BarcodeMask from '../components/BarcodeMask/BarcodeMask';
+import { BarcodeMask } from '../../components';
 
 const QRScanScreen = props => {
   const { isFocused } = props.navigation;

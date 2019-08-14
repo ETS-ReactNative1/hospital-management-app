@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './BarcodeMaskStyles';
 import CustomButton from '../CustomButton/CustomButton';
 
-class BarcodeMask extends React.Component {
+export default class BarcodeMask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,5 +201,3 @@ const defaultProps = {
 
 BarcodeMask.propTypes = propTypes;
 BarcodeMask.defaultProps = defaultProps;
-
-export default BarcodeMask;
