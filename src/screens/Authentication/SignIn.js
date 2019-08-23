@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation';
+
 import { GradientButton, Block, Input, Typography } from '../../components';
 import { theme } from '../../constants';
+import { SIGN_IN } from '../../utils/graphqlQuery';
 
 const VALID_EMAIL = 'long.nguyencong@bvquan11.com';
 const VALID_PASSWORD = 'subscribe';
@@ -13,10 +15,9 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: VALID_EMAIL,
-      password: VALID_PASSWORD,
-      errors: [],
-      loading: false
+      email: '',
+      password: '',
+      errors: []
     };
   }
 
@@ -26,7 +27,6 @@ export default class Login extends Component {
     const errors = [];
 
     Keyboard.dismiss();
-    this.setState({ loading: true });
 
     // check with backend API or with some static data
     if (email !== VALID_EMAIL) {
@@ -36,7 +36,7 @@ export default class Login extends Component {
       errors.push('password');
     }
 
-    this.setState({ errors, loading: false });
+    this.setState({ errors });
 
     if (!errors.length) {
       await AsyncStorage.setItem('userToken', 'somesupersecrettoken');
@@ -46,68 +46,96 @@ export default class Login extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { loading, errors } = this.state;
+    const { errors } = this.state;
     const hasErrors = key => (errors.includes(key) ? styles.hasErrors : null);
+    const { email, password } = this.state;
     return (
-      <Block padding={[0, theme.sizes.base * 2]}>
-        <Typography h1 bold>
-          Login
-        </Typography>
+      <Mutation mutation={SIGN_IN}>
+        {(signIn, { loading, error, data }) => {
+          if (data && data.signIn) {
+            AsyncStorage.setItem('userToken', data.signIn.token).then(() => {
+              this.props.navigation.navigate('App');
+            });
+          }
 
-        <KeyboardAvoidingView
-          style={styles.login}
-          behavior="padding"
-          keyboardVerticalOffset={Header.HEIGHT}
-        >
-          <Block middle>
-            <Input
-              label="Email"
-              error={hasErrors('email')}
-              style={[styles.input, hasErrors('email')]}
-              defaultValue={this.state.email}
-              onChangeText={text => this.setState({ email: text })}
-            />
-            <Input
-              secure
-              label="Password"
-              error={hasErrors('password')}
-              style={[styles.input, hasErrors('password')]}
-              defaultValue={this.state.password}
-              onChangeText={text => this.setState({ password: text })}
-            />
+          if (error) {
+            console.log(error); // Need to test to define what to do with error
+            errors.push(error);
+          }
 
-            <GradientButton gradient onPress={() => this.handleLogin()}>
-              {loading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Typography bold white center>
-                  Sign In
-                </Typography>
-              )}
-            </GradientButton>
-
-            <GradientButton
-              style={styles.forgotPasswordStyle}
-              onPress={() => navigation.navigate('ForgotPassword')}
-            >
-              <Typography gray caption center style={{ textDecorationLine: 'underline' }}>
-                Forgot your password?
+          return (
+            <Block padding={[0, theme.sizes.base * 2]}>
+              <Typography h1 bold>
+                Login
               </Typography>
-            </GradientButton>
-          </Block>
-        </KeyboardAvoidingView>
-        <Block style={styles.bottomBlock}>
-          <Typography black center style={styles.textStyle}>
-            {"Don't have an account?"}
-          </Typography>
 
-          <GradientButton border onPress={() => navigation.navigate('SignUp')}>
-            <Typography black bold center>
-              Sign Up
-            </Typography>
-          </GradientButton>
-        </Block>
-      </Block>
+              <KeyboardAvoidingView
+                style={styles.login}
+                behavior="padding"
+                keyboardVerticalOffset={Header.HEIGHT}
+              >
+                <Block middle>
+                  <Input
+                    label="Email"
+                    error={hasErrors('email')}
+                    style={[styles.input, hasErrors('email')]}
+                    defaultValue={this.state.email}
+                    onChangeText={text => this.setState({ email: text })}
+                  />
+                  <Input
+                    secure
+                    label="Password"
+                    error={hasErrors('password')}
+                    style={[styles.input, hasErrors('password')]}
+                    defaultValue={this.state.password}
+                    onChangeText={text => this.setState({ password: text })}
+                  />
+
+                  <GradientButton
+                    gradient
+                    onPress={() =>
+                      signIn({
+                        variables: {
+                          email,
+                          password
+                        }
+                      })
+                    }
+                  >
+                    {loading ? (
+                      <ActivityIndicator size="small" color="white" />
+                    ) : (
+                      <Typography bold white center>
+                        Sign In
+                      </Typography>
+                    )}
+                  </GradientButton>
+
+                  <GradientButton
+                    style={styles.forgotPasswordStyle}
+                    onPress={() => navigation.navigate('ForgotPassword')}
+                  >
+                    <Typography gray caption center style={{ textDecorationLine: 'underline' }}>
+                      Forgot your password?
+                    </Typography>
+                  </GradientButton>
+                </Block>
+              </KeyboardAvoidingView>
+              <Block style={styles.bottomBlock}>
+                <Typography black center style={styles.textStyle}>
+                  {"Don't have an account?"}
+                </Typography>
+
+                <GradientButton border onPress={() => navigation.navigate('SignUp')}>
+                  <Typography black bold center>
+                    Sign Up
+                  </Typography>
+                </GradientButton>
+              </Block>
+            </Block>
+          );
+        }}
+      </Mutation>
     );
   }
 }
