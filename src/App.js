@@ -1,13 +1,32 @@
 import React from 'react';
 import { Platform, StatusBar } from 'react-native';
-import ApolloClient from 'apollo-boost';
+import { ApolloClient } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import AsyncStorage from '@react-native-community/async-storage';
+import { setContext } from 'apollo-link-context';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import Navigation from './navigation';
 import { Block } from './components';
 
+const httpLink = createHttpLink({
+  uri: 'http://192.168.1.9:8000/graphql'
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem('userToken');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
+
 const client = new ApolloClient({
-  uri: 'http://10.0.2.2:8000/graphql'
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
 });
 
 export default class App extends React.Component {

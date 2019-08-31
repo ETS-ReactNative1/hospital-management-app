@@ -8,40 +8,44 @@ import { GradientButton, Block, Input, Typography } from '../../components';
 import { theme } from '../../constants';
 import { SIGN_IN } from '../../utils/graphqlQuery';
 
-const VALID_EMAIL = 'long.nguyencong@bvquan11.com';
-const VALID_PASSWORD = 'subscribe';
+// const VALID_EMAIL = 'long.nguyencong@bvquan11.com';
+// const VALID_PASSWORD = 'subscribe';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: null,
+      password: null,
       errors: []
     };
   }
 
-  handleLogin = async () => {
+  handleSignIn = async data => {
     const { navigation } = this.props;
     const { email, password } = this.state;
     const errors = [];
 
-    Keyboard.dismiss();
-
     // check with backend API or with some static data
-    if (email !== VALID_EMAIL) {
-      errors.push('email');
-    }
-    if (password !== VALID_PASSWORD) {
-      errors.push('password');
-    }
+    if (!email) errors.push('email');
+    if (!password) errors.push('password');
 
     this.setState({ errors });
 
-    if (!errors.length) {
-      await AsyncStorage.setItem('userToken', 'somesupersecrettoken');
+    if (!errors.length && data && data.signIn) {
+      await AsyncStorage.setItem('userToken', data.signIn.token);
       navigation.navigate('App');
     }
+  };
+
+  handleSignInError = error => {
+    const errors = [];
+    if (error) {
+      console.log(error); // Need to test to define what to do with error
+      errors.push(error);
+    }
+
+    this.setState({ errors });
   };
 
   render() {
@@ -50,19 +54,13 @@ export default class Login extends Component {
     const hasErrors = key => (errors.includes(key) ? styles.hasErrors : null);
     const { email, password } = this.state;
     return (
-      <Mutation mutation={SIGN_IN}>
-        {(signIn, { loading, error, data }) => {
-          if (data && data.signIn) {
-            AsyncStorage.setItem('userToken', data.signIn.token).then(() => {
-              this.props.navigation.navigate('App');
-            });
-          }
-
-          if (error) {
-            console.log(error); // Need to test to define what to do with error
-            errors.push(error);
-          }
-
+      <Mutation
+        mutation={SIGN_IN}
+        variables={{ email, password }}
+        onCompleted={data => this.handleSignIn(data)}
+        onError={error => this.handleSignInError(error)}
+      >
+        {(signIn, { loading }) => {
           return (
             <Block padding={[0, theme.sizes.base * 2]}>
               <Typography h1 bold>
@@ -93,14 +91,10 @@ export default class Login extends Component {
 
                   <GradientButton
                     gradient
-                    onPress={() =>
-                      signIn({
-                        variables: {
-                          email,
-                          password
-                        }
-                      })
-                    }
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      signIn();
+                    }}
                   >
                     {loading ? (
                       <ActivityIndicator size="small" color="white" />

@@ -3,10 +3,10 @@ module.exports = {
     {
       files: ['.prettierrc', '.babelrc', '.eslintrc', '.stylelintrc'],
       options: {
-        parser: 'json'
-      }
-    }
+        parser: 'json',
+      },
+    },
   ],
   singleQuote: true,
-  printWidth: 100
+  printWidth: 100,
 };

@@ -19,7 +19,7 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'no-console': [1],
+    'no-console': [0],
     'prefer-destructuring': [0],
     'react/forbid-prop-types': [0],
     'react/jsx-filename-extension': [
@@ -31,7 +31,7 @@ module.exports = {
     'react/prefer-stateless-function': [0],
     'react/destructuring-assignment': [0],
     'react/prop-types': [0],
-    'no-underscore-dangle':[0],
+    'no-underscore-dangle': [0],
     'import/prefer-default-export': [0],
     'no-use-before-define': [
       'error',

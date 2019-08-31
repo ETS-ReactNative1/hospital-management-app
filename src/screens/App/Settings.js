@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 // import all the basic component we have used
 
 export default class SettingsScreen extends React.Component {
-  _signOutAsync = async () => {
+  signOutAsync = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   };
@@ -14,7 +14,7 @@ export default class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button title="Sign out" onPress={this._signOutAsync} />
+        <Button title="Sign out" onPress={this.signOutAsync} />
       </View>
     );
   }
