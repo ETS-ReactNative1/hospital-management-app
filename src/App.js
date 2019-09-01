@@ -11,7 +11,7 @@ import Navigation from './navigation';
 import { Block } from './components';
 
 const httpLink = createHttpLink({
-  uri: 'http://192.168.1.9:8000/graphql'
+  uri: 'https://hospital-management-2019.appspot.com/graphql'
 });
 
 const authLink = setContext(async (_, { headers }) => {
