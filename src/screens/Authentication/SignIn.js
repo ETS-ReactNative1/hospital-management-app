@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Mutation } from 'react-apollo';
-import { Header } from 'react-navigation';
+import { Header } from 'react-navigation-stack';
 
 import { GradientButton, Block, Input, Typography } from '../../components';
 import { theme } from '../../constants';

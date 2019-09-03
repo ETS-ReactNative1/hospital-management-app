@@ -1,12 +1,8 @@
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import {
-  createStackNavigator,
-  createBottomTabNavigator,
-  createAppContainer,
-  createSwitchNavigator
-} from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import SignIn from '../screens/Authentication/SignIn';
 import ForgotPassword from '../screens/Authentication/ForgotPassword';
