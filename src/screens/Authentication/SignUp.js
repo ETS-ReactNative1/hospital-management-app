@@ -8,12 +8,15 @@ import { theme } from '../../constants';
 import { SIGN_UP } from '../../utils/graphqlQuery';
 
 export default class SignUp extends Component {
-  state = {
-    email: null,
-    password: null,
-    // passwordConfirm: null,
-    errors: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: null,
+      password: null,
+      // passwordConfirm: null,
+      errors: []
+    };
+  }
 
   handleSignUp = async data => {
     const { navigation } = this.props;
