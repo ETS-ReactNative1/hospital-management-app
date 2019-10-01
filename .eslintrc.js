@@ -13,13 +13,15 @@ module.exports = {
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
+      experimentalObjectRestSpread: true
     },
     ecmaVersion: 2018,
     sourceType: 'module'
   },
   rules: {
     'no-console': [0],
+    'no-unused-vars': 1,
     'prefer-destructuring': [0],
     'react/forbid-prop-types': [0],
     'react/jsx-filename-extension': [
@@ -32,9 +34,11 @@ module.exports = {
     'react/destructuring-assignment': [0],
     'react/prop-types': [0],
     'no-underscore-dangle': [0],
+    'no-shadow': 0,
+    'no-unused-expressions': 0,
     'import/prefer-default-export': [0],
     'no-use-before-define': [
-      'error',
+      0,
       {
         functions: false,
         classes: false,
@@ -49,6 +53,9 @@ module.exports = {
         printWidth: 100
       }
     ]
+  },
+  globals: {
+    fetch: false
   },
   plugins: ['prettier']
 };

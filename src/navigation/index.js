@@ -6,7 +6,6 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import SignIn from '../screens/Authentication/SignIn';
 import ForgotPassword from '../screens/Authentication/ForgotPassword';
-import AuthLoading from '../screens/Authentication/AuthLoading';
 import SignUp from '../screens/Authentication/SignUp';
 import Settings from '../screens/App/Settings';
 import QRScan from '../screens/App/QRScan';
@@ -65,12 +64,11 @@ const AuthStack = createStackNavigator(
 
 const App = createSwitchNavigator(
   {
-    AuthLoading,
     Auth: AuthStack,
     App: AppStack
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: 'Auth'
   }
 );
 

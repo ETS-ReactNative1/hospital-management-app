@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { GradientButton, Block, Input, Typography } from '../../components';
 import { theme } from '../../constants';
-import { SIGN_UP } from '../../utils/graphqlQuery';
+import { SIGN_UP } from '../../utils/graphqlMutations';
 
 export default class SignUp extends Component {
   constructor(props) {

@@ -18,6 +18,13 @@ export default class BarcodeMask extends React.Component {
     this.startLineAnimation();
   }
 
+  componentDidUpdate(prevProps) {
+    const { showAnimatedLine } = this.props;
+    if (showAnimatedLine !== prevProps.showAnimatedLine && showAnimatedLine) {
+      this.startLineAnimation();
+    }
+  }
+
   componentWillUnmount() {
     if (this.animation) {
       this.animation.stop();
@@ -105,7 +112,6 @@ export default class BarcodeMask extends React.Component {
   };
 
   render() {
-    // Icon.getImageSource('user', 20, 'red');
     return (
       <View style={[styles.container]}>
         <View
@@ -122,7 +128,7 @@ export default class BarcodeMask extends React.Component {
           {this.renderEdge('bottomLeft')}
           {this.renderEdge('bottomRight')}
 
-          {this.props.showAnimatedLine && (
+          {this.props.showAnimatedLine ? (
             <Animated.View
               style={[
                 styles.animatedLine,
@@ -133,7 +139,7 @@ export default class BarcodeMask extends React.Component {
                 }
               ]}
             />
-          )}
+          ) : null}
         </View>
 
         <View style={styles.maskOuter}>

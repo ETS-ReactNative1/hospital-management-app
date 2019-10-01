@@ -2,20 +2,27 @@
 import React from 'react';
 // import react in our code.
 import { Button, View } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { useMutation } from 'react-apollo';
+import { setAccessToken } from '../../utils/accessToken';
+import { SIGN_OUT } from '../../utils/graphqlMutations';
 // import all the basic component we have used
 
-export default class SettingsScreen extends React.Component {
-  signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
+const SettingsScreen = props => {
+  const [signOut, { client }] = useMutation(SIGN_OUT);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setAccessToken('');
+
+    props.navigation.navigate('Auth');
+    await client.resetStore();
   };
 
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button title="Sign out" onPress={this.signOutAsync} />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title="Sign out" onPress={handleSignOut} />
+    </View>
+  );
+};
+
+export default SettingsScreen;

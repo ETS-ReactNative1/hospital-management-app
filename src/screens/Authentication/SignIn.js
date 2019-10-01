@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
 
 import { GradientButton, Block, Input, Typography } from '../../components';
 import { theme } from '../../constants';
-import { SIGN_IN } from '../../utils/graphqlQuery';
+import { SIGN_IN } from '../../utils/graphqlMutations';
+import { setAccessToken, getAccessToken } from '../../utils/accessToken';
 
 // const VALID_EMAIL = 'long.nguyencong@bvquan11.com';
 // const VALID_PASSWORD = 'subscribe';
@@ -19,6 +19,11 @@ export default class Login extends Component {
       password: null,
       errors: []
     };
+    const accessToken = getAccessToken();
+
+    if (accessToken) {
+      props.navigation.navigate('App');
+    }
   }
 
   handleSignIn = async data => {
@@ -33,7 +38,8 @@ export default class Login extends Component {
     this.setState({ errors });
 
     if (!errors.length && data && data.signIn) {
-      await AsyncStorage.setItem('userToken', data.signIn.token);
+      console.log(data.signIn.accessToken);
+      setAccessToken(data.signIn.accessToken);
       navigation.navigate('App');
     }
   };
