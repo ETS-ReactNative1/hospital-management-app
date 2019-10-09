@@ -22,6 +22,8 @@ module.exports = {
   rules: {
     'no-console': [0],
     'no-unused-vars': 1,
+    'no-useless-rename': [1, { ignoreDestructuring: true }],
+    'react/jsx-props-no-spreading': 0,
     'prefer-destructuring': [0],
     'react/forbid-prop-types': [0],
     'react/jsx-filename-extension': [

@@ -38,7 +38,6 @@ export default class Login extends Component {
     this.setState({ errors });
 
     if (!errors.length && data && data.signIn) {
-      console.log(data.signIn.accessToken);
       setAccessToken(data.signIn.accessToken);
       navigation.navigate('App');
     }
@@ -70,7 +69,7 @@ export default class Login extends Component {
           return (
             <Block padding={[0, theme.sizes.base * 2]}>
               <Typography h1 bold>
-                Login
+                Đăng nhập
               </Typography>
 
               <KeyboardAvoidingView
@@ -83,15 +82,15 @@ export default class Login extends Component {
                     label="Email"
                     error={hasErrors('email')}
                     style={[styles.input, hasErrors('email')]}
-                    defaultValue={this.state.email}
+                    placeholder={this.state.email}
                     onChangeText={text => this.setState({ email: text })}
                   />
                   <Input
                     secure
-                    label="Password"
+                    label="Mật khẩu"
                     error={hasErrors('password')}
                     style={[styles.input, hasErrors('password')]}
-                    defaultValue={this.state.password}
+                    placeholder={this.state.password}
                     onChangeText={text => this.setState({ password: text })}
                   />
 
@@ -106,7 +105,7 @@ export default class Login extends Component {
                       <ActivityIndicator size="small" color="white" />
                     ) : (
                       <Typography bold white center>
-                        Sign In
+                        Đăng nhập
                       </Typography>
                     )}
                   </GradientButton>
@@ -116,19 +115,19 @@ export default class Login extends Component {
                     onPress={() => navigation.navigate('ForgotPassword')}
                   >
                     <Typography gray caption center style={{ textDecorationLine: 'underline' }}>
-                      Forgot your password?
+                      Quên mật khẩu?
                     </Typography>
                   </GradientButton>
                 </Block>
               </KeyboardAvoidingView>
               <Block style={styles.bottomBlock}>
                 <Typography black center style={styles.textStyle}>
-                  {"Don't have an account?"}
+                  {'Chưa có tài khoản?'}
                 </Typography>
 
                 <GradientButton border onPress={() => navigation.navigate('SignUp')}>
                   <Typography black bold center>
-                    Sign Up
+                    Đăng ký
                   </Typography>
                 </GradientButton>
               </Block>

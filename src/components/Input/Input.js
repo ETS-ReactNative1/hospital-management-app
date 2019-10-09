@@ -21,7 +21,7 @@ export default class Input extends Component {
     return (
       <Block flex={false}>
         {label ? (
-          <Typography gray2={!error} accent={error}>
+          <Typography gray={!error} accent={error}>
             {label}
           </Typography>
         ) : null}

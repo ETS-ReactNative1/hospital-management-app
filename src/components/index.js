@@ -1,8 +1,25 @@
-import BarcodeMask from './BarcodeMask/BarcodeMask';
-import Block from './Block/Block';
-import CustomButton from './CustomButton/CustomButton';
-import GradientButton from './GradientButton/GradientButton';
+import Badge from './Badge';
+import BarcodeMask from './BarcodeMask';
+import Block from './Block';
+import Card from './Card';
+import CustomButton from './CustomButton';
+import Divider from './Divider';
+import GradientButton from './GradientButton';
 import Input from './Input/Input';
-import Typography from './Typography/Typography';
+import Progress from './Progress';
+import Switch from './Switch';
+import Typography from './Typography';
 
-export { BarcodeMask, Block, CustomButton, GradientButton, Input, Typography };
+export {
+  Badge,
+  BarcodeMask,
+  Block,
+  Card,
+  CustomButton,
+  Divider,
+  GradientButton,
+  Input,
+  Progress,
+  Switch,
+  Typography
+};
