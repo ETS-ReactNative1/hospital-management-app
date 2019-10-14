@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -14,6 +14,7 @@ export default class Input extends Component {
     this.state = {
       toggleSecure: false
     };
+    this.textInputRef = createRef();
   }
 
   renderLabel() {
@@ -93,6 +94,7 @@ export default class Input extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={inputType}
+          ref={this.textInputRef}
           {...props}
         />
         {this.renderToggle()}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
@@ -19,6 +19,7 @@ export default class Login extends Component {
       password: null,
       errors: []
     };
+    this.passwordRef = createRef();
     const accessToken = getAccessToken();
 
     if (accessToken) {
@@ -82,16 +83,16 @@ export default class Login extends Component {
                     label="Email"
                     error={hasErrors('email')}
                     style={[styles.input, hasErrors('email')]}
-                    placeholder={this.state.email}
                     onChangeText={text => this.setState({ email: text })}
+                    onSubmitEditing={() => this.passwordRef.current.textInputRef.current.focus()}
                   />
                   <Input
                     secure
                     label="Mật khẩu"
                     error={hasErrors('password')}
                     style={[styles.input, hasErrors('password')]}
-                    placeholder={this.state.password}
                     onChangeText={text => this.setState({ password: text })}
+                    ref={this.passwordRef}
                   />
 
                   <GradientButton
