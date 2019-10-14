@@ -82,7 +82,6 @@ export default class Login extends Component {
                     label="Email"
                     error={hasErrors('email')}
                     style={[styles.input, hasErrors('email')]}
-                    placeholder={this.state.email}
                     onChangeText={text => this.setState({ email: text })}
                   />
                   <Input
@@ -90,7 +89,6 @@ export default class Login extends Component {
                     label="Mật khẩu"
                     error={hasErrors('password')}
                     style={[styles.input, hasErrors('password')]}
-                    placeholder={this.state.password}
                     onChangeText={text => this.setState({ password: text })}
                   />
 
