@@ -22,6 +22,8 @@ validate.validators = {
   ...validate.validators,
   ...validators
 };
+validate.validators.email.PATTERN = /^([\w-\.]+@[\w-]+\.+[\w-]{2,5})?$/;
+validate.validators.email.message = '^Email không hợp lệ';
 
 const styles = StyleSheet.create({
   container: {
@@ -144,7 +146,7 @@ const App = () => {
   }
 
   return (
-    <Block white>
+    <Block>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <ApolloProvider client={client}>
         <Navigation />

@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
   gray: { backgroundColor: theme.colors.gray },
   gray2: { backgroundColor: theme.colors.gray2 },
   gray3: { backgroundColor: theme.colors.gray3 },
-  gray4: { backgroundColor: theme.colors.gray4 }
+  gray4: { backgroundColor: theme.colors.gray4 },
+  error: { backgroundColor: theme.colors.error }
 });
 
 export default styles;

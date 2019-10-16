@@ -1,6 +1,6 @@
 const checked = (value, options) => {
   if (value !== true) {
-    return options.message || 'must be checked';
+    return options.message || 'phải được xác nhận';
   }
 
   return true;

@@ -42,6 +42,7 @@ module.exports = {
     'no-unused-expressions': 0,
     'global-require': 0,
     'import/prefer-default-export': [0],
+    'no-useless-escape': 0,
     'no-use-before-define': [
       0,
       {

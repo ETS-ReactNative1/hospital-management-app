@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   white: { color: theme.colors.white },
   gray: { color: theme.colors.gray },
   gray2: { color: theme.colors.gray2 },
+  error: { color: theme.colors.error },
   // fonts
   h1: theme.fonts.h1,
   h2: theme.fonts.h2,

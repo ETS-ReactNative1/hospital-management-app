@@ -28,9 +28,9 @@ export const SIGN_OUT = gql`
   }
 `;
 
-export const SEND_FORGOT_PASSWORD_EMAIL = gql`
-  mutation SendForgotPasswordEmail($email: String!) {
-    sendForgotPasswordEmail(email: $email)
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
   }
 `;
 

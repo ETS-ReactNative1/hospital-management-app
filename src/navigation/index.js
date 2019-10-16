@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image } from 'react-native';
+// import React from 'react';
+// import { Image } from 'react-native';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 // import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -44,6 +44,12 @@ const AuthStack = createStackNavigator(
   { SignIn, SignUp, ForgotPassword },
   {
     defaultNavigationOptions: {
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        paddingLeft: theme.sizes.base,
+        paddingRight: theme.sizes.base,
+        fontSize: theme.sizes.h1
+      },
       headerStyle: {
         height: theme.sizes.base * 4,
         backgroundColor: theme.colors.white, // or 'white
