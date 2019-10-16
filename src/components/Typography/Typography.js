@@ -40,6 +40,7 @@ export default class Typography extends Component {
       gray2,
       style,
       children,
+      error,
       ...props
     } = this.props;
 
@@ -76,6 +77,7 @@ export default class Typography extends Component {
       white && styles.white,
       gray && styles.gray,
       gray2 && styles.gray2,
+      error && styles.error,
       style // rewrite predefined styles
     ];
 

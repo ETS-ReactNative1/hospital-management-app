@@ -8,11 +8,22 @@ import { onError } from 'apollo-link-error';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import jwtDecode from 'jwt-decode';
+import validate from 'validate.js';
 
 import Navigation from './navigation';
 import { Block } from './components';
 import { URL } from './constants/config';
 import { getAccessToken, setAccessToken } from './utils/accessToken';
+import validators from './utils/validators';
+
+//TODO: Implement redux to manage global state through this tutorial: https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b
+
+validate.validators = {
+  ...validate.validators,
+  ...validators
+};
+validate.validators.email.PATTERN = /^([\w-\.]+@[\w-]+\.+[\w-]{2,5})?$/;
+validate.validators.email.message = '^Email không hợp lệ';
 
 const styles = StyleSheet.create({
   container: {
@@ -135,7 +146,7 @@ const App = () => {
   }
 
   return (
-    <Block white>
+    <Block>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <ApolloProvider client={client}>
         <Navigation />

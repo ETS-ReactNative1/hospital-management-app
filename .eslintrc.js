@@ -35,10 +35,14 @@ module.exports = {
     'react/prefer-stateless-function': [0],
     'react/destructuring-assignment': [0],
     'react/prop-types': [0],
+    'react/no-unused-state': [1],
+    'spaced-comment': 0,
     'no-underscore-dangle': [0],
     'no-shadow': 0,
     'no-unused-expressions': 0,
+    'global-require': 0,
     'import/prefer-default-export': [0],
+    'no-useless-escape': 0,
     'no-use-before-define': [
       0,
       {

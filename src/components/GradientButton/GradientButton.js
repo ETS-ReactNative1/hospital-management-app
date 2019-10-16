@@ -20,6 +20,7 @@ class GradientButton extends Component {
       locations,
       shadow,
       children,
+      disabled,
       ...props
     } = this.props;
 
