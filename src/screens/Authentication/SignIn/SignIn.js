@@ -8,7 +8,7 @@ import styles from './SignInStyles';
 import { GradientButton, Block, Input, Typography } from '../../../components';
 import { theme } from '../../../constants';
 import { SIGN_IN } from '../../../utils/graphqlMutations';
-import { setAccessToken, getAccessToken } from '../../../utils/accessToken';
+import AppData from '../../../AppData';
 
 const schema = {
   email: {
@@ -41,10 +41,8 @@ export default class Login extends Component {
       touched: {},
       errors: {}
     };
-    this.passwordRef = createRef();
-    const accessToken = getAccessToken();
-
-    if (accessToken) {
+    this.passwordRef  = createRef();
+    if (AppData.getAccessToken()) {
       props.navigation.navigate('App');
     }
   }
@@ -52,7 +50,7 @@ export default class Login extends Component {
   handleSignInCompleted = async data => {
     const { navigation } = this.props;
 
-    setAccessToken(data.signIn.accessToken);
+    AppData.setAccessToken(data.signIn.accessToken);
     navigation.navigate('App');
   };
 
@@ -82,7 +80,6 @@ export default class Login extends Component {
   };
 
   handleEndEditing = name => {
-    console.log('endEditing');
     const { touched } = this.state;
 
     this.setState({

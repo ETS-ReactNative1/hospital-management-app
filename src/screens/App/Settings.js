@@ -3,7 +3,7 @@ import React from 'react';
 // import react in our code.
 import { Button, View } from 'react-native';
 import { useMutation } from 'react-apollo';
-import { setAccessToken } from '../../utils/accessToken';
+import AppData from '../../AppData';
 import { SIGN_OUT } from '../../utils/graphqlMutations';
 // import all the basic component we have used
 
@@ -12,7 +12,7 @@ const SettingsScreen = props => {
 
   const handleSignOut = async () => {
     await signOut();
-    setAccessToken('');
+    AppData.setAccessToken('');
 
     props.navigation.navigate('Auth');
     await client.resetStore();
