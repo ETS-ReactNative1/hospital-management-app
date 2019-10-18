@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
-import validate from 'validate.js';
 
+import styles from './ForgotPasswordStyles';
 import { GradientButton, Block, Input, Typography } from '../../../components';
 import { theme } from '../../../constants';
-import styles from './ForgotPasswordStyles';
 import { FORGOT_PASSWORD } from '../../../utils/graphqlMutations';
+import validate from '../../../utils/validateOverride';
 
 const schema = {
   email: {

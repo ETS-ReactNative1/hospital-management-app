@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
-import validate from 'validate.js';
+import validate from '../../../utils/validateOverride';
 
 import { GradientButton, Block, Input, Typography } from '../../../components';
 import { theme } from '../../../constants';

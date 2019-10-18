@@ -2,20 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { Block } from './components';
-import { graphqlClient } from './utils';
+import graphqlClient from './utils/graphqlClient';
 import AppData from './AppData';
 import Navigation from './screens';
 
 //TODO: Implement redux to manage global state through this tutorial: https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b
-import validate from 'validate.js';
-import validators from './utils/validators';
-validate.validators = {
-  ...validate.validators,
-  ...validators
-};
-validate.validators.email.PATTERN = /^([\w-\.]+@[\w-]+\.+[\w-]{2,5})?$/;
-validate.validators.email.message = '^Email không hợp lệ';
-//------------------
 
 const App = () => {
   const [loading, setLoading] = useState(true);
