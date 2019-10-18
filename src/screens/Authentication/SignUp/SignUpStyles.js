@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../../../constants';
+import { theme } from 'src/constants';
 
 export default StyleSheet.create({
   signup: {

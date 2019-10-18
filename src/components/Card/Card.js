@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { theme } from '../../constants';
+import { theme } from 'src/constants';
 import Block from '../Block';
 import styles from './CardStyles';
 

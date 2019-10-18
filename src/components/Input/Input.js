@@ -6,7 +6,7 @@ import styles from './InputStyles';
 import Typography from '../Typography/Typography';
 import Block from '../Block/Block';
 import GradientButton from '../GradientButton/GradientButton';
-import { theme } from '../../constants';
+import { theme } from 'src/constants';
 
 export default class Input extends Component {
   constructor(props) {

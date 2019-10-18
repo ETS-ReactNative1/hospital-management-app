@@ -3,10 +3,10 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-
 import { Mutation } from 'react-apollo';
 
 import styles from './ForgotPasswordStyles';
-import { GradientButton, Block, Input, Typography } from '../../../components';
-import { theme } from '../../../constants';
-import { FORGOT_PASSWORD } from '../../../utils/graphqlMutations';
-import validate from '../../../utils/validateOverride';
+import { GradientButton, Block, Input, Typography } from 'src/components';
+import { theme } from 'src/constants';
+import { FORGOT_PASSWORD } from 'src/utils/graphqlMutations';
+import validate from 'src/utils/validateOverride';
 
 const schema = {
   email: {

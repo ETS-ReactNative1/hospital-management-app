@@ -4,9 +4,9 @@ import { Alert, StyleSheet, Vibration, View } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import { useLazyQuery, useMutation } from 'react-apollo';
 
-import { BarcodeMask } from '../../components';
-import { DEVICE_STATE } from '../../utils/graphqlQueries';
-import { CREATE_EVENT } from '../../utils/graphqlMutations';
+import { BarcodeMask } from 'src/components';
+import { DEVICE_STATE } from 'src/utils/graphqlQueries';
+import { CREATE_EVENT } from 'src/utils/graphqlMutations';
 
 // TODO-1 : REMEMBER to rewrite <Query> and <Mutation> as react hooks (useQuery, useMutation)
 // *: DONE TODO-1

@@ -5,10 +5,10 @@ import { Header } from 'react-navigation-stack';
 import validate from 'validate.js';
 
 import styles from './SignInStyles';
-import { GradientButton, Block, Input, Typography } from '../../../components';
-import { theme } from '../../../constants';
-import { SIGN_IN } from '../../../utils/graphqlMutations';
-import AppData from '../../../AppData';
+import { GradientButton, Block, Input, Typography } from 'src/components';
+import { theme } from 'src/constants';
+import { SIGN_IN } from 'src/utils/graphqlMutations';
+import AppData from 'src/AppData';
 
 const schema = {
   email: {

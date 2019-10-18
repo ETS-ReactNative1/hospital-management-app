@@ -3,8 +3,8 @@ import React from 'react';
 // import react in our code.
 import { Button, View } from 'react-native';
 import { useMutation } from 'react-apollo';
-import AppData from '../../AppData';
-import { SIGN_OUT } from '../../utils/graphqlMutations';
+import AppData from 'src/AppData';
+import { SIGN_OUT } from 'src/utils/graphqlMutations';
 // import all the basic component we have used
 
 const SettingsScreen = props => {

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { theme } from '../../constants';
+import { theme } from 'src/constants';
 
 const styles = StyleSheet.create({
   block: {

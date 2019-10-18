@@ -1,11 +1,11 @@
 import React, { Component, createRef } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
-import validate from '../../../utils/validateOverride';
+import validate from 'src/utils/validateOverride';
 
-import { GradientButton, Block, Input, Typography } from '../../../components';
-import { theme } from '../../../constants';
-import { SIGN_UP } from '../../../utils/graphqlMutations';
+import { GradientButton, Block, Input, Typography } from 'src/components';
+import { theme } from 'src/constants';
+import { SIGN_UP } from 'src/utils/graphqlMutations';
 import styles from './SignUpStyles';
 
 const schema = {

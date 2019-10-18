@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './GradientButtonStyles';
-import { theme } from '../../constants';
+import { theme } from 'src/constants';
 
 class GradientButton extends Component {
   render() {

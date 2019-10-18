@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
-import { Card, Badge, GradientButton, Block, Typography } from '../../components';
-import { theme, mocks } from '../../constants';
+import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
+import { theme, mocks } from 'src/constants';
 
 const { width } = Dimensions.get('window');
 
