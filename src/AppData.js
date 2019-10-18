@@ -1,15 +1,4 @@
-class AppData {
-  constructor(){
-    this.data = {}
-  }
-
-  setAccessToken(token){
-    this.data.accessToken = token
-  }
-
-  getAccessToken(){
-    return this.data.accessToken
-  }
+var AppData = {
+  SERVER_URL: 'http://172.16.11.127:8000',
 }
-
-export default new AppData()
+export default AppData

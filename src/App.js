@@ -1,5 +1,3 @@
-global.SERVER_URL = 'http://172.16.11.127:8000'
-
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
@@ -22,12 +20,12 @@ validate.validators.email.message = '^Email không hợp lệ';
 const App = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-      fetch(`${global.SERVER_URL}/refresh-token`, {
+    fetch(`${AppData.SERVER_URL}/refresh-token`, {
       method: 'POST',
       credentials: 'include'
     }).then(async data => {
       const { accessToken } = await data.json();
-      AppData.setAccessToken(accessToken);
+      AppData.accessToken = accessToken;
       setLoading(false);
     }).catch(err => { console.log(err) });
   });

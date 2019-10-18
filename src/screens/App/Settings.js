@@ -12,7 +12,7 @@ const SettingsScreen = props => {
 
   const handleSignOut = async () => {
     await signOut();
-    AppData.setAccessToken('');
+    AppData.accessToken = undefined;
 
     props.navigation.navigate('Auth');
     await client.resetStore();

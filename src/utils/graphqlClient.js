@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 import AppData from '../AppData';
 
 const httpLink = createHttpLink({
-  uri: `${global.SERVER_URL}/graphql`,
+  uri: `${AppData.SERVER_URL}/graphql`,
   credentials: 'include'
 });
 
@@ -19,7 +19,7 @@ const authLink = new ApolloLink(
       let handle;
       Promise.resolve(operation)
         .then(operation => {
-          const accessToken = AppData.getAccessToken();
+          const accessToken = AppData.accessToken;
 
           if (accessToken) {
             operation.setContext({
@@ -48,7 +48,7 @@ const authLink = new ApolloLink(
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: 'accessToken',
   isTokenValidOrUndefined: () => {
-    const token = AppData.getAccessToken();
+    const token = AppData.accessToken;
 
     if (!token)
       return true;
@@ -62,7 +62,7 @@ const refreshTokenLink = new TokenRefreshLink({
   },
   fetchAccessToken: () => {
     return (
-      fetch(`${global.SERVER_URL}/refresh-token`),
+      fetch(`${AppData.SERVER_URL}/refresh-token`),
       {
         method: 'POST',
         credentials: 'include'
@@ -70,7 +70,7 @@ const refreshTokenLink = new TokenRefreshLink({
     );
   },
   handleFetch: accessToken => {
-    AppData.setAccessToken(accessToken);
+    AppData.accessToken = accessToken;
   },
   handleError: err => {
     console.warn('Your refresh token is invalid. Try to relogin');

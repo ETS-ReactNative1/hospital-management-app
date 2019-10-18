@@ -42,7 +42,7 @@ export default class Login extends Component {
       errors: {}
     };
     this.passwordRef  = createRef();
-    if (AppData.getAccessToken()) {
+    if (AppData.accessToken) {
       props.navigation.navigate('App');
     }
   }
@@ -50,7 +50,7 @@ export default class Login extends Component {
   handleSignInCompleted = async data => {
     const { navigation } = this.props;
 
-    AppData.setAccessToken(data.signIn.accessToken);
+    AppData.accessToken = data.signIn.accessToken;
     navigation.navigate('App');
   };
 
