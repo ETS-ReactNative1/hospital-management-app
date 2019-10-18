@@ -8,10 +8,8 @@ import jwtDecode from 'jwt-decode';
 
 import AppData from '../AppData';
 
-global.serverURL = 'http://172.16.11.82:8000'
-
 const httpLink = createHttpLink({
-  uri: `${global.serverURL}/graphql`,
+  uri: `${global.SERVER_URL}/graphql`,
   credentials: 'include'
 });
 
@@ -64,7 +62,7 @@ const refreshTokenLink = new TokenRefreshLink({
   },
   fetchAccessToken: () => {
     return (
-      fetch(`${global.serverURL}/refresh-token`),
+      fetch(`${global.SERVER_URL}/refresh-token`),
       {
         method: 'POST',
         credentials: 'include'
