@@ -1,12 +1,12 @@
 import React, { Component, createRef } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
-import validate from 'src/utils/validateOverride';
+import { StyleSheet } from 'react-native';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import { SIGN_UP } from 'src/utils/graphqlMutations';
-import styles from './SignUpStyles';
+import validate from 'src/utils/validateOverride';
 
 const schema = {
   email: {
@@ -29,6 +29,30 @@ const schema = {
     equality: { attribute: 'password', message: '^Mật khẩu xác nhận không trùng khớp' }
   }
 };
+
+const styles = StyleSheet.create({
+  signup: {
+    flex: 1,
+    justifyContent: 'center',
+    marginBottom: 56
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingVertical: 0
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.error
+  },
+  bottomBlock: {
+    position: 'absolute',
+    bottom: 32,
+    width: '100%',
+    alignSelf: 'center'
+  }
+});
 
 export default class SignUp extends Component {
   static navigationOptions = {

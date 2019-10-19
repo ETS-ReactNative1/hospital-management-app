@@ -8,7 +8,7 @@ import Settings from './App/Settings';
 import Browse from './App/Browse';
 import QRScan from './App/QRScan';
 
-import { theme } from '../constants';
+import { theme } from 'src/constants';
 
 const AuthStack = createStackNavigator(
   { SignIn, SignUp, ForgotPassword },
@@ -48,7 +48,7 @@ const AppStack = createStackNavigator(
   }
 );
 
-const App = createSwitchNavigator(
+const Navigation = createSwitchNavigator(
   {
     Auth: AuthStack,
     App: AppStack
@@ -58,4 +58,4 @@ const App = createSwitchNavigator(
   }
 );
 
-export default createAppContainer(App);
+export default createAppContainer(Navigation);

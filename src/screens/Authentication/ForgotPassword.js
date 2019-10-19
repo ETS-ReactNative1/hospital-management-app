@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
+import { StyleSheet } from 'react-native';
 
-import styles from './ForgotPasswordStyles';
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import { FORGOT_PASSWORD } from 'src/utils/graphqlMutations';
@@ -18,6 +18,22 @@ const schema = {
     }
   }
 };
+
+const styles = StyleSheet.create({
+  forgot: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.error
+  }
+});
 
 export default class Forgot extends Component {
   static navigationOptions = {

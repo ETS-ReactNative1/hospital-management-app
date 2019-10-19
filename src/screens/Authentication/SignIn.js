@@ -2,13 +2,13 @@ import React, { Component, createRef } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
-import validate from 'validate.js';
+import { StyleSheet } from 'react-native';
 
-import styles from './SignInStyles';
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import { SIGN_IN } from 'src/utils/graphqlMutations';
 import AppData from 'src/AppData';
+import validate from 'src/utils/validateOverride';
 
 const schema = {
   email: {
@@ -28,7 +28,30 @@ const schema = {
   }
 };
 
-export default class Login extends Component {
+const styles = StyleSheet.create({
+  login: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth
+  },
+  hasErrors: {
+    borderBottomColor: theme.colors.error
+  },
+  forgotPasswordStyle: {
+    height: 24
+  },
+  textStyle: {
+    marginTop: 48
+  },
+  bottomBlock: { position: 'absolute', bottom: 32, width: '100%', alignSelf: 'center' }
+});
+
+export default class SignIn extends Component {
   static navigationOptions = {
     title: 'Đăng nhập'
   };
