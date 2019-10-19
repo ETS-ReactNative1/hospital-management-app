@@ -1,7 +1,6 @@
 import React, { Component, createRef } from 'react';
-import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
-import { StyleSheet } from 'react-native';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';

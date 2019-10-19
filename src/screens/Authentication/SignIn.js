@@ -1,8 +1,7 @@
 import React, { Component, createRef } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
-import { StyleSheet } from 'react-native';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
@@ -193,7 +192,7 @@ export default class SignIn extends Component {
                   </GradientButton>
                 </Block>
               </KeyboardAvoidingView>
-              <Block style={styles.bottomBlock}>
+              {/* <Block style={styles.bottomBlock}>
                 <Typography black center style={styles.textStyle}>
                   {'Chưa có tài khoản?'}
                 </Typography>
@@ -203,7 +202,7 @@ export default class SignIn extends Component {
                     Đăng ký
                   </Typography>
                 </GradientButton>
-              </Block>
+              </Block> */}
             </Block>
           );
         }}

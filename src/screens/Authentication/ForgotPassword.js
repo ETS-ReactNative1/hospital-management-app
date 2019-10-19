@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
-import { StyleSheet } from 'react-native';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
@@ -90,7 +89,6 @@ export default class Forgot extends Component {
 
   handleForgotCompleted() {
     const { navigation } = this.props;
-    console.log(navigation);
     const { isValid } = this.state;
 
     if (isValid) {
