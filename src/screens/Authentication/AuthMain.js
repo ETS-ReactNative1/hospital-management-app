@@ -53,7 +53,7 @@ export default class Forgot extends Component {
 
           <Image             
             style={styles.image}
-            source = { require('src/assets/icon.png')}
+            source = { require('src/assets/auth.jpg')}
           />
 
           <GradientButton 

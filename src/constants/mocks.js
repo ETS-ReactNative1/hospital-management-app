@@ -1,46 +1,34 @@
 const categories = [
   {
-    id: 'plants',
-    name: 'Plants',
-    tags: ['products', 'inspirations'],
-    count: 147,
+    id: 1,
+    name: 'Bật/Tắt thiết bị',
+    description: 'Ghi nhận quá trình bật/tắt thiết bị',
     image: require('../assets/icons/plants.png')
   },
   {
-    id: 'seeds',
-    name: 'Seeds',
-    tags: ['products', 'shop'],
-    count: 16,
+    id: 2,
+    name: 'Tra cứu thiết bị',
+    description: 'Tra cứu thong tin lich sử ghi nhận',
     image: require('../assets/icons/seeds.png')
   },
   {
-    id: 'flowers',
-    name: 'Flowers',
-    tags: ['products', 'inspirations'],
-    count: 68,
+    id: 3,
+    name: 'Bảo trì thiết bị',
+    description: 'Ghi nhận thông tin bảo trì',
     image: require('../assets/icons/flowers.png')
   },
   {
-    id: 'sprayers',
-    name: 'Sprayers',
-    tags: ['products', 'shop'],
-    count: 17,
+    id: 4,
+    name: 'Thanh lý thiết bị',
+    description: 'Ghi nhận thông tin thanh lý',
     image: require('../assets/icons/sprayers.png')
   },
   {
-    id: 'pots',
-    name: 'Pots',
-    tags: ['products', 'shop'],
-    count: 47,
+    id: 5,
+    name: 'Kiểm kê thiết bị',
+    description: 'Ghi nhận kiểm kê thiết bị',
     image: require('../assets/icons/pots.png')
   },
-  {
-    id: 'fertilizers',
-    name: 'fertilizers',
-    tags: ['products', 'shop'],
-    count: 47,
-    image: require('../assets/icons/fertilizers.png')
-  }
 ];
 
 const products = [

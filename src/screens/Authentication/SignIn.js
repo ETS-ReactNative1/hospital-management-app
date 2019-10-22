@@ -113,7 +113,6 @@ export default class SignIn extends Component {
   };
 
   handleSubmitEditing = name => {
-    console.log('submitEditing');
     if (name === 'email') this.passwordRef.current.textInputRef.current.focus();
   };
 

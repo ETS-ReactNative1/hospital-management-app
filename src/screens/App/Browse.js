@@ -6,98 +6,6 @@ import { theme, mocks } from 'src/constants';
 
 const { width } = Dimensions.get('window');
 
-export default class Browse extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: 'Products',
-      categories: []
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ categories: this.props.categories });
-  }
-
-  handleTab = tab => {
-    const { categories } = this.props;
-    const filtered = categories.filter(category => category.tags.includes(tab.toLowerCase()));
-
-    this.setState({ active: tab, categories: filtered });
-  };
-
-  renderTab(tab) {
-    const { active } = this.state;
-    const isActive = active === tab;
-
-    return (
-      <TouchableOpacity
-        key={`tab-${tab}`}
-        onPress={() => this.handleTab(tab)}
-        style={[styles.tab, isActive ? styles.active : null]}
-      >
-        <Typography size={16} medium gray={!isActive} secondary={isActive}>
-          {tab}
-        </Typography>
-      </TouchableOpacity>
-    );
-  }
-
-  render() {
-    const { profile, navigation } = this.props;
-    const { categories } = this.state;
-    const tabs = ['Products', 'Inspirations', 'Shop'];
-
-    return (
-      <Block>
-        <Block flex={false} row center space="between" style={styles.header}>
-          <Typography h1 bold>
-            Chức năng
-          </Typography>
-          <GradientButton onPress={() => navigation.navigate('Settings')}>
-            <Image source={profile.avatar} style={styles.avatar} />
-          </GradientButton>
-        </Block>
-
-        {/* <Block flex={false} row style={styles.tabs}>
-          {tabs.map(tab => this.renderTab(tab))}
-        </Block> */}
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ paddingVertical: theme.sizes.base * 2 }}
-        >
-          <Block flex={false} row space="between" style={styles.categories}>
-            {categories.map(category => (
-              <TouchableOpacity
-                key={category.name}
-                onPress={() => navigation.navigate('Explore', { category })}
-              >
-                <Card center middle shadow style={styles.category}>
-                  <Badge margin={[0, 0, 15]} size={50} color="rgba(41,216,143,0.20)">
-                    <Image source={category.image} />
-                  </Badge>
-                  <Typography medium height={20}>
-                    {category.name}
-                  </Typography>
-                  <Typography gray caption>
-                    {category.count} products
-                  </Typography>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </Block>
-        </ScrollView>
-      </Block>
-    );
-  }
-}
-
-Browse.defaultProps = {
-  profile: mocks.profile,
-  categories: mocks.categories
-};
-
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.sizes.base * 2
@@ -122,11 +30,76 @@ const styles = StyleSheet.create({
   },
   categories: {
     flexWrap: 'wrap',
-    paddingHorizontal: theme.sizes.base * 2,
-    marginBottom: theme.sizes.base * 3.5
+    paddingHorizontal: theme.sizes.base,
+    marginBottom: 0
   },
   category: {
     // this should be dynamic based on screen width
-    minWidth: (width - theme.sizes.padding * 4 - theme.sizes.base * 3) / 2
+    width: '100%',
   }
 });
+
+export default class Browse extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: 'Products',
+      categories: []
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ categories: this.props.categories });
+  }
+
+  render() {
+    const { profile, navigation } = this.props;
+    const { categories } = this.state;
+
+    return (
+      <Block>
+        <Block flex={false} row center space="between" style={styles.header}>
+          <Typography h1 bold>
+            Chức năng
+          </Typography>
+          <GradientButton onPress={() => navigation.navigate('Settings')}>
+            <Image source={profile.avatar} style={styles.avatar} />
+          </GradientButton>
+        </Block>
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ paddingVertical: theme.sizes.base * 2 }}
+        >
+          <Block flex={false} space="between" padding={[theme.sizes.base , theme.sizes.base * 2]} style={styles.categories}>
+            {categories.map(category => (
+              <TouchableOpacity
+                key={category.name}
+                onPress={() => navigation.navigate('Explore', { category })}
+              >
+                <Card center middle shadow row style={styles.category}>
+                  <Badge size={50} color="rgba(41,216,143,0.20)">
+                    <Image source={category.image} />
+                  </Badge>
+                  <Block padding={[0, theme.sizes.base]} >
+                    <Typography medium height={20}>
+                      {category.name}
+                    </Typography>
+                    <Typography gray caption>
+                      {category.description}
+                    </Typography>
+                  </Block> 
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </Block>
+        </ScrollView>
+      </Block>
+    );
+  }
+}
+
+Browse.defaultProps = {
+  profile: mocks.profile,
+  categories: mocks.categories
+};
