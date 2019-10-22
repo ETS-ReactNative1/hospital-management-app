@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   header: {
@@ -34,7 +33,6 @@ const styles = StyleSheet.create({
     marginBottom: 0
   },
   category: {
-    // this should be dynamic based on screen width
     width: '100%',
   }
 });
@@ -79,7 +77,7 @@ export default class Browse extends Component {
               >
                 <Card center middle shadow row style={styles.category}>
                   <Badge size={50} color="rgba(41,216,143,0.20)">
-                    <Image source={category.image} />
+                    <Icon name={category.icon} size={24} color={theme.colors.green} />
                   </Badge>
                   <Block padding={[0, theme.sizes.base]} >
                     <Typography medium height={20}>

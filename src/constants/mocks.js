@@ -3,31 +3,31 @@ const categories = [
     id: 1,
     name: 'Bật/Tắt thiết bị',
     description: 'Ghi nhận quá trình bật/tắt thiết bị',
-    image: require('../assets/icons/plants.png')
+    icon: 'power-settings-new'
   },
   {
     id: 2,
     name: 'Tra cứu thiết bị',
     description: 'Tra cứu thong tin lich sử ghi nhận',
-    image: require('../assets/icons/seeds.png')
+    icon: 'search'
   },
   {
     id: 3,
     name: 'Bảo trì thiết bị',
     description: 'Ghi nhận thông tin bảo trì',
-    image: require('../assets/icons/flowers.png')
+    icon: 'gavel'
   },
   {
     id: 4,
     name: 'Thanh lý thiết bị',
     description: 'Ghi nhận thông tin thanh lý',
-    image: require('../assets/icons/sprayers.png')
+    icon: 'attach-money'
   },
   {
     id: 5,
     name: 'Kiểm kê thiết bị',
     description: 'Ghi nhận kiểm kê thiết bị',
-    image: require('../assets/icons/pots.png')
+    icon: 'assignment'
   },
 ];
 
