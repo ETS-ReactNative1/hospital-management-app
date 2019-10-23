@@ -38,6 +38,35 @@ const styles = StyleSheet.create({
 });
 
 export default class Browse extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Chức năng',
+      headerStyle: {
+        backgroundColor: theme.colors.white,
+        borderBottomColor: 'transparent',
+        marginLeft: theme.sizes.padding*4,
+        elevation: 0 // for android
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        marginLeft: 0,
+        paddingLeft: 0,
+        paddingRight: theme.sizes.padding,
+        fontSize: theme.sizes.h1,
+        color: theme.colors.grey
+      },
+      headerLeft: null,
+      headerRight: () => (
+        <GradientButton onPress={() => navigation.navigate('Settings')} style={{
+          alignItems: 'center',
+          paddingRight: theme.sizes.padding
+        }}>
+          <Image source={mocks.profile.avatar} style={styles.avatar} />
+        </GradientButton>
+      ),
+    }
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -56,14 +85,6 @@ export default class Browse extends Component {
 
     return (
       <Block>
-        <Block flex={false} row center space="between" style={styles.header}>
-          <Typography h1 bold>
-            Chức năng
-          </Typography>
-          <GradientButton onPress={() => navigation.navigate('Settings')}>
-            <Image source={profile.avatar} style={styles.avatar} />
-          </GradientButton>
-        </Block>
 
         <ScrollView
           showsVerticalScrollIndicator={false}
