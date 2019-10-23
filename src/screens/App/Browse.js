@@ -6,26 +6,9 @@ import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
 
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: theme.sizes.base * 2
-  },
   avatar: {
     height: theme.sizes.base * 2.2,
     width: theme.sizes.base * 2.2
-  },
-  tabs: {
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginVertical: theme.sizes.base,
-    marginHorizontal: theme.sizes.base * 2
-  },
-  tab: {
-    marginRight: theme.sizes.base * 2,
-    paddingBottom: theme.sizes.base
-  },
-  active: {
-    borderBottomColor: theme.colors.secondary,
-    borderBottomWidth: 3
   },
   categories: {
     flexWrap: 'wrap',
@@ -67,21 +50,8 @@ export default class Browse extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: 'Products',
-      categories: []
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ categories: this.props.categories });
-  }
-
   render() {
-    const { profile, navigation } = this.props;
-    const { categories } = this.state;
+    const { navigation } = this.props;
 
     return (
       <Block>
@@ -90,8 +60,13 @@ export default class Browse extends Component {
           showsVerticalScrollIndicator={false}
           style={{ paddingVertical: theme.sizes.base * 2 }}
         >
-          <Block flex={false} space="between" padding={[theme.sizes.base , theme.sizes.base * 2]} style={styles.categories}>
-            {categories.map(category => (
+          <Block 
+            flex={false} 
+            space="between" 
+            padding={[theme.sizes.base , theme.sizes.base * 2]} 
+            style={styles.categories}
+          >
+            {mocks.categories.map(category => (
               <TouchableOpacity
                 key={category.name}
                 onPress={() => navigation.navigate('Explore', { category })}
@@ -117,8 +92,3 @@ export default class Browse extends Component {
     );
   }
 }
-
-Browse.defaultProps = {
-  profile: mocks.profile,
-  categories: mocks.categories
-};
