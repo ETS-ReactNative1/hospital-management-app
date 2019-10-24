@@ -4,7 +4,7 @@ class Constants {
         this.SERVER_URL = 'http://172.16.10.221:8000'
 
         let n                       = 0
-        this.EMPTY_POPUP            = n++
+        this.NO_POPUP               = n++
         this.OK_POPUP               = n++
         this.YES_NO_POPUP           = n++
         this.CHANGE_PASS_POPUP      = n++

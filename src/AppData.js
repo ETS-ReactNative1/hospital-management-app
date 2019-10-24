@@ -1,4 +1,5 @@
 var AppData = {
+  language: 'VN',
   userProfile: {
     email: 'ttanhvu1712@gmail.com',
     surname:'Trần Thái Anh',

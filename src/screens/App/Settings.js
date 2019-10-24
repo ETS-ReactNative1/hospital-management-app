@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Image, View, Modal, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { GradientButton, Block, Typography } from 'src/components';
+import { theme, localization } from 'src/constants';
 import Popop from './Popup'
 
-import { useMutation } from 'react-apollo';
-import { SIGN_OUT } from 'src/utils/graphqlMutations';
-
 import AppData from 'src/AppData';
-import { theme, mocks } from 'src/constants';
+import AppConst from 'src/AppConst';
 
 const styles = StyleSheet.create({
   container: {
@@ -66,23 +64,23 @@ export default class SettingsScreen extends Component {
   };
 
   state = {
-    popupType: -1,
+    popupType: AppConst.NO_POPUP,
   };
 
-  setPopupType(type) {
+  showPopup(type) {
     this.setState({ popupType: type });
   }
 
-  closePopup()
-  {
-    this.setState({ popupType: -1 });
+  closePopup() {
+    this.setState({ popupType: AppConst.NO_POPUP });
   }
 
   render() {
+    var TextPackage = localization[AppData.language]
     const { userProfile } = AppData
     return (
       <Block padding={[theme.sizes.base * 2, theme.sizes.base * 2]} style={styles.container}>
-        <Popop popupType={this.state.popupType} closePopup={_ => {this.closePopup()}}/>
+        <Popop popupType={this.state.popupType} closePopup={_ => { this.closePopup() }} />
 
         <Image
           style={styles.image}
@@ -95,25 +93,25 @@ export default class SettingsScreen extends Component {
           style={styles.scrollView}
         >
           <Typography style={styles.group_infor} >
-            Thông tin chung
+            {TextPackage.GENERAL_INFOR}
           </Typography>
           <View style={styles.divider_1px} />
           <Typography style={styles.title_infor} >
-            Email
+            {TextPackage.EMAIL}
           </Typography>
           <Typography style={styles.user_infor} >
             {userProfile.email}
           </Typography>
           <Typography style={styles.title_infor} >
-            Vai trò
+            {TextPackage.USER_SCOPE}
             </Typography>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Typography style={styles.user_infor} >
               {userProfile.scope}
             </Typography>
-            <TouchableOpacity onPress={_ => { this.setPopupType(1); }}>
+            <TouchableOpacity onPress={_ => { this.showPopup(AppConst.RADIO_INPUT_POPUP); }}>
               <Typography style={[styles.user_infor, styles.change_infor]} >
-                Chỉnh sửa
+              {TextPackage.EDIT}
               </Typography>
             </TouchableOpacity>
           </View>
@@ -122,29 +120,29 @@ export default class SettingsScreen extends Component {
           <View style={styles.divider_5px} />
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Typography style={styles.group_infor} >
-              Thông tin cá nhân
+              {TextPackage.PERSONAL_INFOR}
             </Typography>
-            <TouchableOpacity onPress={_ => { this.setPopupType(1); }}>
+            <TouchableOpacity onPress={_ => { this.showPopup(AppConst.CHANGE_INFOR_POPUP); }}>
               <Typography style={[styles.group_infor, styles.change_infor]} >
-                Chỉnh sửa
+                {TextPackage.EDIT}
               </Typography>
             </TouchableOpacity>
           </View>
           <View style={styles.divider_1px} />
           <Typography style={styles.title_infor} >
-            Họ và tên đệm
+            {TextPackage.SURNAME}
           </Typography>
           <Typography style={styles.user_infor} >
             {userProfile.surname}
           </Typography>
           <Typography style={styles.title_infor} >
-            Tên
+            {TextPackage.NAME}
           </Typography>
           <Typography style={styles.user_infor} >
             {userProfile.name}
           </Typography>
           <Typography style={styles.title_infor} >
-            Số điện thoại
+            {TextPackage.PHONE}
           </Typography>
           <Typography style={styles.user_infor} >
             {userProfile.phone}
@@ -155,18 +153,18 @@ export default class SettingsScreen extends Component {
         <GradientButton
           border
           style={{ width: '100%' }}
-          onPress={_ => { this.setPopupType(1); }}>
+          onPress={_ => { this.showPopup(AppConst.CHANGE_PASS_POPUP); }}>
           <Typography black bold center>
-            Đổi mật khẩu
+            {TextPackage.CHANGE_PASSWORD}
           </Typography>
         </GradientButton>
 
         <GradientButton
           gradient
           style={{ width: '100%', }}
-          onPress={_ => { this.setPopupType(1); }}>
+          onPress={_ => { this.showPopup(AppConst.YES_NO_POPUP); }}>
           <Typography black bold center>
-            Đăng xuất
+            {TextPackage.SETUP}
           </Typography>
         </GradientButton>
       </Block>
