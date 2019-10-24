@@ -7,9 +7,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import jwtDecode from 'jwt-decode';
 
 import AppData from '../AppData';
+import AppConst from '../AppConst';
 
 const httpLink = createHttpLink({
-  uri: `${AppData.SERVER_URL}/graphql`,
+  uri: `${AppConst.SERVER_URL}/graphql`,
   credentials: 'include'
 });
 
@@ -62,7 +63,7 @@ const refreshTokenLink = new TokenRefreshLink({
   },
   fetchAccessToken: () => {
     return (
-      fetch(`${AppData.SERVER_URL}/refresh-token`),
+      fetch(`${AppConst.SERVER_URL}/refresh-token`),
       {
         method: 'POST',
         credentials: 'include'

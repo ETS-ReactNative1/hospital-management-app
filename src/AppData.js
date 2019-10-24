@@ -1,5 +1,4 @@
 var AppData = {
-  SERVER_URL: 'http://172.16.10.221:8000',
   userProfile: {
     email: 'ttanhvu1712@gmail.com',
     surname:'Trần Thái Anh',

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, Image, View, Modal, TouchableOpacity } from 'react-native';
 import { GradientButton, Block, Typography } from 'src/components';
+import Popop from './Popup'
 
 import { useMutation } from 'react-apollo';
 import { SIGN_OUT } from 'src/utils/graphqlMutations';
@@ -60,53 +61,33 @@ const styles = StyleSheet.create({
 });
 
 export default class SettingsScreen extends Component {
+  static navigationOptions = {
+    title: 'Cài đặt'
+  };
 
   state = {
-    modalVisible: false,
+    popupType: -1,
   };
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+  setPopupType(type) {
+    this.setState({ popupType: type });
   }
 
-  handleSignOut = async () => {
-    const [signOut, { client }] = useMutation(SIGN_OUT);
-    await signOut();
-    AppData.accessToken = undefined;
-    props.navigation.navigate('Auth');
-    await client.resetStore();
-  };
-
-  handleChangePass = async () => { };
+  closePopup()
+  {
+    this.setState({ popupType: -1 });
+  }
 
   render() {
     const { userProfile } = AppData
     return (
       <Block padding={[theme.sizes.base * 2, theme.sizes.base * 2]} style={styles.container}>
-        
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-          <View style={{ marginTop: 22 }}>
-            <View>
-              <Typography>Hello World!</Typography>
-
-              <TouchableOpacity
-                onPress={() => { this.setModalVisible(!this.state.modalVisible);  }}>
-                <Typography>Hide Modal</Typography>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        <Popop popupType={this.state.popupType} closePopup={_ => {this.closePopup()}}/>
 
         <Image
           style={styles.image}
           source={userProfile.avatar}
-        />       
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -130,7 +111,7 @@ export default class SettingsScreen extends Component {
             <Typography style={styles.user_infor} >
               {userProfile.scope}
             </Typography>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={_ => { this.setPopupType(1); }}>
               <Typography style={[styles.user_infor, styles.change_infor]} >
                 Chỉnh sửa
               </Typography>
@@ -143,7 +124,7 @@ export default class SettingsScreen extends Component {
             <Typography style={styles.group_infor} >
               Thông tin cá nhân
             </Typography>
-            <TouchableOpacity onPress={ _ => { this.setModalVisible(true); }}>
+            <TouchableOpacity onPress={_ => { this.setPopupType(1); }}>
               <Typography style={[styles.group_infor, styles.change_infor]} >
                 Chỉnh sửa
               </Typography>
@@ -174,7 +155,7 @@ export default class SettingsScreen extends Component {
         <GradientButton
           border
           style={{ width: '100%' }}
-          onPress={this.handleChangePass}>
+          onPress={_ => { this.setPopupType(1); }}>
           <Typography black bold center>
             Đổi mật khẩu
           </Typography>
@@ -183,7 +164,7 @@ export default class SettingsScreen extends Component {
         <GradientButton
           gradient
           style={{ width: '100%', }}
-          onPress={this.handleSignOut}>
+          onPress={_ => { this.setPopupType(1); }}>
           <Typography black bold center>
             Đăng xuất
           </Typography>

@@ -26,7 +26,7 @@ const configHeaderNavigatior =
       color: theme.colors.white
     },
     headerStyle: {
-      height: theme.sizes.base * 4,
+      height: theme.sizes.base * 3.5,
       backgroundColor: theme.colors.primary, // or 'white
       borderBottomColor: 'transparent',
       elevation: 0 // for android
