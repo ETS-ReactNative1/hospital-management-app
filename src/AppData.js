@@ -1,4 +1,12 @@
 var AppData = {
-  SERVER_URL: 'http://172.16.11.127:8000',
+  SERVER_URL: 'http://172.16.10.221:8000',
+  userProfile: {
+    email: 'ttanhvu1712@gmail.com',
+    surname:'Trần Thái Anh',
+    name:'Vũ',
+    scope: 'Người dùng',
+    phone: '0948283151',
+    avatar: require('src/assets/images/avatar.png'),
+  }
 }
 export default AppData

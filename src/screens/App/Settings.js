@@ -1,28 +1,194 @@
-// This is an example code for Bottom Navigation//
-import React from 'react';
-// import react in our code.
-import { Button, View } from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, StyleSheet, Image, View, Modal, TouchableOpacity } from 'react-native';
+import { GradientButton, Block, Typography } from 'src/components';
+
 import { useMutation } from 'react-apollo';
-import AppData from 'src/AppData';
 import { SIGN_OUT } from 'src/utils/graphqlMutations';
-// import all the basic component we have used
 
-const SettingsScreen = props => {
-  const [signOut, { client }] = useMutation(SIGN_OUT);
+import AppData from 'src/AppData';
+import { theme, mocks } from 'src/constants';
 
-  const handleSignOut = async () => {
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    borderRadius: 50,
+    marginBottom: 10,
+    alignSelf: 'center'
+  },
+  scrollView: {
+    width: '100%',
+    paddingVertical: theme.sizes.base * 2,
+  },
+  scrollElement: {
+    width: '100%',
+  },
+  divider_1px: {
+    width: '100%',
+    height: 1,
+    backgroundColor: theme.colors.gray2
+  },
+  divider_5px: {
+    width: '100%',
+    height: 5,
+    backgroundColor: theme.colors.gray2,
+    marginTop: theme.sizes.padding
+  },
+  group_infor: {
+    paddingBottom: theme.sizes.padding,
+    paddingTop: theme.sizes.padding * 2,
+    textTransform: 'capitalize',
+    fontWeight: 'bold'
+  },
+  title_infor: {
+    paddingTop: theme.sizes.padding,
+    textTransform: 'capitalize',
+    fontWeight: 'bold'
+  },
+  user_infor: {},
+  change_infor: {
+    textTransform: 'capitalize',
+    color: theme.colors.green,
+    textDecorationLine: 'underline',
+    fontWeight: 'normal'
+  }
+});
+
+export default class SettingsScreen extends Component {
+
+  state = {
+    modalVisible: false,
+  };
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+  handleSignOut = async () => {
+    const [signOut, { client }] = useMutation(SIGN_OUT);
     await signOut();
     AppData.accessToken = undefined;
-
     props.navigation.navigate('Auth');
     await client.resetStore();
   };
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Button title="Sign out" onPress={handleSignOut} />
-    </View>
-  );
-};
+  handleChangePass = async () => { };
 
-export default SettingsScreen;
+  render() {
+    const { userProfile } = AppData
+    return (
+      <Block padding={[theme.sizes.base * 2, theme.sizes.base * 2]} style={styles.container}>
+        
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}>
+          <View style={{ marginTop: 22 }}>
+            <View>
+              <Typography>Hello World!</Typography>
+
+              <TouchableOpacity
+                onPress={() => { this.setModalVisible(!this.state.modalVisible);  }}>
+                <Typography>Hide Modal</Typography>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <Image
+          style={styles.image}
+          source={userProfile.avatar}
+        />       
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollElement}
+          style={styles.scrollView}
+        >
+          <Typography style={styles.group_infor} >
+            Thông tin chung
+          </Typography>
+          <View style={styles.divider_1px} />
+          <Typography style={styles.title_infor} >
+            Email
+          </Typography>
+          <Typography style={styles.user_infor} >
+            {userProfile.email}
+          </Typography>
+          <Typography style={styles.title_infor} >
+            Vai trò
+            </Typography>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Typography style={styles.user_infor} >
+              {userProfile.scope}
+            </Typography>
+            <TouchableOpacity>
+              <Typography style={[styles.user_infor, styles.change_infor]} >
+                Chỉnh sửa
+              </Typography>
+            </TouchableOpacity>
+          </View>
+
+
+          <View style={styles.divider_5px} />
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Typography style={styles.group_infor} >
+              Thông tin cá nhân
+            </Typography>
+            <TouchableOpacity onPress={ _ => { this.setModalVisible(true); }}>
+              <Typography style={[styles.group_infor, styles.change_infor]} >
+                Chỉnh sửa
+              </Typography>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.divider_1px} />
+          <Typography style={styles.title_infor} >
+            Họ và tên đệm
+          </Typography>
+          <Typography style={styles.user_infor} >
+            {userProfile.surname}
+          </Typography>
+          <Typography style={styles.title_infor} >
+            Tên
+          </Typography>
+          <Typography style={styles.user_infor} >
+            {userProfile.name}
+          </Typography>
+          <Typography style={styles.title_infor} >
+            Số điện thoại
+          </Typography>
+          <Typography style={styles.user_infor} >
+            {userProfile.phone}
+          </Typography>
+          <View style={styles.divider_5px} />
+        </ScrollView>
+
+        <GradientButton
+          border
+          style={{ width: '100%' }}
+          onPress={this.handleChangePass}>
+          <Typography black bold center>
+            Đổi mật khẩu
+          </Typography>
+        </GradientButton>
+
+        <GradientButton
+          gradient
+          style={{ width: '100%', }}
+          onPress={this.handleSignOut}>
+          <Typography black bold center>
+            Đăng xuất
+          </Typography>
+        </GradientButton>
+      </Block>
+    )
+  };
+};

@@ -4,11 +4,13 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
+import AppData from 'src/AppData';
 
 const styles = StyleSheet.create({
   avatar: {
     height: theme.sizes.base * 2.2,
-    width: theme.sizes.base * 2.2
+    width: theme.sizes.base * 2.2,
+    borderRadius: 50
   },
   categories: {
     flexWrap: 'wrap',
@@ -44,7 +46,7 @@ export default class Browse extends Component {
           alignItems: 'center',
           paddingRight: theme.sizes.padding
         }}>
-          <Image source={mocks.profile.avatar} style={styles.avatar} />
+          <Image source={AppData.userProfile.avatar} style={styles.avatar} />
         </GradientButton>
       ),
     }
