@@ -1,6 +1,6 @@
 const VN  = {
     SIGN_OUT: 'Đăng xuất',
-    SIGN_OUT_CONFIRM: 'Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?',
+    CONFIRM_SIGN_OUT: 'Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?',
     GENERAL_INFOR: 'Thông tin chung',
     EMAIL: 'Email',
     USER_SCOPE: 'Vai trò',
@@ -10,7 +10,7 @@ const VN  = {
     NAME: 'Tên',
     PHONE: 'Số điện thoại',
     CHANGE_PASSWORD: 'Đổi mật khẩu',
-    SETUP: 'Cài đặt' 
+    SETUP: 'Cài đặt',
 }
 
 export { VN }

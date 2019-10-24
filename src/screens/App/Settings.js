@@ -58,29 +58,53 @@ const styles = StyleSheet.create({
   }
 });
 
+const TextPackage = localization[AppData.language]
+
 export default class SettingsScreen extends Component {
   static navigationOptions = {
-    title: 'Cài đặt'
+    title: TextPackage.SETUP
   };
 
   state = {
-    popupType: AppConst.NO_POPUP,
+    popupConfig: {
+      type: AppConst.NO_POPUP,
+    },
   };
 
   showPopup(type) {
-    this.setState({ popupType: type });
+    this.setState({ popupConfig: type });
   }
 
   closePopup() {
-    this.setState({ popupType: AppConst.NO_POPUP });
+    this.setState({ popupConfig: { type: AppConst.NO_POPUP } });
+  }
+
+  confirmSignOut() {
+    let config = {
+      type: AppConst.YES_NO_POPUP,
+      title: TextPackage.SIGN_OUT,
+      message: TextPackage.CONFIRM_SIGN_OUT
+    }
+    this.setState({ popupConfig: config })
+  }
+
+  changePassword() {
+    this.setState({ popupConfig: { type: AppConst.CHANGE_PASS_POPUP }})
+  }
+
+  changeInfor() {
+    this.setState({ popupConfig: { type: AppConst.CHANGE_INFOR_POPUP }})
+  }
+
+  changeScope() {
+    this.setState({ popupConfig: { type: AppConst.CHANGE_SCOPE_POPUP }})
   }
 
   render() {
-    var TextPackage = localization[AppData.language]
     const { userProfile } = AppData
     return (
       <Block padding={[theme.sizes.base * 2, theme.sizes.base * 2]} style={styles.container}>
-        <Popop popupType={this.state.popupType} closePopup={_ => { this.closePopup() }} />
+        <Popop popupConfig={this.state.popupConfig} closePopup={_ => { this.closePopup() }} />
 
         <Image
           style={styles.image}
@@ -104,14 +128,14 @@ export default class SettingsScreen extends Component {
           </Typography>
           <Typography style={styles.title_infor} >
             {TextPackage.USER_SCOPE}
-            </Typography>
+          </Typography>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Typography style={styles.user_infor} >
               {userProfile.scope}
             </Typography>
-            <TouchableOpacity onPress={_ => { this.showPopup(AppConst.RADIO_INPUT_POPUP); }}>
+            <TouchableOpacity onPress={_ => { this.changeScope(); }}>
               <Typography style={[styles.user_infor, styles.change_infor]} >
-              {TextPackage.EDIT}
+                {TextPackage.EDIT}
               </Typography>
             </TouchableOpacity>
           </View>
@@ -122,7 +146,7 @@ export default class SettingsScreen extends Component {
             <Typography style={styles.group_infor} >
               {TextPackage.PERSONAL_INFOR}
             </Typography>
-            <TouchableOpacity onPress={_ => { this.showPopup(AppConst.CHANGE_INFOR_POPUP); }}>
+            <TouchableOpacity onPress={_ => { this.changePassword(); }}>
               <Typography style={[styles.group_infor, styles.change_infor]} >
                 {TextPackage.EDIT}
               </Typography>
@@ -153,7 +177,7 @@ export default class SettingsScreen extends Component {
         <GradientButton
           border
           style={{ width: '100%' }}
-          onPress={_ => { this.showPopup(AppConst.CHANGE_PASS_POPUP); }}>
+          onPress={_ => { this.changePassword() }}>
           <Typography black bold center>
             {TextPackage.CHANGE_PASSWORD}
           </Typography>
@@ -162,9 +186,9 @@ export default class SettingsScreen extends Component {
         <GradientButton
           gradient
           style={{ width: '100%', }}
-          onPress={_ => { this.showPopup(AppConst.YES_NO_POPUP); }}>
+          onPress={_ => { this.confirmSignOut() }}>
           <Typography black bold center>
-            {TextPackage.SETUP}
+            {TextPackage.SIGN_OUT}
           </Typography>
         </GradientButton>
       </Block>

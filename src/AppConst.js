@@ -9,7 +9,7 @@ class Constants {
         this.YES_NO_POPUP           = n++
         this.CHANGE_PASS_POPUP      = n++
         this.CHANGE_INFOR_POPUP     = n++
-        this.RADIO_INPUT_POPUP      = n++
+        this.CHANGE_SCOPE_POPUP      = n++
     }
 }
 
