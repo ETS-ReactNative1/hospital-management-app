@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Modal, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import { GradientButton, Block, Typography } from 'src/components';
+import { StyleSheet, Modal, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { GradientButton, Block, Typography, Input } from 'src/components';
 
 import { useMutation } from 'react-apollo';
 import { SIGN_OUT } from 'src/utils/graphqlMutations';
@@ -12,15 +12,27 @@ import AppConst from 'src/AppConst';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.black2,
+    flex: 1,
     width: '100%',
     height: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',   
+    paddingLeft: theme.sizes.base*2,
+    paddingRight: theme.sizes.base*2, 
   },
   popup_container: {
     backgroundColor: theme.colors.white,
-    width: '50%',
-    height: '50%',
+    width: '100%',
+    borderRadius:10,
   },
+  divider_1px: {
+    width: '100%',
+    height: 1,
+    backgroundColor: theme.colors.gray2
+  },
+  title: {
+
+  }
 });
 
 export default class SettingsScreen extends Component {
@@ -46,7 +58,10 @@ export default class SettingsScreen extends Component {
         onRequestClose={() => { console.log('Modal has been closed.'); }}>
         <Block style={styles.container} >
           <KeyboardAvoidingView style={styles.popup_container}>
-            <Typography>Hello World!</Typography>
+            <Block style = {{visible: popupConfig.type == AppConst.YES_NO_POPUP}}>
+              <Typography>Hello World! ashdhasdhahsd</Typography>
+            </Block>
+
             <TouchableOpacity
               onPress={() => { closePopup() }}>
               <Typography>Hide Modal</Typography>
