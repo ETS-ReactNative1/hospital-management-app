@@ -16,27 +16,25 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',   
-    paddingLeft: theme.sizes.base*2,
-    paddingRight: theme.sizes.base*2, 
+    justifyContent: 'center',
+    paddingLeft: theme.sizes.base * 2,
+    paddingRight: theme.sizes.base * 2
   },
   popup_container: {
     backgroundColor: theme.colors.white,
     width: '100%',
-    borderRadius:10,
+    borderRadius: 10
   },
   divider_1px: {
     width: '100%',
     height: 1,
     backgroundColor: theme.colors.gray2
   },
-  title: {
-
-  }
+  title: {}
 });
 
 export default class SettingsScreen extends Component {
-  handleSignOut = async () => {
+  handleSignOut = async props => {
     const [signOut, { client }] = useMutation(SIGN_OUT);
     await signOut();
     AppData.accessToken = undefined;
@@ -44,31 +42,37 @@ export default class SettingsScreen extends Component {
     await client.resetStore();
   };
 
-  handleChangePass = async () => { };
+  handleChangePass = async () => {};
 
   render() {
-    const { userProfile } = AppData
-    const { popupConfig, closePopup } = this.props
-    
+    const { userProfile } = AppData;
+    const { popupConfig, closePopup } = this.props;
+
     return (
       <Modal
         animationType="slide"
         transparent={true}
-        visible={popupConfig.type != AppConst.NO_POPUP}
-        onRequestClose={() => { console.log('Modal has been closed.'); }}>
-        <Block style={styles.container} >
+        visible={popupConfig.type !== AppConst.NO_POPUP}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}
+      >
+        <Block style={styles.container}>
           <KeyboardAvoidingView style={styles.popup_container}>
-            <Block style = {{visible: popupConfig.type == AppConst.YES_NO_POPUP}}>
+            <Block style={{ visible: popupConfig.type === AppConst.YES_NO_POPUP }}>
               <Typography>Hello World! ashdhasdhahsd</Typography>
             </Block>
 
             <TouchableOpacity
-              onPress={() => { closePopup() }}>
+              onPress={() => {
+                closePopup();
+              }}
+            >
               <Typography>Hide Modal</Typography>
             </TouchableOpacity>
           </KeyboardAvoidingView>
-        </Block >
+        </Block>
       </Modal>
-    )
-  };
-};
+    );
+  }
+}

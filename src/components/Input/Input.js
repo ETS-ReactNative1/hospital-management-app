@@ -2,11 +2,11 @@ import React, { Component, createRef } from 'react';
 import { TextInput, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { theme } from 'src/constants';
 import styles from './InputStyles';
 import Typography from '../Typography/Typography';
 import Block from '../Block/Block';
 import GradientButton from '../GradientButton/GradientButton';
-import { theme } from 'src/constants';
 
 export default class Input extends Component {
   constructor(props) {
