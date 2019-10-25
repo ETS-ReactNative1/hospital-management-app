@@ -82,7 +82,6 @@ export default class Login extends Component {
   };
 
   handleEndEditing = name => {
-    console.log('endEditing');
     const { touched } = this.state;
 
     this.setState({
@@ -94,7 +93,6 @@ export default class Login extends Component {
   };
 
   handleSubmitEditing = name => {
-    console.log('submitEditing');
     if (name === 'email') this.passwordRef.current.textInputRef.current.focus();
   };
 
