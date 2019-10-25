@@ -43,6 +43,7 @@ module.exports = {
     'global-require': 0,
     'import/prefer-default-export': [0],
     'no-useless-escape': 0,
+    'no-plusplus': 0,
     'no-use-before-define': [
       0,
       {
@@ -63,5 +64,13 @@ module.exports = {
   globals: {
     fetch: false
   },
-  plugins: ['prettier']
+  plugins: ['prettier'],
+  settings: {
+    'import/resolver': {
+      node: {
+        moduleDirectory: ['node_modules', '.'],
+        extensions: ['.js', '.android.js', '.ios.js', '.web.js', '.json']
+      }
+    }
+  }
 };
