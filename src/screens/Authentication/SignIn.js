@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet} from 'react-native';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
 
@@ -63,7 +63,7 @@ export default class SignIn extends Component {
       touched: {},
       errors: {}
     };
-    this.passwordRef  = createRef();
+    this.passwordRef = createRef();
     if (AppData.accessToken) {
       props.navigation.navigate('App');
     }

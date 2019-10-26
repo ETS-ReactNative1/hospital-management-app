@@ -36,6 +36,8 @@ module.exports = {
     'react/destructuring-assignment': [0],
     'react/prop-types': [0],
     'react/no-unused-state': [1],
+    'import/no-extraneous-dependencies': 0,
+    'import/order': 0,
     'spaced-comment': 0,
     'no-underscore-dangle': [0],
     'no-shadow': 0,
