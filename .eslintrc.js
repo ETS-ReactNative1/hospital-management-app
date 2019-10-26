@@ -71,7 +71,7 @@ module.exports = {
     'import/resolver': {
       node: {
         moduleDirectory: ['node_modules', '.'],
-        extensions: ['.js', '.android.js', '.ios.js', '.web.js', '.json']
+        extensions: ['.js', '.android.js', '.ios.js', '.web.js']
       }
     }
   }
