@@ -7,6 +7,9 @@ import Popop from './Popup';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
 
+import { useMutation } from 'react-apollo';
+import { SIGN_OUT } from 'src/utils/graphqlMutations';
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -70,13 +73,13 @@ export default class SettingsScreen extends Component {
     };
   }
 
-  static navigationOptions = {
-    title: TextPackage.SETUP
+  handleSignOut = async props => {
+    const [signOut, { client }] = useMutation(SIGN_OUT);
+    await signOut();
+    AppData.accessToken = undefined;
+    props.navigation.navigate('Auth');
+    await client.resetStore();
   };
-
-  showPopup(type) {
-    this.setState({ popupConfig: type });
-  }
 
   closePopup() {
     this.setState({ popupConfig: { type: AppConst.NO_POPUP } });
@@ -84,9 +87,13 @@ export default class SettingsScreen extends Component {
 
   confirmSignOut() {
     const config = {
-      type: AppConst.YES_NO_POPUP,
+      type: AppConst.OK_CANCEL_POPUP,
       title: TextPackage.SIGN_OUT,
-      message: TextPackage.CONFIRM_SIGN_OUT
+      message: TextPackage.CONFIRM_SIGN_OUT,
+      okText: TextPackage.SURE,
+      okFunc: () => {
+        this.handleSignOut();
+      }
     };
     this.setState({ popupConfig: config });
   }
@@ -102,6 +109,10 @@ export default class SettingsScreen extends Component {
   changeScope() {
     this.setState({ popupConfig: { type: AppConst.CHANGE_SCOPE_POPUP } });
   }
+
+  static navigationOptions = {
+    title: TextPackage.SETUP
+  };
 
   render() {
     const { userProfile } = AppData;

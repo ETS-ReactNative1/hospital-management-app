@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, Modal, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import { Block, Typography } from 'src/components';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Text
+} from 'react-native';
 
-import { useMutation } from 'react-apollo';
-import { SIGN_OUT } from 'src/utils/graphqlMutations';
-
-import { theme } from 'src/constants';
+import { theme, localization } from 'src/constants';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
+
+const TextPackage = localization[AppData.language];
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +26,10 @@ const styles = StyleSheet.create({
     paddingRight: theme.sizes.base * 2
   },
   popup_container: {
+    paddingBottom: theme.sizes.padding * 3,
+    paddingTop: theme.sizes.padding * 3,
+    paddingLeft: theme.sizes.padding * 3,
+    paddingRight: theme.sizes.padding * 3,
     backgroundColor: theme.colors.white,
     width: '100%',
     borderRadius: 10
@@ -30,23 +39,51 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: theme.colors.gray2
   },
-  title: {}
+  title: {
+    textTransform: 'capitalize',
+    fontWeight: 'bold',
+    fontSize: theme.sizes.h1
+  },
+  body: {
+    textTransform: 'none',
+    fontSize: theme.sizes.h3,
+    marginTop: theme.sizes.padding * 2,
+    marginBottom: theme.sizes.padding * 2
+  },
+  btn_group: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  ok_btn: {
+    textTransform: 'uppercase',
+    color: theme.colors.green
+  },
+  cancel_btn: {
+    textTransform: 'uppercase',
+    color: theme.colors.gray
+  }
 });
 
-export default class SettingsScreen extends Component {
-  handleSignOut = async props => {
-    const [signOut, { client }] = useMutation(SIGN_OUT);
-    await signOut();
-    AppData.accessToken = undefined;
-    props.navigation.navigate('Auth');
-    await client.resetStore();
-  };
+const CancelBtn = props => {
+  return (
+    <TouchableOpacity onPress={props.onPress}>
+      <Text style={styles.cancel_btn}>{TextPackage.CANCEL}</Text>
+    </TouchableOpacity>
+  );
+};
 
-  handleChangePass = async () => {};
+const OkBtn = props => {
+  return (
+    <TouchableOpacity onPress={props.onPress}>
+      <Text style={styles.ok_btn}>{props.okText}</Text>
+    </TouchableOpacity>
+  );
+};
 
+export default class Popup extends Component {
   render() {
     const { popupConfig, closePopup } = this.props;
-
+    console.log(popupConfig);
     return (
       <Modal
         animationType="slide"
@@ -56,21 +93,18 @@ export default class SettingsScreen extends Component {
           console.log('Modal has been closed.');
         }}
       >
-        <Block style={styles.container}>
+        <View style={styles.container}>
           <KeyboardAvoidingView style={styles.popup_container}>
-            <Block style={{ visible: popupConfig.type === AppConst.YES_NO_POPUP }}>
-              <Typography>Hello World! ashdhasdhahsd</Typography>
-            </Block>
-
-            <TouchableOpacity
-              onPress={() => {
-                closePopup();
-              }}
-            >
-              <Typography>Hide Modal</Typography>
-            </TouchableOpacity>
+            <View style={{ visible: popupConfig.type === AppConst.OK_CANCEL_POPUP }}>
+              <Text style={styles.title}>{popupConfig.title}</Text>
+              <Text style={styles.body}>{popupConfig.message}</Text>
+              <View style={styles.btn_group}>
+                <CancelBtn onPress={closePopup} />
+                <OkBtn onPress={popupConfig.okFunc} okText={popupConfig.okText} />
+              </View>
+            </View>
           </KeyboardAvoidingView>
-        </Block>
+        </View>
       </Modal>
     );
   }

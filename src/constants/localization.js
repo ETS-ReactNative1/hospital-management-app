@@ -10,7 +10,9 @@ const VN = {
   NAME: 'Tên',
   PHONE: 'Số điện thoại',
   CHANGE_PASSWORD: 'Đổi mật khẩu',
-  SETUP: 'Cài đặt'
+  SETUP: 'Cài đặt',
+  CANCEL: 'Hủy bỏ',
+  SURE: 'Chắc chắn'
 };
 
 export { VN };
