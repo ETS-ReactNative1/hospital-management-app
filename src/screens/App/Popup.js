@@ -64,45 +64,45 @@ const styles = StyleSheet.create({
   }
 });
 
-const CancelBtn = props => {
-  return (
-    <TouchableOpacity onPress={props.onPress}>
-      <Text style={styles.cancel_btn}>{TextPackage.CANCEL}</Text>
-    </TouchableOpacity>
-  );
-};
+const CancelBtn = props => (
+  <TouchableOpacity onPress={props.onPress}>
+    <Text style={styles.cancel_btn}>{TextPackage.CANCEL}</Text>
+  </TouchableOpacity>
+);
 
-const OkBtn = props => {
-  return (
-    <TouchableOpacity onPress={props.onPress}>
-      <Text style={styles.ok_btn}>{props.okText}</Text>
-    </TouchableOpacity>
-  );
+const OkBtn = props => (
+  <TouchableOpacity onPress={props.onPress}>
+    <Text style={styles.ok_btn}>{props.okText}</Text>
+  </TouchableOpacity>
+);
+
+const PopupContent = props => {
+  const { popupConfig, closePopup } = props;
+  switch (popupConfig.type) {
+    case AppConst.OK_CANCEL_POPUP:
+      return (
+        <View>
+          <Text style={styles.title}>{popupConfig.title}</Text>
+          <Text style={styles.body}>{popupConfig.message}</Text>
+          <View style={styles.btn_group}>
+            <CancelBtn onPress={closePopup} />
+            <OkBtn onPress={popupConfig.okFunc} okText={popupConfig.okText} />
+          </View>
+        </View>
+      );
+    default:
+      return <CancelBtn onPress={closePopup} />;
+  }
 };
 
 export default class Popup extends Component {
   render() {
     const { popupConfig, closePopup } = this.props;
-    console.log(popupConfig);
     return (
-      <Modal
-        animationType="slide"
-        transparent
-        visible={popupConfig.type !== AppConst.NO_POPUP}
-        onRequestClose={() => {
-          console.log('Modal has been closed.');
-        }}
-      >
+      <Modal animationType="slide" transparent visible={popupConfig.type !== AppConst.NO_POPUP}>
         <View style={styles.container}>
           <KeyboardAvoidingView style={styles.popup_container}>
-            <View style={{ visible: popupConfig.type === AppConst.OK_CANCEL_POPUP }}>
-              <Text style={styles.title}>{popupConfig.title}</Text>
-              <Text style={styles.body}>{popupConfig.message}</Text>
-              <View style={styles.btn_group}>
-                <CancelBtn onPress={closePopup} />
-                <OkBtn onPress={popupConfig.okFunc} okText={popupConfig.okText} />
-              </View>
-            </View>
+            <PopupContent popupConfig={popupConfig} closePopup={closePopup} />
           </KeyboardAvoidingView>
         </View>
       </Modal>
