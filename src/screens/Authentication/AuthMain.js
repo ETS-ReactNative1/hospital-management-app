@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image } from 'react-native';
 
-import { GradientButton, Block, Input, Typography } from 'src/components';
+import { GradientButton, Block, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import AppData from 'src/AppData';
 

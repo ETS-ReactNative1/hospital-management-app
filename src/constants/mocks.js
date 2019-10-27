@@ -28,9 +28,7 @@ const categories = [
     name: 'Kiểm kê thiết bị',
     description: 'Ghi nhận kiểm kê thiết bị',
     icon: 'assignment'
-  },
+  }
 ];
-
-
 
 export { categories };

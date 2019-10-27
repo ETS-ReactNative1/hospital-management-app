@@ -112,6 +112,10 @@ const QRScanScreen = props => {
   );
 };
 
+QRScanScreen.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('name', 'QRScan')
+});
+
 const styles = StyleSheet.create({
   CameraStyle: {
     flex: 1,

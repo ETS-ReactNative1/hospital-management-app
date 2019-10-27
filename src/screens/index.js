@@ -1,8 +1,8 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+// import React from 'react';
+// import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants/';
 import AuthMain from './Authentication/AuthMain';
@@ -20,29 +20,27 @@ const configHeaderNavigatior = {
       marginLeft: 0,
       paddingLeft: 0,
       paddingRight: theme.sizes.padding,
-      fontSize: theme.sizes.h1,
-      color: theme.colors.white
+      fontSize: theme.sizes.h1
     },
     headerStyle: {
       height: theme.sizes.base * 3.5,
-      backgroundColor: theme.colors.primary, // or 'white
+      backgroundColor: theme.colors.white, // or 'white
+      marginLeft: theme.sizes.padding * 4,
       borderBottomColor: 'transparent',
       elevation: 0 // for android
     },
     headerLeftContainerStyle: {
-      alignItems: 'center',
-      marginLeft: theme.sizes.padding,
-      paddingRight: theme.sizes.padding
+      alignItems: 'center'
     },
     headerRightContainerStyle: {
       alignItems: 'center',
-      paddingRight: theme.sizes.padding * 2
-    },
-    headerLeft: ({ onPress }) => (
-      <TouchableOpacity onPress={onPress}>
-        <Icon name="keyboard-backspace" size={30} color={theme.colors.white} />
-      </TouchableOpacity>
-    )
+      paddingRight: theme.sizes.padding * 3
+    }
+    // headerLeft: ({ onPress }) => (
+    //   <TouchableOpacity onPress={onPress}>
+    //     <Icon name="keyboard-backspace" size={30} color={theme.colors.white} />
+    //   </TouchableOpacity>
+    // )
   }
 };
 const AuthStack = createStackNavigator(
