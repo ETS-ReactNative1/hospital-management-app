@@ -21,11 +21,11 @@ const configHeaderNavigatior = {
       paddingLeft: 0,
       paddingRight: theme.sizes.padding,
       fontSize: theme.sizes.h1,
-      color: theme.colors.white
+      color: theme.colors.black
     },
     headerStyle: {
       height: theme.sizes.base * 3.5,
-      backgroundColor: theme.colors.primary, // or 'white
+      backgroundColor: theme.colors.white, // or 'white
       borderBottomColor: 'transparent',
       elevation: 0 // for android
     },
@@ -40,7 +40,7 @@ const configHeaderNavigatior = {
     },
     headerLeft: ({ onPress }) => (
       <TouchableOpacity onPress={onPress}>
-        <Icon name="keyboard-backspace" size={30} color={theme.colors.white} />
+        <Icon name="keyboard-backspace" size={30} color={theme.colors.black} />
       </TouchableOpacity>
     )
   }

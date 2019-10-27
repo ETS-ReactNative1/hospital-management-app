@@ -27,11 +27,7 @@ export default class Forgot extends Component {
   }
 
   static navigationOptions = {
-    headerStyle: {
-      backgroundColor: theme.colors.white,
-      borderBottomColor: 'transparent',
-      elevation: 0 // for android
-    }
+    headerLeft: () => <Block />
   };
 
   render() {
