@@ -42,8 +42,7 @@ const authLink = new ApolloLink(
       return () => {
         handle && handle.unsubscribe();
       };
-    }
-    )
+    })
 );
 
 const refreshTokenLink = new TokenRefreshLink({
@@ -51,8 +50,7 @@ const refreshTokenLink = new TokenRefreshLink({
   isTokenValidOrUndefined: () => {
     const token = AppData.accessToken;
 
-    if (!token)
-      return true;
+    if (!token) return true;
 
     try {
       const { exp } = jwtDecode(token);

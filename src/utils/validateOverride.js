@@ -6,8 +6,8 @@ const validators = {
       return options.message || 'phải được xác nhận';
     }
     return true;
-  },
-}
+  }
+};
 
 validate.validators = {
   ...validate.validators,
@@ -16,4 +16,4 @@ validate.validators = {
 
 validate.validators.email.message = '^Email không hợp lệ';
 
-export default validate
+export default validate;

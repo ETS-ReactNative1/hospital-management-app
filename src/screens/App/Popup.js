@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Modal, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import { GradientButton, Block, Typography, Input } from 'src/components';
+import { Block, Typography } from 'src/components';
 
 import { useMutation } from 'react-apollo';
 import { SIGN_OUT } from 'src/utils/graphqlMutations';
@@ -45,13 +45,12 @@ export default class SettingsScreen extends Component {
   handleChangePass = async () => {};
 
   render() {
-    const { userProfile } = AppData;
     const { popupConfig, closePopup } = this.props;
 
     return (
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={popupConfig.type !== AppConst.NO_POPUP}
         onRequestClose={() => {
           console.log('Modal has been closed.');

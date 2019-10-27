@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image } from 'react-native';
 
-import { GradientButton, Block, Input, Typography } from 'src/components';
+import { GradientButton, Block, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import AppData from 'src/AppData';
 
@@ -19,6 +19,13 @@ const styles = StyleSheet.create({
 });
 
 export default class Forgot extends Component {
+  constructor(props) {
+    super(props);
+    if (AppData.accessToken) {
+      props.navigation.navigate('App');
+    }
+  }
+
   static navigationOptions = {
     headerStyle: {
       backgroundColor: theme.colors.white,
@@ -26,13 +33,6 @@ export default class Forgot extends Component {
       elevation: 0 // for android
     }
   };
-
-  constructor(props) {
-    super(props);
-    if (AppData.accessToken) {
-      props.navigation.navigate('App');
-    }
-  }
 
   render() {
     const { navigation } = this.props;

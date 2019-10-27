@@ -35,10 +35,6 @@ const styles = StyleSheet.create({
 });
 
 export default class Forgot extends Component {
-  static navigationOptions = {
-    title: 'Quên mật khẩu'
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -107,6 +103,10 @@ export default class Forgot extends Component {
       );
     }
   }
+
+  static navigationOptions = {
+    title: 'Quên mật khẩu'
+  };
 
   render() {
     const {

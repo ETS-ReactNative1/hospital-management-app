@@ -61,10 +61,6 @@ const styles = StyleSheet.create({
 const TextPackage = localization[AppData.language];
 
 export default class SettingsScreen extends Component {
-  static navigationOptions = {
-    title: TextPackage.SETUP
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -73,6 +69,10 @@ export default class SettingsScreen extends Component {
       }
     };
   }
+
+  static navigationOptions = {
+    title: TextPackage.SETUP
+  };
 
   showPopup(type) {
     this.setState({ popupConfig: type });

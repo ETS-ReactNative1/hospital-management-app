@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, ActivityIndicator, View, StyleSheet } from 'react-native';
+import { Platform, StatusBar, ActivityIndicator, View } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { Block } from './components';
 import graphqlClient from './utils/graphqlClient';
@@ -15,11 +15,15 @@ const App = () => {
     fetch(`${AppConst.SERVER_URL}/refresh-token`, {
       method: 'POST',
       credentials: 'include'
-    }).then(async data => {
-      const { accessToken } = await data.json();
-      AppData.accessToken = accessToken;
-      setLoading(false);
-    }).catch(err => { console.log(err) });
+    })
+      .then(async data => {
+        const { accessToken } = await data.json();
+        AppData.accessToken = accessToken;
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 
   if (loading || Platform.OS === 'ios') {

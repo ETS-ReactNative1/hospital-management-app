@@ -54,10 +54,6 @@ const styles = StyleSheet.create({
 });
 
 export default class SignUp extends Component {
-  static navigationOptions = {
-    title: 'Đăng ký'
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -127,6 +123,10 @@ export default class SignUp extends Component {
   handleSubmitEditing = name => {
     if (name === 'email') this.passwordRef.current.textInputRef.current.focus();
     if (name === 'password') this.confirmPasswordRef.current.textInputRef.current.focus();
+  };
+
+  static navigationOptions = {
+    title: 'Đăng ký'
   };
 
   render() {
