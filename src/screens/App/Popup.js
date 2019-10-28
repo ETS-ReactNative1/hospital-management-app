@@ -1,78 +1,20 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Text
-} from 'react-native';
-
-import { theme, localization } from 'src/constants';
+import { View, Modal, TouchableOpacity, KeyboardAvoidingView, Text } from 'react-native';
+import { theme, localization, generalStyles } from 'src/constants';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
 
 const TextPackage = localization[AppData.language];
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.black2,
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: theme.sizes.base * 2,
-    paddingRight: theme.sizes.base * 2
-  },
-  popup_container: {
-    paddingBottom: theme.sizes.padding * 3,
-    paddingTop: theme.sizes.padding * 3,
-    paddingLeft: theme.sizes.padding * 3,
-    paddingRight: theme.sizes.padding * 3,
-    backgroundColor: theme.colors.white,
-    width: '100%',
-    borderRadius: 10
-  },
-  divider_1px: {
-    width: '100%',
-    height: 1,
-    backgroundColor: theme.colors.gray2
-  },
-  title: {
-    textTransform: 'capitalize',
-    fontWeight: 'bold',
-    fontSize: theme.sizes.h1
-  },
-  body: {
-    textTransform: 'none',
-    fontSize: theme.sizes.h3,
-    marginTop: theme.sizes.padding * 2,
-    marginBottom: theme.sizes.padding * 2
-  },
-  btn_group: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  ok_btn: {
-    textTransform: 'uppercase',
-    color: theme.colors.green
-  },
-  cancel_btn: {
-    textTransform: 'uppercase',
-    color: theme.colors.gray
-  }
-});
-
 const CancelBtn = props => (
   <TouchableOpacity onPress={props.onPress}>
-    <Text style={styles.cancel_btn}>{TextPackage.CANCEL}</Text>
+    <Text style={generalStyles.popup_ok_btn}>{TextPackage.CANCEL}</Text>
   </TouchableOpacity>
 );
 
 const OkBtn = props => (
   <TouchableOpacity onPress={props.onPress}>
-    <Text style={styles.ok_btn}>{props.okText}</Text>
+    <Text style={generalStyles.popup_cancel_btn}>{props.okText}</Text>
   </TouchableOpacity>
 );
 
@@ -82,14 +24,19 @@ const PopupContent = props => {
     case AppConst.OK_CANCEL_POPUP:
       return (
         <View>
-          <Text style={styles.title}>{popupConfig.title}</Text>
-          <Text style={styles.body}>{popupConfig.message}</Text>
-          <View style={styles.btn_group}>
+          <Text style={generalStyles.popup_title}>{popupConfig.title}</Text>
+          <View style={generalStyles.divider_1px} />
+          <Text style={generalStyles.popup_body}>{popupConfig.message}</Text>
+          <View style={generalStyles.popup_group_btn}>
             <CancelBtn onPress={closePopup} />
             <OkBtn onPress={popupConfig.okFunc} okText={popupConfig.okText} />
           </View>
         </View>
       );
+    case AppConst.OK_POPUP:
+    case AppConst.CHANGE_PASS_POPUP:
+    case AppConst.CHANGE_INFOR_POPUP:
+    case AppConst.CHANGE_SCOPE_POPUP:
     default:
       return <CancelBtn onPress={closePopup} />;
   }
@@ -100,8 +47,8 @@ export default class Popup extends Component {
     const { popupConfig, closePopup } = this.props;
     return (
       <Modal animationType="slide" transparent visible={popupConfig.type !== AppConst.NO_POPUP}>
-        <View style={styles.container}>
-          <KeyboardAvoidingView style={styles.popup_container}>
+        <View style={[generalStyles.screen_container, { backgroundColor: theme.colors.black2 }]}>
+          <KeyboardAvoidingView style={generalStyles.popup_container}>
             <PopupContent popupConfig={popupConfig} closePopup={closePopup} />
           </KeyboardAvoidingView>
         </View>
