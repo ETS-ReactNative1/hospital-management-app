@@ -12,7 +12,8 @@ const VN = {
   CHANGE_PASSWORD: 'Đổi mật khẩu',
   SETUP: 'Cài đặt',
   CANCEL: 'Hủy bỏ',
-  SURE: 'Chắc chắn'
+  SURE: 'Chắc chắn',
+  COMPLETE: 'Hoàn tất'
 };
 
 export { VN };

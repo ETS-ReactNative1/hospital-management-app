@@ -36,11 +36,10 @@ const generalStyles = StyleSheet.create({
   popup_title: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    fontSize: sizes.h2
+    fontSize: sizes.h3
   },
   popup_body: {
     textTransform: 'none',
-    fontSize: sizes.h3,
     marginTop: sizes.padding,
     marginBottom: sizes.padding
   },
