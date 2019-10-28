@@ -9,7 +9,9 @@ const generalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: sizes.base * 2,
-    paddingRight: sizes.base * 2
+    paddingRight: sizes.base * 2,
+    paddingTop: sizes.base * 2,
+    paddingBottom: sizes.base * 2
   },
   popup_container: {
     paddingBottom: sizes.padding * 2,
@@ -24,6 +26,12 @@ const generalStyles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: colors.gray2
+  },
+  divider_5px: {
+    width: '100%',
+    height: 5,
+    backgroundColor: colors.gray2,
+    marginTop: sizes.padding
   },
   popup_title: {
     textTransform: 'uppercase',
