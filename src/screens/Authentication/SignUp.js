@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     borderWidth: 0,
     borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingVertical: 0
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   hasErrors: {
     borderBottomColor: theme.colors.error

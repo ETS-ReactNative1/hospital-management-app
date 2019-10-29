@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
   shadow: {
     shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 5 // android
   },
   accent: { backgroundColor: theme.colors.accent },
   primary: { backgroundColor: theme.colors.primary },

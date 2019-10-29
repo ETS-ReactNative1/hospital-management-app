@@ -15,9 +15,9 @@ export const SIGN_UP = gql`
 `;
 
 export const CREATE_EVENT = gql`
-  mutation CreateEvent($deviceId: ID!) {
-    createEvent(deviceId: $deviceId) {
-      action
+  mutation CreateActiveEvent($deviceId: ID!) {
+    createActiveEvent(deviceId: $deviceId) {
+      actionType
     }
   }
 `;

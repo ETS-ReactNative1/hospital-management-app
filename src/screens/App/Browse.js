@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
+import { Card, Badge, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
 import AppData from 'src/AppData';
 
