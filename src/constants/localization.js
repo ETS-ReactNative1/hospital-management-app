@@ -13,7 +13,9 @@ const VN = {
   SETUP: 'Cài đặt',
   CANCEL: 'Hủy bỏ',
   SURE: 'Chắc chắn',
-
+  CHANGE_SUCCESSFULL: 'Thay đổi thành công',
+  CHANGE_PASSWORD_SUCCESSFULL:
+    'Mật khẩu của bạn đã được cập nhật thành công! \n Để đảm bảo an toàn, bạn sẽ phải đăng nhập lại với mật khẩu mới.',
   PASSWORD: 'Mật khẩu mới',
   OLD_PASSWORD: 'Mật khẩu cũ',
   CONFRIM_PASSWORD: 'Nhập lại mật khâu mới',
@@ -21,7 +23,6 @@ const VN = {
   PASSWORD_TOO_SHORT_ERROR: '^Độ dài tối đa là 64 ký tự',
   CONFRIM_PASSWORD_REQUIRED_ERROR: '^Xác nhận mật khẩu là bắt buộc',
   CONFRIM_PASSWORD_CONFLIT_ERROR: '^Mật khẩu xác nhận không trùng khớp',
-
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
   SEARCH_DEVICE: 'Tra cứu thiết bị',

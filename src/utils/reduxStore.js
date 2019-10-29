@@ -3,7 +3,7 @@ import AppConst from 'src/AppConst';
 
 export const actions = {
   showPopup: popupConfig => ({ type: 'SHOW_POPUP', payload: popupConfig }),
-  hidePopup: () => ({ type: 'HIDE_POPUP' })
+  hidePopup: feedback => ({ type: 'HIDE_POPUP', payload: feedback })
 };
 
 const popupReducer = (state = { type: AppConst.NO_POPUP }, action) => {
@@ -11,7 +11,7 @@ const popupReducer = (state = { type: AppConst.NO_POPUP }, action) => {
     case 'SHOW_POPUP':
       return action.payload;
     case 'HIDE_POPUP':
-      return { type: AppConst.NO_POPUP };
+      return { type: AppConst.NO_POPUP, feedback: action.payload };
     default:
       return state;
   }

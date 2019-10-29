@@ -62,7 +62,7 @@ class ChangePassPopup extends Component {
     this.confirmPasswordRef = createRef();
   }
 
-  handleChangePassword = async () => {
+  handleChangePassword = () => {
     const { hidePopup } = this.props;
     const { isValid } = this.state;
     isValid && hidePopup();

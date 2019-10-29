@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import AppConst from 'src/AppConst';
 import OkCanelPopup from './OKCancelPopup';
 import ChangePassPopup from './ChangePassPopup';
+import OkPopup from './OkPopup';
 
 class Popup extends Component {
   render() {
@@ -23,6 +24,7 @@ class Popup extends Component {
           <KeyboardAvoidingView style={generalStyles.popup_container}>
             <OkCanelPopup />
             <ChangePassPopup />
+            <OkPopup />
           </KeyboardAvoidingView>
         </View>
       </Modal>
