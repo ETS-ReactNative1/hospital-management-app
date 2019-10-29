@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { Card, Badge, GradientButton, Block, Typography } from 'src/components';
+import { Card, Badge, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
 import AppData from 'src/AppData';
 
@@ -26,23 +26,8 @@ export default class Browse extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Chức năng',
-      headerStyle: {
-        backgroundColor: theme.colors.white,
-        borderBottomColor: 'transparent',
-        marginLeft: theme.sizes.padding * 4,
-        elevation: 0 // for android
-      },
-      headerTitleStyle: {
-        fontWeight: 'bold',
-        marginLeft: 0,
-        paddingLeft: 0,
-        paddingRight: theme.sizes.padding,
-        fontSize: theme.sizes.h1,
-        color: theme.colors.grey
-      },
-      headerLeft: null,
       headerRight: () => (
-        <GradientButton
+        <TouchableOpacity
           onPress={() => navigation.navigate('Settings')}
           style={{
             alignItems: 'center',
@@ -50,14 +35,13 @@ export default class Browse extends Component {
           }}
         >
           <Image source={AppData.userProfile.avatar} style={styles.avatar} />
-        </GradientButton>
+        </TouchableOpacity>
       )
     };
   };
 
   render() {
     const { navigation } = this.props;
-
     return (
       <Block>
         <ScrollView
@@ -72,8 +56,8 @@ export default class Browse extends Component {
           >
             {mocks.categories.map(category => (
               <TouchableOpacity
-                key={category.name}
-                onPress={() => navigation.navigate('Explore', { category })}
+                key={category.id}
+                onPress={() => navigation.navigate('QRScan', category)}
               >
                 <Card center middle shadow row style={styles.category}>
                   <Badge size={50} color="rgba(41,216,143,0.20)">

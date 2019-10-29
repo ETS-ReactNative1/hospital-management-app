@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, ActivityIndicator, View } from 'react-native';
+import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { Block } from './components';
 import graphqlClient from './utils/graphqlClient';
@@ -8,6 +8,13 @@ import AppConst from './AppConst';
 import Navigation from './screens';
 
 //TODO: Implement redux to manage global state through this tutorial: https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b
+
+String.prototype.toLocaleDateString = function() {
+  return this.split('T')[0]
+    .split('-')
+    .reverse()
+    .join('/');
+};
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -26,11 +33,10 @@ const App = () => {
       });
   });
 
-  if (loading || Platform.OS === 'ios') {
+  if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
-        <StatusBar barStyle="default" />
       </View>
     );
   }
@@ -38,6 +44,7 @@ const App = () => {
   return (
     <Block>
       <ApolloProvider client={graphqlClient}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
         <Navigation />
       </ApolloProvider>
     </Block>

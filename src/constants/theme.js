@@ -9,7 +9,9 @@ const colors = {
   green: '#20D29B',
   gray: '#9DA3B4',
   gray2: '#C5CCD6',
-  error: '#F3534A'
+  error: '#F3534A',
+  redDark: '#D82626',
+  redLight: '#F97871'
 };
 
 const sizes = {
@@ -20,12 +22,12 @@ const sizes = {
   padding: 8,
 
   // font sizes
+  header: 26,
   h1: 22,
   h2: 20,
   h3: 18,
   title: 18,
-  header: 16,
-  body: 14,
+  body: 16,
   caption: 12
 };
 

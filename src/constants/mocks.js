@@ -1,32 +1,37 @@
+import * as localization from './localization';
+import AppData from 'src/AppData';
+
+const TextPackage = localization[AppData.language];
+
 const categories = [
   {
     id: 1,
-    name: 'Bật/Tắt thiết bị',
-    description: 'Ghi nhận quá trình bật/tắt thiết bị',
+    name: TextPackage.SWITCH_DEVICE,
+    description: TextPackage.SWITCH_DEVICE_DESC,
     icon: 'power-settings-new'
   },
   {
     id: 2,
-    name: 'Tra cứu thiết bị',
-    description: 'Tra cứu thong tin lich sử ghi nhận',
+    name: TextPackage.SEARCH_DEVICE,
+    description: TextPackage.SEARCH_DEVICE_DESC,
     icon: 'search'
   },
   {
     id: 3,
-    name: 'Bảo trì thiết bị',
-    description: 'Ghi nhận thông tin bảo trì',
-    icon: 'gavel'
+    name: TextPackage.MAINTAIN_DEVICE,
+    description: TextPackage.MAINTAIN_DEVICE_DESC,
+    icon: 'build'
   },
   {
     id: 4,
-    name: 'Thanh lý thiết bị',
-    description: 'Ghi nhận thông tin thanh lý',
+    name: TextPackage.LIQUIDATE_DEVICE,
+    description: TextPackage.LIQUIDATE_DEVICE_DESC,
     icon: 'attach-money'
   },
   {
     id: 5,
-    name: 'Kiểm kê thiết bị',
-    description: 'Ghi nhận kiểm kê thiết bị',
+    name: TextPackage.ACCOUNT_DEVICE,
+    description: TextPackage.ACCOUNT_DEVICE_DESC,
     icon: 'assignment'
   }
 ];

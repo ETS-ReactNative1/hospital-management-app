@@ -88,7 +88,7 @@ export default class Input extends Component {
     let inputType = 'default';
     if (email || name === 'email') {
       inputType = 'email-address';
-    } else if (number) {
+    } else if (number || name === 'cost' || name === 'price') {
       inputType = 'numeric';
     } else if (phone || name === 'phone') {
       inputType = 'phone-pad';
