@@ -14,6 +14,14 @@ const VN = {
   CANCEL: 'Hủy bỏ',
   SURE: 'Chắc chắn',
 
+  PASSWORD: 'Mật khẩu mới',
+  OLD_PASSWORD: 'Mật khẩu cũ',
+  CONFRIM_PASSWORD: 'Nhập lại mật khâu mới',
+  PASSWORD_REQUIRED_ERROR: '^Mật khẩu là bắt buộc',
+  PASSWORD_TOO_SHORT_ERROR: '^Độ dài tối đa là 64 ký tự',
+  CONFRIM_PASSWORD_REQUIRED_ERROR: '^Xác nhận mật khẩu là bắt buộc',
+  CONFRIM_PASSWORD_CONFLIT_ERROR: '^Mật khẩu xác nhận không trùng khớp',
+
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
   SEARCH_DEVICE: 'Tra cứu thiết bị',
@@ -24,7 +32,6 @@ const VN = {
   LIQUIDATE_DEVICE_DESC: 'Ghi nhận thông tin thanh lý',
   ACCOUNT_DEVICE: 'Kiểm kể thiết bị',
   ACCOUNT_DEVICE_DESC: 'Ghi nhận kiểm kê thiết bị',
-
   DEVICE_INFO: 'Thông tin thiết bị',
   DEVICE_TITLE: 'Tên thiết bị',
   MODEL: 'Mẫu thiết bị',

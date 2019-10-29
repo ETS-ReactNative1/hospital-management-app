@@ -49,10 +49,12 @@ const generalStyles = StyleSheet.create({
   },
   popup_ok_btn: {
     textTransform: 'uppercase',
+    fontWeight: 'bold',
     color: colors.green
   },
   popup_cancel_btn: {
     textTransform: 'uppercase',
+    fontWeight: 'bold',
     color: colors.gray
   }
 });
