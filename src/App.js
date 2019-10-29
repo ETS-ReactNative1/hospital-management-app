@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, ActivityIndicator, View } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
-import { Block } from './components';
+import { Provider } from 'react-redux';
+import { store } from './utils/reduxStore';
 import graphqlClient from './utils/graphqlClient';
 import AppData from './AppData';
 import AppConst from './AppConst';
 import Navigation from './screens';
-
-//TODO: Implement redux to manage global state through this tutorial: https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b
+import Popup from './screens/App/Popup';
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     fetch(`${AppConst.SERVER_URL}/refresh-token`, {
       method: 'POST',
@@ -36,11 +36,12 @@ const App = () => {
   }
 
   return (
-    <Block>
-      <ApolloProvider client={graphqlClient}>
+    <ApolloProvider client={graphqlClient}>
+      <Provider store={store}>
         <Navigation />
-      </ApolloProvider>
-    </Block>
+        <Popup />
+      </Provider>
+    </ApolloProvider>
   );
 };
 
