@@ -56,7 +56,8 @@ const VN = {
   UPDATE_MAINTAIN: 'Cập nhật bảo trì',
   LIQUIDATE_COMPANY: 'Đơn vị mua',
   LIQUIDATE_PRICE: 'Giá trị thanh lý',
-  LIQUIDATE: 'Thanh lý'
+  LIQUIDATE: 'Thanh lý',
+  COMPLETE: 'Hoàn tất'
 };
 
 export { VN };

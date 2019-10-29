@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { GradientButton, Block, Typography } from 'src/components';
 import { theme, localization, generalStyles } from 'src/constants';
-import Popop from './Popup';
-
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
-
 import { useMutation } from 'react-apollo';
 import { SIGN_OUT } from 'src/utils/graphqlMutations';
+import { actions } from 'src/utils/reduxStore';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   image: {
@@ -46,30 +45,18 @@ const styles = StyleSheet.create({
 
 const TextPackage = localization[AppData.language];
 
-export default class SettingsScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      popupConfig: {
-        type: AppConst.NO_POPUP
-      }
-    };
-  }
-
+class SettingsScreen extends Component {
   handleSignOut = async props => {
-    const [signOut, { client }] = useMutation(SIGN_OUT);
-    await signOut();
-    AppData.accessToken = undefined;
+    // const [signOut, { client }] = useMutation(SIGN_OUT);
+    // await signOut();
+    // AppData.accessToken = undefined;
+    // await client.resetStore();
     props.navigation.navigate('Auth');
-    await client.resetStore();
+    console.log('User signout');
   };
 
-  closePopup() {
-    this.setState({ popupConfig: { type: AppConst.NO_POPUP } });
-  }
-
   confirmSignOut() {
-    const config = {
+    this.props.showPopup({
       type: AppConst.OK_CANCEL_POPUP,
       title: TextPackage.SIGN_OUT,
       message: TextPackage.CONFIRM_SIGN_OUT,
@@ -77,20 +64,25 @@ export default class SettingsScreen extends Component {
       okFunc: () => {
         this.handleSignOut();
       }
-    };
-    this.setState({ popupConfig: config });
+    });
   }
 
   changePassword() {
-    this.setState({ popupConfig: { type: AppConst.CHANGE_PASS_POPUP } });
+    this.props.showPopup({
+      type: AppConst.CHANGE_PASS_POPUP
+    });
   }
 
   changeInfor() {
-    this.setState({ popupConfig: { type: AppConst.edite_infor_POPUP } });
+    this.props.showPopup({
+      type: AppConst.CHANGE_INFOR_POPUP
+    });
   }
 
   changeScope() {
-    this.setState({ popupConfig: { type: AppConst.CHANGE_SCOPE_POPUP } });
+    this.props.showPopup({
+      type: AppConst.CHANGE_SCOPE_POPUP
+    });
   }
 
   static navigationOptions = {
@@ -101,13 +93,6 @@ export default class SettingsScreen extends Component {
     const { userProfile } = AppData;
     return (
       <Block style={generalStyles.screen_container}>
-        <Popop
-          popupConfig={this.state.popupConfig}
-          closePopup={() => {
-            this.closePopup();
-          }}
-        />
-
         <Image style={styles.image} source={userProfile.avatar} />
 
         <ScrollView
@@ -181,3 +166,8 @@ export default class SettingsScreen extends Component {
     );
   }
 }
+
+export default connect(
+  ({ popup }) => ({ popup }),
+  actions
+)(SettingsScreen);
