@@ -17,7 +17,7 @@ String.prototype.toLocaleDateString = function() {
 };
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetch(`${AppConst.SERVER_URL}/refresh-token`, {
       method: 'POST',
