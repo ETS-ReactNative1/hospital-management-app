@@ -20,7 +20,7 @@ const VN = {
   OLD_PASSWORD: 'Mật khẩu cũ',
   CONFRIM_PASSWORD: 'Nhập lại mật khâu mới',
   PASSWORD_REQUIRED_ERROR: '^Mật khẩu là bắt buộc',
-  PASSWORD_TOO_SHORT_ERROR: '^Độ dài tối đa là 64 ký tự',
+  PASSWORD_TOO_SHORT_ERROR: '^Độ dài tối thiểu là 6 ký tự',
   CONFRIM_PASSWORD_REQUIRED_ERROR: '^Xác nhận mật khẩu là bắt buộc',
   CONFRIM_PASSWORD_CONFLIT_ERROR: '^Mật khẩu xác nhận không trùng khớp',
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
