@@ -16,6 +16,9 @@ export default class Typography extends Component {
       small,
       size,
       transform,
+      uppercase,
+      lowercase,
+      capitalize,
       align,
       // styling
       regular,
@@ -26,6 +29,7 @@ export default class Typography extends Component {
       light,
       center,
       right,
+      justify,
       spacing, // letter-spacing
       height, // line-height
       // colors
@@ -55,6 +59,9 @@ export default class Typography extends Component {
       small && styles.small,
       size && { fontSize: size },
       transform && { textTransform: transform },
+      uppercase && styles.uppercase,
+      lowercase && styles.lowercase,
+      capitalize && styles.capitalize,
       align && { textAlign: align },
       height && { lineHeight: height },
       spacing && { letterSpacing: spacing },
@@ -66,6 +73,7 @@ export default class Typography extends Component {
       light && styles.light,
       center && styles.center,
       right && styles.right,
+      justify && styles.justify,
       color && styles[color],
       color && !styles[color] && { color },
       // color shortcuts
