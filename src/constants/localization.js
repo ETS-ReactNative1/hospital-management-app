@@ -54,7 +54,14 @@ const VN = {
   UPDATE_MAINTAIN: 'Cập nhật bảo trì',
   LIQUIDATE_COMPANY: 'Đơn vị mua',
   LIQUIDATE_PRICE: 'Giá trị thanh lý',
-  LIQUIDATE: 'Thanh lý'
+  LIQUIDATE: 'Thanh lý',
+
+  SWITCH_OFF_MESSAGE:
+    'Thiết bị đã được ghi nhận chuyển sang trạng thái Tắt. Hãy chắc chắn  rằng bạn đã tắt thiết bị!',
+  SWITCH_ON_MESSAGE:
+    'Thiết bị đã được ghi nhận chuyển sang trạng thái Bật. Hãy chắc chắn rằng bạn đã bật thiết bị!',
+  CONTINUE: 'Tiếp tục',
+  CHANGE_SUCCESS: 'Thay đổi thành công'
 };
 
 export { VN };

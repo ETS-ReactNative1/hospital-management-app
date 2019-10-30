@@ -9,13 +9,19 @@ export default class Dialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: props.visible
+      visible: false
     };
   }
 
-  setModalVisible = boolean => {
-    this.setState({ modalVisible: boolean });
+  setVisible = boolean => {
+    this.setState({ visible: boolean });
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.visible !== prevProps.visible) {
+      this.setVisible(this.props.visible);
+    }
+  }
 
   render() {
     const {
@@ -27,13 +33,15 @@ export default class Dialog extends Component {
       handleConfirm,
       children
     } = this.props;
-    const { modalVisible } = this.state;
+    const { visible } = this.state;
     return (
       <Modal
-        onRequestClose={() => this.setModalVisible(!modalVisible)}
-        animationType="fade"
+        onRequestClose={() => {
+          !hideCancel && this.setVisible(!visible);
+        }}
+        animationType="slide"
         transparent
-        visible={modalVisible}
+        visible={visible}
       >
         <StatusBar barStyle="default" backgroundColor={theme.colors.black2} />
         <Block middle padding={[0, theme.sizes.base * 2]} backgroundColor={theme.colors.black2}>
@@ -48,10 +56,7 @@ export default class Dialog extends Component {
             {/* Action */}
             <Block flex={false} row right>
               {!hideCancel && (
-                <GradientButton
-                  onPress={() => this.setModalVisible(false)}
-                  style={styles.actionButton}
-                >
+                <GradientButton onPress={() => this.setVisible(false)} style={styles.actionButton}>
                   <Typography transform="uppercase" bold body color={theme.colors.gray}>
                     {cancelText}
                   </Typography>

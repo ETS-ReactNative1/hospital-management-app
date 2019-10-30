@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 
-import { GradientButton, Block, Typography } from 'src/components';
+import { GradientButton, Block, Typography, Dialog } from 'src/components';
 import { theme, localization } from 'src/constants';
 import AppData from 'src/AppData';
 import { DEVICE_INFO_CONDENSE } from 'src/utils/graphqlQueries';
@@ -21,6 +21,7 @@ const SwitchDevice = props => {
   const { navigation } = props;
   const { deviceId } = navigation.state.params;
   const [createEvent] = useMutation(CREATE_EVENT);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { loading, error, data, refetch } = useQuery(DEVICE_INFO_CONDENSE, {
     variables: {
@@ -29,10 +30,15 @@ const SwitchDevice = props => {
   });
 
   const handleStateSwitch = async () => {
+    setModalVisible(!modalVisible);
     await createEvent({ variables: { deviceId } });
-    //*: Should use refetch here because query cache does not automatically update
-    //TODO: Add Modal later when it finished
+  };
+
+  const handleDialogConfirm = async () => {
+    setModalVisible(!modalVisible);
+    //?: Should refetch here because it will store cache for this deviceId.
     await refetch();
+    navigation.goBack();
   };
 
   if (loading) {
@@ -58,13 +64,24 @@ const SwitchDevice = props => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Dialog
+        hideCancel
+        visible={modalVisible}
+        title={TextPackage.CHANGE_SUCCESS}
+        confirmText={TextPackage.CONTINUE}
+        handleConfirm={handleDialogConfirm}
+      >
+        <Typography body align="justify">
+          {data.device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE}
+        </Typography>
+      </Dialog>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
         </Typography>
         {Object.entries(displayData).map(([key, name]) => {
           return (
-            <View>
+            <View key={key}>
               <Typography gray height={theme.sizes.body * 2}>
                 {TextPackage[name]}
               </Typography>
