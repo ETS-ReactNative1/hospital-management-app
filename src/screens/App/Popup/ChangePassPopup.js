@@ -1,7 +1,9 @@
 import React, { Component, createRef } from 'react';
 import { Input } from 'src/components';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Keyboard, Text, StyleSheet } from 'react-native';
 import { localization, generalStyles, theme } from 'src/constants';
+import { CHANGE_PASSWORD } from 'src/utils/graphqlMutations';
+import { Mutation } from 'react-apollo';
 import { actions } from 'src/utils/reduxStore';
 import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
@@ -62,10 +64,15 @@ class ChangePassPopup extends Component {
     this.confirmPasswordRef = createRef();
   }
 
-  handleChangePassword = () => {
-    const { hidePopup } = this.props;
-    const { isValid } = this.state;
-    isValid && hidePopup();
+  handleChangePasswordCompleted = () => {
+    this.props.hidePopup();
+    this.props.popup.callback();
+  };
+
+  handleChangePasswordError = error => {
+    console.log(error);
+    this.props.hidePopup();
+    this.props.popup.callback();
   };
 
   handleTextChange = (name, text) => {
@@ -100,62 +107,85 @@ class ChangePassPopup extends Component {
 
   render() {
     const { popup, hidePopup } = this.props;
-    const { touched, errors } = this.state;
+    const {
+      isValid,
+      touched,
+      errors,
+      values: { password }
+    } = this.state;
     const hasErrors = key => touched[key] && errors[key];
     if (popup.type === AppConst.CHANGE_PASS_POPUP)
       return (
-        <View>
-          <Text style={generalStyles.popup_title}>{TextPackage.CHANGE_PASSWORD}</Text>
-          <View style={generalStyles.divider_1px} />
-          <View style={generalStyles.popup_body}>
-            <Input
-              name="oldPassword"
-              secure
-              placeholder={TextPackage.OLD_PASSWORD}
-              error={hasErrors('oldPassword')}
-              style={[styles.input, hasErrors('oldPassword') && styles.hasErrors]}
-              helperText={errors.oldPassword || ''}
-              onChangeText={text => this.handleTextChange('oldPassword', text)}
-              onEndEditing={() => this.handleEndEditing('oldPassword')}
-              onSubmitEditing={() => this.handleSubmitEditing('oldPassword')}
-            />
-            <Input
-              name="password"
-              secure
-              placeholder={TextPackage.PASSWORD}
-              error={hasErrors('password')}
-              style={[styles.input, hasErrors('password') && styles.hasErrors]}
-              helperText={errors.password || ''}
-              ref={this.passwordRef}
-              onChangeText={text => this.handleTextChange('password', text)}
-              onEndEditing={() => this.handleEndEditing('password')}
-              onSubmitEditing={() => this.handleSubmitEditing('password')}
-            />
-            <Input
-              name="confirmPassword"
-              secure
-              placeholder={TextPackage.CONFRIM_PASSWORD}
-              error={hasErrors('confirmPassword')}
-              style={[styles.input, hasErrors('confirmPassword') && styles.hasErrors]}
-              helperText={errors.confirmPassword || ''}
-              ref={this.confirmPasswordRef}
-              onChangeText={text => this.handleTextChange('confirmPassword', text)}
-              onEndEditing={() => this.handleEndEditing('confirmPassword')}
-            />
-          </View>
-          <View style={generalStyles.popup_group_btn}>
-            <TouchableOpacity onPress={hidePopup}>
-              <Text style={generalStyles.popup_cancel_btn}>{TextPackage.CANCEL}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                this.handleChangePassword();
-              }}
-            >
-              <Text style={generalStyles.popup_ok_btn}>{TextPackage.COMPLETE}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Mutation
+          mutation={CHANGE_PASSWORD}
+          variables={{ password }}
+          onCompleted={this.handleChangePasswordCompleted}
+          onError={error => this.handleChangePasswordError(error)}
+        >
+          {(changePassword, { loading }) => {
+            return (
+              <View>
+                <Text style={generalStyles.popup_title}>{TextPackage.CHANGE_PASSWORD}</Text>
+                <View style={generalStyles.divider_1px} />
+                <View style={generalStyles.popup_body}>
+                  <Input
+                    name="oldPassword"
+                    secure
+                    placeholder={TextPackage.OLD_PASSWORD}
+                    error={hasErrors('oldPassword')}
+                    style={[styles.input, hasErrors('oldPassword') && styles.hasErrors]}
+                    helperText={errors.oldPassword || ''}
+                    onChangeText={text => this.handleTextChange('oldPassword', text)}
+                    onEndEditing={() => this.handleEndEditing('oldPassword')}
+                    onSubmitEditing={() => this.handleSubmitEditing('oldPassword')}
+                  />
+                  <Input
+                    name="password"
+                    secure
+                    placeholder={TextPackage.PASSWORD}
+                    error={hasErrors('password')}
+                    style={[styles.input, hasErrors('password') && styles.hasErrors]}
+                    helperText={errors.password || ''}
+                    ref={this.passwordRef}
+                    onChangeText={text => this.handleTextChange('password', text)}
+                    onEndEditing={() => this.handleEndEditing('password')}
+                    onSubmitEditing={() => this.handleSubmitEditing('password')}
+                  />
+                  <Input
+                    name="confirmPassword"
+                    secure
+                    placeholder={TextPackage.CONFRIM_PASSWORD}
+                    error={hasErrors('confirmPassword')}
+                    style={[styles.input, hasErrors('confirmPassword') && styles.hasErrors]}
+                    helperText={errors.confirmPassword || ''}
+                    ref={this.confirmPasswordRef}
+                    onChangeText={text => this.handleTextChange('confirmPassword', text)}
+                    onEndEditing={() => this.handleEndEditing('confirmPassword')}
+                  />
+                </View>
+                {loading ? (
+                  <Text style={[generalStyles.popup_cancel_btn, { alignSelf: 'center' }]}>
+                    {TextPackage.UPDATING}
+                  </Text>
+                ) : (
+                  <View style={generalStyles.popup_group_btn}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        isValid && changePassword();
+                      }}
+                    >
+                      <Text style={generalStyles.popup_ok_btn}>{TextPackage.COMPLETE}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={hidePopup}>
+                      <Text style={generalStyles.popup_cancel_btn}>{TextPackage.CANCEL}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            );
+          }}
+        </Mutation>
       );
     return <View />;
   }

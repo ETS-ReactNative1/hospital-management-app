@@ -44,18 +44,21 @@ const generalStyles = StyleSheet.create({
     marginBottom: sizes.padding
   },
   popup_group_btn: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: 'row-reverse'
   },
   popup_ok_btn: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    color: colors.green
+    color: colors.green,
+    marginRight: sizes.padding,
+    marginLeft: sizes.padding
   },
   popup_cancel_btn: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    color: colors.gray
+    color: colors.gray,
+    marginRight: sizes.padding,
+    marginLeft: sizes.padding
   }
 });
 

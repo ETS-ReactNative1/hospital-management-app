@@ -11,13 +11,14 @@ import OkPopup from './OkPopup';
 class Popup extends Component {
   render() {
     const { popup, hidePopup } = this.props;
+    const closeByBackBtn = popup.closeByBackBtn === undefined ? true : popup.closeByBackBtn;
     return (
       <Modal
         animationType="slide"
         transparent
         visible={popup.type !== AppConst.NO_POPUP}
         onRequestClose={() => {
-          hidePopup();
+          closeByBackBtn && hidePopup();
         }}
       >
         <View style={[generalStyles.screen_container, { backgroundColor: theme.colors.black2 }]}>

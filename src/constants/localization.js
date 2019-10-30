@@ -65,7 +65,9 @@ const VN = {
   LIQUIDATE_COMPANY: 'Đơn vị mua',
   LIQUIDATE_PRICE: 'Giá trị thanh lý',
   LIQUIDATE: 'Thanh lý',
-  COMPLETE: 'Hoàn tất'
+  COMPLETE: 'Hoàn tất',
+  UPDATING: 'Đang cập nhật...',
+  CONTINUE: 'Tiếp tục'
 };
 
 export { VN };
