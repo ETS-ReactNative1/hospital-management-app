@@ -3,7 +3,9 @@ import { Animated, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import styles from './BarcodeMaskStyles';
-import CustomButton from '../CustomButton/CustomButton';
+import GradientButton from '../GradientButton';
+import Typography from '../Typography';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class BarcodeMask extends React.Component {
   constructor(props) {
@@ -112,29 +114,30 @@ export default class BarcodeMask extends React.Component {
   };
 
   render() {
+    const {
+      flashState,
+      width,
+      height,
+      showAnimatedLine,
+      animatedLineColor,
+      animatedLineHeight,
+      hintText
+    } = this.props;
     return (
       <View style={[styles.container]}>
-        <View
-          style={[
-            styles.finder,
-            {
-              width: this.props.width,
-              height: this.props.height
-            }
-          ]}
-        >
+        <View style={[styles.finder, { width, height }]}>
           {this.renderEdge('topLeft')}
           {this.renderEdge('topRight')}
           {this.renderEdge('bottomLeft')}
           {this.renderEdge('bottomRight')}
 
-          {this.props.showAnimatedLine ? (
+          {showAnimatedLine ? (
             <Animated.View
               style={[
                 styles.animatedLine,
                 {
-                  backgroundColor: this.props.animatedLineColor,
-                  height: this.props.animatedLineHeight,
+                  backgroundColor: animatedLineColor,
+                  height: animatedLineHeight,
                   top: this.state.top
                 }
               ]}
@@ -144,30 +147,28 @@ export default class BarcodeMask extends React.Component {
 
         <View style={styles.maskOuter}>
           <View style={[styles.maskRow, styles.maskFrame, this.applyMaskFrameTransparency()]}>
-            <CustomButton
-              onPress={this.onPressFlashOn}
-              title={this.props.flashState ? 'Tắt flash' : 'Bật flash'}
-              iconName={this.props.flashState ? 'flash-off' : 'flash-on'}
-            />
+            <GradientButton style={styles.flashButtonStyle} onPress={this.onPressFlashOn} border>
+              <Icon
+                name={flashState ? 'flash-off' : 'flash-on'}
+                size={16}
+                color="white"
+                style={{ paddingRight: 2 }}
+              />
+              <Typography white center>
+                {flashState ? 'Tắt flash' : 'Bật flash'}
+              </Typography>
+            </GradientButton>
           </View>
           <View
-            style={[{ height: this.props.height }, styles.maskCenter]}
+            style={[{ height }, styles.maskCenter]}
             onLayout={this.onMaskCenterViewLayoutUpdated}
           >
             <View style={[styles.maskFrame, this.applyMaskFrameTransparency()]} />
-            <View
-              style={[
-                styles.maskInner,
-                {
-                  width: this.props.width,
-                  height: this.props.height
-                }
-              ]}
-            />
+            <View style={[styles.maskInner, { width, height }]} />
             <View style={[styles.maskFrame, this.applyMaskFrameTransparency()]} />
           </View>
           <View style={[styles.maskRow, styles.maskFrame, this.applyMaskFrameTransparency()]}>
-            <Text style={styles.hintTextStyle}>{this.props.hintText}</Text>
+            <Text style={styles.hintTextStyle}>{hintText}</Text>
           </View>
         </View>
       </View>
