@@ -61,7 +61,13 @@ const VN = {
   SWITCH_ON_MESSAGE:
     'Thiết bị đã được ghi nhận chuyển sang trạng thái Bật. Hãy chắc chắn rằng bạn đã bật thiết bị!',
   CONTINUE: 'Tiếp tục',
-  CHANGE_SUCCESS: 'Thay đổi thành công'
+  CHANGE_SUCCESS: 'Thay đổi thành công',
+  DEVICE_MAINTAINING: 'Thiết bị đang được bảo trì',
+  DEVICE_MAINTAINING_DESC:
+    'Thiết bị này đang được bảo trì. Vui lòng thử lại khi thiết bị đã sẵn sàng.',
+  DEVICE_LIQUIDATED: 'Thiết bị đã được thanh lý',
+  DEVICE_LIQUIDATED_DESC:
+    'Thiết bị này đã được bệnh viện thanh lý. Vui lòng thử lại với thiết bị khác.'
 };
 
 export { VN };

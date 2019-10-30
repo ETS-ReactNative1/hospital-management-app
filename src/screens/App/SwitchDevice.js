@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, View, StyleSheet, Image } from 'react-native';
 
 import { GradientButton, Block, Typography, Dialog } from 'src/components';
 import { theme, localization } from 'src/constants';
@@ -23,7 +23,7 @@ const SwitchDevice = props => {
   const [createEvent] = useMutation(CREATE_EVENT);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const { loading, error, data, refetch } = useQuery(DEVICE_INFO_CONDENSE, {
+  const { loading, error, data } = useQuery(DEVICE_INFO_CONDENSE, {
     variables: {
       id: deviceId
     }
@@ -36,8 +36,6 @@ const SwitchDevice = props => {
 
   const handleDialogConfirm = async () => {
     setModalVisible(!modalVisible);
-    //?: Should refetch here because it will store cache for this deviceId.
-    await refetch();
     navigation.goBack();
   };
 
@@ -55,9 +53,41 @@ const SwitchDevice = props => {
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
         </Typography>
-        <Typography bold title height={theme.sizes.title * 2}>
+        <Typography bold title>
           Error
         </Typography>
+      </Block>
+    );
+  }
+
+  if (data.device.availability === 'maintaining') {
+    return (
+      <Block middle center>
+        <Image style={styles.image} source={require('src/assets/images/maintaining.jpg')} />
+        <Block center padding={[0, theme.sizes.base * 5]}>
+          <Typography title transform="uppercase">
+            {TextPackage.DEVICE_MAINTAINING}
+          </Typography>
+          <Typography center gray>
+            {TextPackage.DEVICE_MAINTAINING_DESC}
+          </Typography>
+        </Block>
+      </Block>
+    );
+  }
+
+  if (data.device.availability === 'liquidated') {
+    return (
+      <Block middle center>
+        <Image style={styles.image} source={require('src/assets/images/liquidated.jpg')} />
+        <Block center padding={[0, theme.sizes.base * 5]}>
+          <Typography title transform="uppercase">
+            {TextPackage.DEVICE_LIQUIDATED}
+          </Typography>
+          <Typography center gray>
+            {TextPackage.DEVICE_LIQUIDATED_DESC}
+          </Typography>
+        </Block>
       </Block>
     );
   }
@@ -71,7 +101,7 @@ const SwitchDevice = props => {
         confirmText={TextPackage.CONTINUE}
         handleConfirm={handleDialogConfirm}
       >
-        <Typography body align="justify">
+        <Typography body justify>
           {data.device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE}
         </Typography>
       </Dialog>
@@ -125,6 +155,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%'
+  },
+  image: {
+    width: '100%',
+    height: '50%',
+    resizeMode: 'contain',
+    shadowColor: theme.colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10
   }
 });
 
