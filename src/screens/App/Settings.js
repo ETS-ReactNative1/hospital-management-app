@@ -24,17 +24,6 @@ const styles = StyleSheet.create({
   scrollElement: {
     width: '100%'
   },
-  group_infor: {
-    paddingBottom: theme.sizes.padding,
-    paddingTop: theme.sizes.padding * 2,
-    textTransform: 'capitalize',
-    fontWeight: 'bold'
-  },
-  title_infor: {
-    paddingTop: theme.sizes.padding,
-    textTransform: 'capitalize',
-    fontWeight: 'bold'
-  },
   edite_infor: {
     textTransform: 'capitalize',
     color: theme.colors.green,
@@ -51,8 +40,8 @@ const SettingsScreen = props => {
   const { userProfile } = AppData;
 
   const handleSignOut = async () => {
-    // await signOut();
-    // await client.resetStore();
+    await signOut();
+    await client.resetStore();
     AppData.accessToken = undefined;
     navigation.navigate('Auth');
     hidePopup();
@@ -86,9 +75,19 @@ const SettingsScreen = props => {
     });
   };
 
+  const changeInforSuccess = () => {
+    showPopup({
+      type: AppConst.OK_POPUP,
+      title: TextPackage.CHANGE_INFOR_SUCCESSFULL_TITLE,
+      message: TextPackage.CHANGE_INFOR_SUCCESSFULL_MESSAGE,
+      okText: TextPackage.CONTINUE
+    });
+  };
+
   const changeInfor = () => {
     showPopup({
-      type: AppConst.CHANGE_INFOR_POPUP
+      type: AppConst.CHANGE_INFOR_POPUP,
+      callback: changeInforSuccess
     });
   };
 
@@ -107,11 +106,11 @@ const SettingsScreen = props => {
         contentContainerStyle={styles.scrollElement}
         style={styles.scrollView}
       >
-        <Typography style={styles.group_infor}>{TextPackage.GENERAL_INFOR}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.GENERAL_INFOR}</Typography>
         <View style={generalStyles.divider_1px} />
-        <Typography style={styles.title_infor}>{TextPackage.EMAIL}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.EMAIL}</Typography>
         <Typography>{userProfile.email}</Typography>
-        <Typography style={styles.title_infor}>{TextPackage.USER_SCOPE}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.USER_SCOPE}</Typography>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Typography>{userProfile.scope}</Typography>
           <TouchableOpacity onPress={changeScope}>
@@ -121,19 +120,19 @@ const SettingsScreen = props => {
 
         <View style={generalStyles.divider_5px} />
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography style={styles.group_infor}>{TextPackage.PERSONAL_INFOR}</Typography>
-          <TouchableOpacity onPress={changePassword}>
-            <Typography style={[styles.group_infor, styles.edite_infor]}>
+          <Typography style={generalStyles.title_infor}>{TextPackage.PERSONAL_INFOR}</Typography>
+          <TouchableOpacity onPress={changeInfor}>
+            <Typography style={[generalStyles.title_infor, styles.edite_infor]}>
               {TextPackage.EDIT}
             </Typography>
           </TouchableOpacity>
         </View>
         <View style={generalStyles.divider_1px} />
-        <Typography style={styles.title_infor}>{TextPackage.SURNAME}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.SURNAME}</Typography>
         <Typography>{userProfile.surname}</Typography>
-        <Typography style={styles.title_infor}>{TextPackage.NAME}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.NAME}</Typography>
         <Typography>{userProfile.name}</Typography>
-        <Typography style={styles.title_infor}>{TextPackage.PHONE}</Typography>
+        <Typography style={generalStyles.title_infor}>{TextPackage.PHONE}</Typography>
         <Typography>{userProfile.phone}</Typography>
         <View style={generalStyles.divider_5px} />
       </ScrollView>

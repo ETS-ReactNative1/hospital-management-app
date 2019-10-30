@@ -15,7 +15,7 @@ const VN = {
   SURE: 'Chắc chắn',
   CHANGE_SUCCESSFULL: 'Thay đổi thành công',
   CHANGE_PASSWORD_SUCCESSFULL:
-    'Mật khẩu của bạn đã được cập nhật thành công! \n Để đảm bảo an toàn, bạn sẽ phải đăng nhập lại với mật khẩu mới.',
+    'Mật khẩu của bạn đã được cập nhật thành công!\nĐể đảm bảo an toàn, bạn sẽ phải đăng nhập lại với mật khẩu mới.',
   PASSWORD: 'Mật khẩu mới',
   OLD_PASSWORD: 'Mật khẩu cũ',
   CONFRIM_PASSWORD: 'Nhập lại mật khâu mới',
@@ -67,7 +67,10 @@ const VN = {
   LIQUIDATE: 'Thanh lý',
   COMPLETE: 'Hoàn tất',
   UPDATING: 'Đang cập nhật...',
-  CONTINUE: 'Tiếp tục'
+  CONTINUE: 'Tiếp tục',
+  CHANGE_INFOR: 'Thay đổi thông tin',
+  CHANGE_INFOR_SUCCESSFULL_TITLE: 'Thay đổi thành công',
+  CHANGE_INFOR_SUCCESSFULL_MESSAGE: 'Thông tin của bạn đã được cập nhật thành công! '
 };
 
 export { VN };

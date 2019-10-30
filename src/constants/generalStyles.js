@@ -59,6 +59,17 @@ const generalStyles = StyleSheet.create({
     color: colors.gray,
     marginRight: sizes.padding,
     marginLeft: sizes.padding
+  },
+  title_infor: {
+    paddingTop: sizes.padding,
+    textTransform: 'capitalize',
+    fontWeight: 'bold'
+  },
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth
   }
 });
 

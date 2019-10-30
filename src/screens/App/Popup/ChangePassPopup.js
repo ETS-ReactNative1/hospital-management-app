@@ -34,12 +34,6 @@ const schema = {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth
-  },
   hasErrors: {
     borderBottomColor: theme.colors.error
   },
@@ -71,8 +65,8 @@ class ChangePassPopup extends Component {
 
   handleChangePasswordError = error => {
     console.log(error);
-    this.props.hidePopup();
-    this.props.popup.callback();
+    // this.props.hidePopup();
+    // this.props.popup.callback();
   };
 
   handleTextChange = (name, text) => {
@@ -133,7 +127,7 @@ class ChangePassPopup extends Component {
                     secure
                     placeholder={TextPackage.OLD_PASSWORD}
                     error={hasErrors('oldPassword')}
-                    style={[styles.input, hasErrors('oldPassword') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('oldPassword') && styles.hasErrors]}
                     helperText={errors.oldPassword || ''}
                     onChangeText={text => this.handleTextChange('oldPassword', text)}
                     onEndEditing={() => this.handleEndEditing('oldPassword')}
@@ -144,7 +138,7 @@ class ChangePassPopup extends Component {
                     secure
                     placeholder={TextPackage.PASSWORD}
                     error={hasErrors('password')}
-                    style={[styles.input, hasErrors('password') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('password') && styles.hasErrors]}
                     helperText={errors.password || ''}
                     ref={this.passwordRef}
                     onChangeText={text => this.handleTextChange('password', text)}
@@ -156,7 +150,7 @@ class ChangePassPopup extends Component {
                     secure
                     placeholder={TextPackage.CONFRIM_PASSWORD}
                     error={hasErrors('confirmPassword')}
-                    style={[styles.input, hasErrors('confirmPassword') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('confirmPassword') && styles.hasErrors]}
                     helperText={errors.confirmPassword || ''}
                     ref={this.confirmPasswordRef}
                     onChangeText={text => this.handleTextChange('confirmPassword', text)}
