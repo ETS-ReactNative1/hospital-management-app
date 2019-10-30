@@ -57,7 +57,7 @@ export default class Dialog extends Component {
             <Block flex={false} row right>
               {!hideCancel && (
                 <GradientButton onPress={() => this.setVisible(false)} style={styles.actionButton}>
-                  <Typography transform="uppercase" bold body color={theme.colors.gray}>
+                  <Typography uppercase bold body color={theme.colors.gray}>
                     {cancelText}
                   </Typography>
                 </GradientButton>
@@ -68,7 +68,7 @@ export default class Dialog extends Component {
                 disalbe={confirmDisable}
                 style={styles.actionButton}
               >
-                <Typography transform="uppercase" bold body color={theme.colors.primary}>
+                <Typography uppercase bold body primary>
                   {confirmText}
                 </Typography>
               </GradientButton>
