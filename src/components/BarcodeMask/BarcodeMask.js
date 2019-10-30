@@ -176,7 +176,7 @@ export default class BarcodeMask extends React.Component {
   }
 }
 
-const propTypes = {
+BarcodeMask.propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   edgeWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -191,7 +191,7 @@ const propTypes = {
   hintText: PropTypes.string
 };
 
-const defaultProps = {
+BarcodeMask.defaultProps = {
   width: 250,
   height: 250,
   edgeWidth: 30,
@@ -205,6 +205,3 @@ const defaultProps = {
   lineAnimationDuration: 2000,
   hintText: 'Di chuyển camera để thấy rõ mã QR'
 };
-
-BarcodeMask.propTypes = propTypes;
-BarcodeMask.defaultProps = defaultProps;
