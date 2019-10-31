@@ -19,14 +19,6 @@ const styles = StyleSheet.create({
 });
 
 export default class AuthMain extends Component {
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: theme.colors.white,
-      borderBottomColor: 'transparent',
-      elevation: 0 // for android
-    }
-  };
-
   constructor(props) {
     super(props);
     if (AppData.accessToken) {
