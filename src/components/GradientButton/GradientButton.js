@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import styles from './GradientButtonStyles';
 import { theme } from 'src/constants';
 
-class GradientButton extends Component {
+export default class GradientButton extends Component {
   render() {
     const {
       style,
@@ -21,6 +21,7 @@ class GradientButton extends Component {
       shadow,
       children,
       disabled,
+      paddingHorizontal,
       ...props
     } = this.props;
 
@@ -30,6 +31,7 @@ class GradientButton extends Component {
       color && styles[color], // predefined styles colors for backgroundColor
       color && !styles[color] && { backgroundColor: color }, // custom backgroundColor
       border && { borderColor: theme.colors.gray2, borderWidth: 2 }, // button border
+      paddingHorizontal && { paddingHorizontal },
       style
     ];
 
@@ -62,5 +64,3 @@ GradientButton.defaultProps = {
   opacity: 0.8,
   color: theme.colors.white
 };
-
-export default GradientButton;

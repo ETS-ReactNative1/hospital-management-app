@@ -14,6 +14,6 @@ validate.validators = {
   ...validators
 };
 
-validate.validators.email.message = '^Email không hợp lệ';
+validate.validators.email.message = 'không hợp lệ';
 
 export default validate;

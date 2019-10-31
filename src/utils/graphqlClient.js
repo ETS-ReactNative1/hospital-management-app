@@ -86,7 +86,18 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   networkError && console.log('Network error', networkError);
 });
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'ignore'
+  },
+  query: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all'
+  }
+};
+
 const link = ApolloLink.from([refreshTokenLink, authLink, errorLink, httpLink]);
 const cache = new InMemoryCache();
 
-export default new ApolloClient({ link, cache });
+export default new ApolloClient({ link, cache, defaultOptions });

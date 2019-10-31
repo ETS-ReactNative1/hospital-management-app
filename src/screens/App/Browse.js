@@ -16,9 +16,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     paddingHorizontal: theme.sizes.base,
     marginBottom: 0
-  },
-  category: {
-    width: '100%'
   }
 });
 
@@ -59,7 +56,7 @@ export default class Browse extends Component {
                 key={category.id}
                 onPress={() => navigation.navigate('QRScan', category)}
               >
-                <Card center middle shadow row style={styles.category}>
+                <Card center middle shadow row fullWidth>
                   <Badge size={50} color="rgba(41,216,143,0.20)">
                     <Icon name={category.icon} size={24} color={theme.colors.green} />
                   </Badge>

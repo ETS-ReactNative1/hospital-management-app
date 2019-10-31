@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Forgot extends Component {
+export default class AuthMain extends Component {
   constructor(props) {
     super(props);
     if (AppData.accessToken) {
@@ -45,7 +45,7 @@ export default class Forgot extends Component {
 
           <Typography gray>Vận Hành Hiệu Quả Hơn</Typography>
 
-          <Image style={styles.image} source={require('src/assets/auth.jpg')} />
+          <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
 
           <GradientButton
             gradient

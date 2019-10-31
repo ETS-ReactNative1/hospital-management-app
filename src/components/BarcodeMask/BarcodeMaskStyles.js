@@ -66,7 +66,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 8
   },
-  flashButtonStyle: {}
+  flashButtonStyle: {
+    position: 'absolute',
+    bottom: 8,
+    display: 'flex',
+    alignSelf: 'center',
+    height: 40,
+    borderRadius: 20,
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    padding: 16,
+    backgroundColor: 'transparent'
+  }
 });
 
 export default styles;

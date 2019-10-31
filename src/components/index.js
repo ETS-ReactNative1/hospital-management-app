@@ -2,7 +2,7 @@ import Badge from './Badge';
 import BarcodeMask from './BarcodeMask';
 import Block from './Block';
 import Card from './Card';
-import CustomButton from './CustomButton';
+import Dialog from './Dialog';
 import Divider from './Divider';
 import GradientButton from './GradientButton';
 import Input from './Input/Input';
@@ -15,7 +15,7 @@ export {
   BarcodeMask,
   Block,
   Card,
-  CustomButton,
+  Dialog,
   Divider,
   GradientButton,
   Input,
