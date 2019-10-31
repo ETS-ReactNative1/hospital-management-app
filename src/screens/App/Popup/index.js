@@ -7,6 +7,7 @@ import AppConst from 'src/AppConst';
 import OkCanelPopup from './OKCancelPopup';
 import ChangePassPopup from './ChangePassPopup';
 import ChangeInforPopup from './ChangeInforPopup';
+import ErrorPopup from './ErrorPopup';
 
 class Popup extends Component {
   render() {
@@ -26,6 +27,7 @@ class Popup extends Component {
             <OkCanelPopup />
             <ChangePassPopup />
             <ChangeInforPopup />
+            <ErrorPopup />
           </KeyboardAvoidingView>
         </View>
       </Modal>

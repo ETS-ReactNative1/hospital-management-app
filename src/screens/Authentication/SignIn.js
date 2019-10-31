@@ -2,12 +2,14 @@ import React, { Component, createRef } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
-
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme } from 'src/constants';
 import { SIGN_IN } from 'src/utils/graphqlMutations';
-import AppData from 'src/AppData';
+import { actions } from 'src/utils/reduxStore';
+import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
+import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
 
 const schema = {
   email: {
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
   bottomBlock: { position: 'absolute', bottom: 32, width: '100%', alignSelf: 'center' }
 });
 
-export default class SignIn extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -73,7 +75,10 @@ export default class SignIn extends Component {
   };
 
   handleSignInError = error => {
-    console.log(error.message);
+    this.props.showPopup({
+      type: AppConst.ERROR_POPUP,
+      errorMsg: error.message
+    });
   };
 
   handleTextChange = (name, text) => {
@@ -209,3 +214,8 @@ export default class SignIn extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  actions
+)(SignIn);

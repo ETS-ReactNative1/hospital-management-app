@@ -1,11 +1,13 @@
 import React, { Component, createRef } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { Mutation } from 'react-apollo';
-
 import { GradientButton, Block, Input, Typography } from 'src/components';
+import { Mutation } from 'react-apollo';
 import { theme } from 'src/constants';
 import { SIGN_UP } from 'src/utils/graphqlMutations';
+import { actions } from 'src/utils/reduxStore';
+import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
+import AppConst from 'src/AppConst';
 
 const schema = {
   email: {
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -84,7 +86,10 @@ export default class SignUp extends Component {
   };
 
   handleSignUpError = error => {
-    console.log(error); // Need to test to define what to do with error
+    this.props.showPopup({
+      type: AppConst.ERROR_POPUP,
+      errorMsg: error.message
+    });
   };
 
   handleTextChange = (name, text) => {
@@ -207,3 +212,8 @@ export default class SignUp extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  actions
+)(SignUp);

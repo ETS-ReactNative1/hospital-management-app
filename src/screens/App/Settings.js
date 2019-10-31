@@ -91,11 +91,11 @@ const SettingsScreen = props => {
     });
   };
 
-  const changeScope = () => {
-    showPopup({
-      type: AppConst.CHANGE_SCOPE_POPUP
-    });
-  };
+  // const changeScope = () => {
+  //   showPopup({
+  //     type: AppConst.CHANGE_SCOPE_POPUP
+  //   });
+  // };
 
   return (
     <Block style={generalStyles.screen_container}>
@@ -111,12 +111,13 @@ const SettingsScreen = props => {
         <Typography style={generalStyles.title_infor}>{TextPackage.EMAIL}</Typography>
         <Typography>{userProfile.email}</Typography>
         <Typography style={generalStyles.title_infor}>{TextPackage.USER_SCOPE}</Typography>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Typography>{userProfile.scope}</Typography>
+        {/* <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Typography>{userProfile.scope}</Typography>
-          <TouchableOpacity onPress={changeScope}>
+          <TouchableOpacity>
             <Typography style={styles.edite_infor}>{TextPackage.EDIT}</Typography>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={generalStyles.divider_5px} />
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>

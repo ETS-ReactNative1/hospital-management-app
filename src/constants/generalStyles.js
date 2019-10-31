@@ -36,12 +36,13 @@ const generalStyles = StyleSheet.create({
   popup_title: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    fontSize: sizes.h3
+    fontSize: sizes.title
   },
   popup_body: {
     textTransform: 'none',
-    marginTop: sizes.padding,
-    marginBottom: sizes.padding
+    marginTop: sizes.padding * 2,
+    marginBottom: sizes.padding * 2,
+    fontSize: sizes.body
   },
   popup_group_btn: {
     flexDirection: 'row-reverse'

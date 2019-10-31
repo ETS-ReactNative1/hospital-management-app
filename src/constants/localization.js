@@ -70,7 +70,18 @@ const VN = {
   CONTINUE: 'Tiếp tục',
   CHANGE_INFOR: 'Thay đổi thông tin',
   CHANGE_INFOR_SUCCESSFULL_TITLE: 'Thay đổi thành công',
-  CHANGE_INFOR_SUCCESSFULL_MESSAGE: 'Thông tin của bạn đã được cập nhật thành công! '
+  CHANGE_INFOR_SUCCESSFULL_MESSAGE: 'Thông tin của bạn đã được cập nhật thành công! ',
+  EMAIL_IS_TAKEN_ERR_TITLE: 'Email đã được sử dụng',
+  EMAIL_IS_TAKEN_ERR_MESSAGE:
+    'Email đã được sử dụng để đăng kí cho một tài khoản khác. Xin vui lòng chọn một email khác',
+  UNDEFINED_ERR_TITLE: 'Lỗi ứng dụng.',
+  UNDEFINED_ERR_MESSAGE:
+    'Thao tác của bạn không thể hoàn thành do một lỗi nào đó của ứng dụng. Chúng tôi rất tiếc vì điều đó',
+  NO_INTERNET_ERR_TITLE: 'Lỗi kết nối',
+  NO_INTERNET_ERR_MESSAGE: 'Không thể kết nối đến server. Hãy kiểm tra lại kết nối mạng của bạn.',
+  SIGN_IN_ERR: 'Lỗi đăng nhâp',
+  UNCONFIRMED_EMAIL_ERR: 'Tài khoản của bạn vẫn chưa được xác nhận.',
+  INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.'
 };
 
 export { VN };
