@@ -81,8 +81,7 @@ const VN = {
   NO_INTERNET_ERR_MESSAGE: 'Không thể kết nối đến server. Hãy kiểm tra lại kết nối mạng của bạn.',
   SIGN_IN_ERR: 'Lỗi đăng nhâp',
   UNCONFIRMED_EMAIL_ERR: 'Tài khoản của bạn vẫn chưa được xác nhận.',
-  INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.'
-
+  INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.',
   SWITCH_OFF_MESSAGE:
     'Thiết bị đã được ghi nhận chuyển sang trạng thái Tắt. Hãy chắc chắn  rằng bạn đã tắt thiết bị!',
   SWITCH_ON_MESSAGE:
