@@ -21,22 +21,44 @@ const SwitchDevice = props => {
   const { navigation } = props;
   const { deviceId } = navigation.state.params;
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalSwitchVisible, setModalSwitchVisible] = useState(false);
+  const [modalReportVisible, setModalReportVisible] = useState(false);
+  const [modalReportDoneVisible, setModalReportDoneVisible] = useState(false);
 
-  const { loading, error, data } = useQuery(DEVICE_INFO_CONDENSE, {
+  const { loading, error, data, refetch } = useQuery(DEVICE_INFO_CONDENSE, {
     variables: {
       id: deviceId
     }
   });
 
   const handleStateSwitch = async () => {
-    setModalVisible(!modalVisible);
+    setModalSwitchVisible(true);
     await createEvent({ variables: { deviceId } });
   };
 
   const handleDialogConfirm = async () => {
-    setModalVisible(!modalVisible);
+    setModalSwitchVisible(false);
     navigation.goBack();
+  };
+
+  const handleReport = () => {
+    console.log('report clicked');
+    setModalReportVisible(true);
+  };
+
+  const handleReportConfirm = () => {
+    setModalReportVisible(false);
+    setModalReportDoneVisible(true);
+  };
+
+  const handleReportCancel = () => {
+    setModalReportVisible(false);
+  };
+
+  const handleReportDoneConfirm = async () => {
+    setModalReportDoneVisible(false);
+    //*: Should refetch here because of muatation
+    await refetch();
   };
 
   if (loading) {
@@ -94,9 +116,10 @@ const SwitchDevice = props => {
 
   return (
     <View style={{ flex: 1 }}>
+      {/* Continue Modal after change state */}
       <Dialog
         hideCancel
-        visible={modalVisible}
+        visible={modalSwitchVisible}
         title={TextPackage.CHANGE_SUCCESS}
         confirmText={TextPackage.CONTINUE}
         handleConfirm={handleDialogConfirm}
@@ -105,6 +128,33 @@ const SwitchDevice = props => {
           {data.device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE}
         </Typography>
       </Dialog>
+
+      {/* Confirm Modal for report state */}
+      <Dialog
+        visible={modalReportVisible}
+        title={TextPackage.REPORT_STATE}
+        confirmText={TextPackage.CONFIRM}
+        handleConfirm={handleReportConfirm}
+        handleCancel={handleReportCancel}
+      >
+        <Typography body justify>
+          {TextPackage.REPORT_SWITCH_MESSAGE}
+        </Typography>
+      </Dialog>
+
+      {/* Continue Modal after report state */}
+      <Dialog
+        hideCancel
+        visible={modalReportDoneVisible}
+        title={TextPackage.REPORT_SUCCESS}
+        confirmText={TextPackage.CONTINUE}
+        handleConfirm={handleReportDoneConfirm}
+      >
+        <Typography body justify>
+          {TextPackage.REPORT_SWITCH_SUCCESS_MESSAGE}
+        </Typography>
+      </Dialog>
+
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
@@ -135,6 +185,7 @@ const SwitchDevice = props => {
           shadow
           startColor={theme.colors.redDark}
           endColor={theme.colors.redLight}
+          onPress={handleReport}
         >
           <Typography body bold white center>
             {TextPackage.REPORT_STATE}

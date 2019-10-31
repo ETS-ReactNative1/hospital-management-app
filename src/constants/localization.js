@@ -60,7 +60,15 @@ const VN = {
     'Thiết bị đã được ghi nhận chuyển sang trạng thái Tắt. Hãy chắc chắn  rằng bạn đã tắt thiết bị!',
   SWITCH_ON_MESSAGE:
     'Thiết bị đã được ghi nhận chuyển sang trạng thái Bật. Hãy chắc chắn rằng bạn đã bật thiết bị!',
+  REPORT_SWITCH_MESSAGE:
+    'Bạn đang báo cáo một sai sót của hệ thống về trạng thái thiết bị. Hãy chắc chắn rằng trạng thái thiết bị thực tế là khác so với ghi nhận trên hệ thống!',
+  REPORT_SWITCH_SUCCESS_MESSAGE:
+    'Báo cáo của bạn về sai sót của trạng thái thiết bị đã được hệ thống ghi nhận.',
+  REPORT_SUCCESS: 'Báo cáo thành công',
+  TITLE: 'Tiêu đề',
   CONTINUE: 'Tiếp tục',
+  CONFIRM: 'Xác nhận',
+  CANCEL: 'Hủy bỏ',
   CHANGE_SUCCESS: 'Thay đổi thành công',
   DEVICE_MAINTAINING: 'Thiết bị đang được bảo trì',
   DEVICE_MAINTAINING_DESC:
