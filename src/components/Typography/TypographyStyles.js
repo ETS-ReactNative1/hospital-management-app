@@ -24,9 +24,14 @@ const styles = StyleSheet.create({
   light: {
     fontWeight: '200'
   },
+  //transform
+  uppercase: { textTransform: 'uppercase' },
+  lowercase: { textTransform: 'lowercase' },
+  capitalize: { textTransform: 'capitalize' },
   // position
   center: { textAlign: 'center' },
   right: { textAlign: 'right' },
+  justify: { textAlign: 'justify' },
   // colors
   accent: { color: theme.colors.accent },
   primary: { color: theme.colors.primary },
