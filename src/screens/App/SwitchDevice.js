@@ -11,10 +11,10 @@ import { useQuery, useMutation } from 'react-apollo';
 const TextPackage = localization[AppData.language];
 
 const displayData = {
-  title: 'DEVICE_TITLE',
-  model: 'MODEL',
-  manufacturer: 'MANUFACTURER',
-  activeState: 'ACTIVE_STATE'
+  title: TextPackage.DEVICE_TITLE,
+  model: TextPackage.MODEL,
+  manufacturer: TextPackage.MANUFACTURER,
+  activeState: TextPackage.ACTIVE_STATE
 };
 
 const SwitchDevice = props => {
@@ -76,7 +76,7 @@ const SwitchDevice = props => {
           {TextPackage.DEVICE_INFO}
         </Typography>
         <Typography bold title>
-          Error
+          {error}
         </Typography>
       </Block>
     );
@@ -163,7 +163,7 @@ const SwitchDevice = props => {
           return (
             <View key={key}>
               <Typography gray height={theme.sizes.body * 2}>
-                {TextPackage[name]}
+                {name}
               </Typography>
               {typeof data.device[key] !== 'boolean' && (
                 <Typography bold gray={!data.device[key]}>
@@ -179,7 +179,7 @@ const SwitchDevice = props => {
           );
         })}
       </Block>
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButton}>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
         <GradientButton
           gradient
           shadow
@@ -202,7 +202,7 @@ const SwitchDevice = props => {
 };
 
 const styles = StyleSheet.create({
-  actionButton: {
+  actionButtons: {
     position: 'absolute',
     bottom: 0,
     width: '100%'
@@ -219,12 +219,7 @@ const styles = StyleSheet.create({
 });
 
 SwitchDevice.navigationOptions = () => ({
-  title: TextPackage.SWITCH_DEVICE,
-  headerTitleStyle: {
-    marginLeft: 0,
-    fontSize: theme.sizes.header,
-    fontWeight: 'bold'
-  }
+  title: TextPackage.SWITCH_DEVICE
 });
 
 export default SwitchDevice;

@@ -91,12 +91,7 @@ const styles = StyleSheet.create({
 });
 
 MaintainDevice.navigationOptions = () => ({
-  title: TextPackage.MAINTAIN_DEVICE,
-  headerTitleStyle: {
-    marginLeft: 0,
-    fontSize: theme.sizes.header,
-    fontWeight: 'bold'
-  }
+  title: TextPackage.MAINTAIN_DEVICE
 });
 
 export default MaintainDevice;

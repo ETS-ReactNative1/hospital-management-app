@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { theme } from 'src/constants';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,22 +14,26 @@ const styles = StyleSheet.create({
   topLeftEdge: {
     position: 'absolute',
     top: 8,
-    left: 8
+    left: 8,
+    borderRadius: theme.sizes.radius
   },
   topRightEdge: {
     position: 'absolute',
     top: 8,
-    right: 8
+    right: 8,
+    borderRadius: theme.sizes.radius
   },
   bottomLeftEdge: {
     position: 'absolute',
     bottom: 8,
-    left: 8
+    left: 8,
+    borderRadius: theme.sizes.radius
   },
   bottomRightEdge: {
     position: 'absolute',
     bottom: 8,
-    right: 8
+    right: 8,
+    borderRadius: theme.sizes.radius
   },
   maskOuter: {
     position: 'absolute',
@@ -68,18 +73,18 @@ const styles = StyleSheet.create({
   },
   flashButtonStyle: {
     position: 'absolute',
-    bottom: 8,
+    bottom: theme.sizes.padding,
     display: 'flex',
     alignSelf: 'center',
-    height: 40,
-    borderRadius: 20,
+    height: theme.sizes.base * 3,
+    borderRadius: theme.sizes.base * 1.5,
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#FFFFFF',
-    padding: 16,
+    padding: theme.sizes.padding * 2,
     backgroundColor: 'transparent'
   }
 });

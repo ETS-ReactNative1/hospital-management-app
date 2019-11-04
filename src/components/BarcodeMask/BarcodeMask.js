@@ -192,8 +192,8 @@ BarcodeMask.propTypes = {
 };
 
 BarcodeMask.defaultProps = {
-  width: 250,
-  height: 250,
+  width: 350,
+  height: 350,
   edgeWidth: 30,
   edgeHeight: 30,
   edgeColor: '#e3e3e3',

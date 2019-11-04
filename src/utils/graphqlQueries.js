@@ -46,13 +46,14 @@ export const LASTEST_MAINTAIN_EVENT = gql`
 `;
 
 export const ME = gql`
-  {
+  query {
     me {
       email
-      id
+      role
       phone
       firstName
       lastName
+      avatar
     }
   }
 `;

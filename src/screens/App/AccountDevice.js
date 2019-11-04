@@ -103,7 +103,7 @@ const AccountDevice = props => {
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButton}>
         <GradientButton shadow gradient>
           <Typography body bold white center>
-            {TextPackage.HISTORY_ACTIVITY}
+            {TextPackage.ACTIVE_HISTORY}
           </Typography>
         </GradientButton>
         <GradientButton shadow>
@@ -125,12 +125,7 @@ const styles = StyleSheet.create({
 });
 
 AccountDevice.navigationOptions = () => ({
-  title: TextPackage.ACCOUNT_DEVICE,
-  headerTitleStyle: {
-    marginLeft: 0,
-    fontSize: theme.sizes.header,
-    fontWeight: 'bold'
-  }
+  title: TextPackage.ACCOUNT_DEVICE
 });
 
 export default AccountDevice;

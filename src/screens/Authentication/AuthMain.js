@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, Image } from 'react-native';
+import { useQuery } from 'react-apollo';
+import { ME } from 'src/utils/graphqlQueries';
 
 import { GradientButton, Block, Typography } from 'src/components';
 import { theme } from 'src/constants';
@@ -8,8 +10,7 @@ import AppData from 'src/AppData';
 const styles = StyleSheet.create({
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
-    fontFamily: 'SFUIText'
+    fontWeight: 'bold'
   },
   image: {
     width: '100%',
@@ -18,52 +19,50 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class AuthMain extends Component {
-  constructor(props) {
-    super(props);
-    if (AppData.accessToken) {
-      props.navigation.navigate('App');
-    }
+const AuthMain = props => {
+  const { navigation } = props;
+
+  if (AppData.accessToken) {
+    navigation.navigate('App');
   }
 
-  render() {
-    const { navigation } = this.props;
-    return (
-      <Block>
-        <Block center padding={[0, theme.sizes.base * 2]}>
-          <Typography color={theme.colors.black} style={styles.title}>
-            QUẢN LÝ
+  return (
+    <Block>
+      <Block center padding={[0, theme.sizes.base * 2]}>
+        <Typography color={theme.colors.black} style={styles.title}>
+          QUẢN LÝ
+        </Typography>
+
+        <Typography color={theme.colors.green} style={styles.title}>
+          THIẾT BỊ BỆNH VIỆN
+        </Typography>
+
+        <Typography gray>Vận Hành Hiệu Quả Hơn</Typography>
+
+        <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
+
+        <GradientButton
+          gradient
+          style={{ width: '100%' }}
+          onPress={() => navigation.navigate('SignIn')}
+        >
+          <Typography black bold center>
+            Đăng nhập
           </Typography>
+        </GradientButton>
 
-          <Typography color={theme.colors.green} style={styles.title}>
-            THIẾT BỊ BỆNH VIỆN
+        <GradientButton
+          border
+          style={{ width: '100%' }}
+          onPress={() => navigation.navigate('SignUp')}
+        >
+          <Typography black bold center>
+            Đăng ký
           </Typography>
-
-          <Typography gray>Vận Hành Hiệu Quả Hơn</Typography>
-
-          <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
-
-          <GradientButton
-            gradient
-            style={{ width: '100%' }}
-            onPress={() => navigation.navigate('SignIn')}
-          >
-            <Typography black bold center>
-              Đăng nhập
-            </Typography>
-          </GradientButton>
-
-          <GradientButton
-            border
-            style={{ width: '100%' }}
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            <Typography black bold center>
-              Đăng ký
-            </Typography>
-          </GradientButton>
-        </Block>
+        </GradientButton>
       </Block>
-    );
-  }
-}
+    </Block>
+  );
+};
+
+export default AuthMain;

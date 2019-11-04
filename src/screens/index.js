@@ -1,4 +1,5 @@
 // import React from 'react';
+// import { Image } from 'react-native';
 // import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -17,27 +18,31 @@ import SearchDevice from './App/SearchDevice';
 import MaintainDevice from './App/MaintainDevice';
 import LiquidateDevice from './App/LiquidateDevice';
 import AccountDevice from './App/AccountDevice';
+import ActiveHistory from './App/ActiveHistory';
+import MaintainHistory from './App/MaintainHistory';
+import LiquidateInfo from './App/LiquidateInfo';
 
 const configHeaderNavigatior = {
   defaultNavigationOptions: {
     headerTitleStyle: {
       fontWeight: 'bold',
-      marginLeft: theme.sizes.padding * 4,
       fontSize: theme.sizes.header
     },
     headerStyle: {
-      height: theme.sizes.base * 3.5,
+      height: theme.sizes.base * 4,
       backgroundColor: theme.colors.white, // or 'white
       borderBottomColor: 'transparent',
       elevation: 0 // for android
     },
     headerLeftContainerStyle: {
-      alignItems: 'center'
+      alignItems: 'center',
+      marginLeft: theme.sizes.padding
     },
     headerRightContainerStyle: {
       alignItems: 'center',
       paddingRight: theme.sizes.padding * 3
     }
+    // headerBackImage: <Image source={require('src/assets/icons/back.png')} />,
     // headerLeft: ({ onPress }) => (
     //   <TouchableOpacity onPress={onPress}>
     //     <Icon name="keyboard-backspace" size={30} color={theme.colors.white} />
@@ -59,9 +64,15 @@ const AppStack = createStackNavigator(
     SearchDevice,
     MaintainDevice,
     LiquidateDevice,
-    AccountDevice
+    AccountDevice,
+    ActiveHistory,
+    MaintainHistory,
+    LiquidateInfo
   },
-  configHeaderNavigatior
+  {
+    ...configHeaderNavigatior
+    // initialRouteName: 'Settings'
+  }
 );
 
 const Navigation = createSwitchNavigator(
