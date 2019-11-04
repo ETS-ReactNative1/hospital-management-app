@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
-import { GradientButton, Block, Typography } from 'src/components';
-import { theme, localization } from 'src/constants';
-import Popop from './Popup';
+import React from 'react';
+import { StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useQuery, useMutation } from 'react-apollo';
 
+import { GradientButton, Block, Typography, Divider } from 'src/components';
+import { theme, localization } from 'src/constants';
+import { ME } from 'src/utils/graphqlQueries';
 import AppData from 'src/AppData';
-import AppConst from 'src/AppConst';
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%'
-  },
   image: {
     width: 100,
     height: 100,
@@ -20,172 +16,126 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'center'
   },
-  scrollView: {
-    width: '100%',
-    paddingVertical: theme.sizes.base * 2
-  },
-  scrollElement: {
+  actionButtons: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%'
-  },
-  divider_1px: {
-    width: '100%',
-    height: 1,
-    backgroundColor: theme.colors.gray2
-  },
-  divider_5px: {
-    width: '100%',
-    height: 5,
-    backgroundColor: theme.colors.gray2,
-    marginTop: theme.sizes.padding
-  },
-  group_infor: {
-    paddingBottom: theme.sizes.padding,
-    paddingTop: theme.sizes.padding * 2,
-    textTransform: 'capitalize',
-    fontWeight: 'bold'
-  },
-  title_infor: {
-    paddingTop: theme.sizes.padding,
-    textTransform: 'capitalize',
-    fontWeight: 'bold'
-  },
-  user_infor: {},
-  change_infor: {
-    textTransform: 'capitalize',
-    color: theme.colors.green,
-    textDecorationLine: 'underline',
-    fontWeight: 'normal'
   }
 });
 
 const TextPackage = localization[AppData.language];
 
-export default class SettingsScreen extends Component {
-  static navigationOptions = {
-    title: TextPackage.SETUP
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      popupConfig: {
-        type: AppConst.NO_POPUP
-      }
-    };
+const displayData = {
+  email: TextPackage.EMAIL,
+  role: TextPackage.ROLE,
+  personal: {
+    lastName: TextPackage.SURNAME,
+    firstName: TextPackage.NAME,
+    phone: TextPackage.PHONE
   }
+};
 
-  showPopup(type) {
-    this.setState({ popupConfig: type });
-  }
+const SettingsScreen = () => {
+  const { loading, error, data } = useQuery(ME);
 
-  closePopup() {
-    this.setState({ popupConfig: { type: AppConst.NO_POPUP } });
-  }
+  data && console.log(data);
+  const { userProfile } = AppData;
 
-  confirmSignOut() {
-    const config = {
-      type: AppConst.YES_NO_POPUP,
-      title: TextPackage.SIGN_OUT,
-      message: TextPackage.CONFIRM_SIGN_OUT
-    };
-    this.setState({ popupConfig: config });
-  }
-
-  changePassword() {
-    this.setState({ popupConfig: { type: AppConst.CHANGE_PASS_POPUP } });
-  }
-
-  changeInfor() {
-    this.setState({ popupConfig: { type: AppConst.CHANGE_INFOR_POPUP } });
-  }
-
-  changeScope() {
-    this.setState({ popupConfig: { type: AppConst.CHANGE_SCOPE_POPUP } });
-  }
-
-  render() {
-    const { userProfile } = AppData;
+  if (loading) {
     return (
-      <Block padding={[theme.sizes.base * 2, theme.sizes.base * 2]} style={styles.container}>
-        <Popop
-          popupConfig={this.state.popupConfig}
-          closePopup={() => {
-            this.closePopup();
-          }}
-        />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
-        <Image style={styles.image} source={userProfile.avatar} />
+  if (error) {
+    return (
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
+        <Typography bold title>
+          {error}
+        </Typography>
+      </Block>
+    );
+  }
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollElement}
-          style={styles.scrollView}
-        >
-          <Typography style={styles.group_infor}>{TextPackage.GENERAL_INFOR}</Typography>
-          <View style={styles.divider_1px} />
-          <Typography style={styles.title_infor}>{TextPackage.EMAIL}</Typography>
-          <Typography style={styles.user_infor}>{userProfile.email}</Typography>
-          <Typography style={styles.title_infor}>{TextPackage.USER_SCOPE}</Typography>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Typography style={styles.user_infor}>{userProfile.scope}</Typography>
-            <TouchableOpacity
-              onPress={() => {
-                this.changeScope();
-              }}
-            >
-              <Typography style={[styles.user_infor, styles.change_infor]}>
-                {TextPackage.EDIT}
-              </Typography>
-            </TouchableOpacity>
-          </View>
+  return (
+    <View style={{ flex: 1 }}>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
+        <Image key="avatar" style={styles.image} source={userProfile.avatar} />
 
-          <View style={styles.divider_5px} />
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Typography style={styles.group_infor}>{TextPackage.PERSONAL_INFOR}</Typography>
-            <TouchableOpacity
-              onPress={() => {
-                this.changePassword();
-              }}
-            >
-              <Typography style={[styles.group_infor, styles.change_infor]}>
-                {TextPackage.EDIT}
-              </Typography>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.divider_1px} />
-          <Typography style={styles.title_infor}>{TextPackage.SURNAME}</Typography>
-          <Typography style={styles.user_infor}>{userProfile.surname}</Typography>
-          <Typography style={styles.title_infor}>{TextPackage.NAME}</Typography>
-          <Typography style={styles.user_infor}>{userProfile.name}</Typography>
-          <Typography style={styles.title_infor}>{TextPackage.PHONE}</Typography>
-          <Typography style={styles.user_infor}>{userProfile.phone}</Typography>
-          <View style={styles.divider_5px} />
-        </ScrollView>
+        {Object.entries(displayData).map(([key, name]) => {
+          if (typeof name === 'string') {
+            return (
+              <View key={key}>
+                <Typography gray height={theme.sizes.body * 2}>
+                  {name}
+                </Typography>
+                <Typography bold gray={!data.me[key]}>
+                  {data.me[key] || TextPackage.UNKNOWN}
+                </Typography>
+              </View>
+            );
+          }
 
-        <GradientButton
-          border
-          style={{ width: '100%' }}
-          onPress={() => {
-            this.changePassword();
-          }}
-        >
-          <Typography black bold center>
+          if (key === 'personal') {
+            return (
+              <View key={key}>
+                <Divider />
+                <Block flex={false} center row space="between">
+                  <Typography bold title>
+                    {TextPackage.PERSONAL_INFO}
+                  </Typography>
+                  <TouchableOpacity>
+                    <Typography bold primary>
+                      {TextPackage.EDIT}
+                    </Typography>
+                  </TouchableOpacity>
+                </Block>
+                {Object.entries(name).map(([key, name]) => {
+                  return (
+                    <View key={key}>
+                      <Typography gray height={theme.sizes.body * 2}>
+                        {name}
+                      </Typography>
+                      <Typography bold gray={!data.me[key]}>
+                        {data.me[key] || TextPackage.UNKNOWN}
+                      </Typography>
+                    </View>
+                  );
+                })}
+              </View>
+            );
+          }
+
+          return null;
+        })}
+      </Block>
+
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
+        <GradientButton shadow>
+          <Typography bold center body>
             {TextPackage.CHANGE_PASSWORD}
           </Typography>
         </GradientButton>
 
         <GradientButton
           gradient
-          style={{ width: '100%' }}
-          onPress={() => {
-            this.confirmSignOut();
-          }}
+          shadow
+          startColor={theme.colors.redDark}
+          endColor={theme.colors.redLight}
         >
-          <Typography black bold center>
+          <Typography white bold center title>
             {TextPackage.SIGN_OUT}
           </Typography>
         </GradientButton>
       </Block>
-    );
-  }
-}
+    </View>
+  );
+};
+
+SettingsScreen.navigationOptions = {
+  title: TextPackage.SETUP
+};
+
+export default SettingsScreen;
