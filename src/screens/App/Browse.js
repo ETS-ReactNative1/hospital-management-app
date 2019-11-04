@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useQuery, useMutation } from 'react-apollo';
 
@@ -38,7 +38,7 @@ const Browse = props => {
               <Icon name={category.icon} size={24} color={theme.colors.green} />
             </Badge>
             <Block padding={[0, theme.sizes.base]}>
-              <Typography medium height={20}>
+              <Typography medium body>
                 {category.name}
               </Typography>
               <Typography gray caption>

@@ -82,32 +82,27 @@ const SwitchDevice = props => {
     );
   }
 
-  if (data.device.availability === 'maintaining') {
+  if (data.device.availability !== 'active') {
     return (
       <Block middle center>
-        <Image style={styles.image} source={require('src/assets/images/maintaining.jpg')} />
+        <Image
+          style={styles.image}
+          source={
+            data.device.availability === 'maintaining'
+              ? require('src/assets/images/maintaining.jpg')
+              : require('src/assets/images/liquidated.jpg')
+          }
+        />
         <Block center padding={[0, theme.sizes.base * 5]}>
           <Typography title transform="uppercase">
-            {TextPackage.DEVICE_MAINTAINING}
+            {data.device.availability === 'maintaining'
+              ? TextPackage.DEVICE_MAINTAINING
+              : TextPackage.DEVICE_LIQUIDATED}
           </Typography>
           <Typography center gray>
-            {TextPackage.DEVICE_MAINTAINING_DESC}
-          </Typography>
-        </Block>
-      </Block>
-    );
-  }
-
-  if (data.device.availability === 'liquidated') {
-    return (
-      <Block middle center>
-        <Image style={styles.image} source={require('src/assets/images/liquidated.jpg')} />
-        <Block center padding={[0, theme.sizes.base * 5]}>
-          <Typography title transform="uppercase">
-            {TextPackage.DEVICE_LIQUIDATED}
-          </Typography>
-          <Typography center gray>
-            {TextPackage.DEVICE_LIQUIDATED_DESC}
+            {data.device.availability === 'maintaining'
+              ? TextPackage.DEVICE_MAINTAINING_DESC
+              : TextPackage.DEVICE_LIQUIDATED_DESC}
           </Typography>
         </Block>
       </Block>
