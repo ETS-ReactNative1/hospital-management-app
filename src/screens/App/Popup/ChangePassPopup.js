@@ -13,7 +13,7 @@ import AppConst from 'src/AppConst';
 const TextPackage = localization[AppData.language];
 
 const schema = {
-  password: {
+  newPassword: {
     presence: { allowEmpty: false, message: TextPackage.PASSWORD_REQUIRED_ERROR },
     length: {
       minimum: 6,
@@ -29,7 +29,7 @@ const schema = {
   },
   confirmPassword: {
     presence: { allowEmpty: false, message: TextPackage.CONFRIM_PASSWORD_REQUIRED_ERROR },
-    equality: { attribute: 'password', message: TextPackage.CONFRIM_PASSWORD_CONFLIT_ERROR }
+    equality: { attribute: 'newPassword', message: TextPackage.CONFRIM_PASSWORD_CONFLIT_ERROR }
   }
 };
 
@@ -64,9 +64,10 @@ class ChangePassPopup extends Component {
   };
 
   handleChangePasswordError = error => {
-    console.log(error);
-    // this.props.hidePopup();
-    // this.props.popup.callback();
+    this.props.showPopup({
+      type: AppConst.ERROR_POPUP,
+      errorMsg: error.message
+    });
   };
 
   handleTextChange = (name, text) => {
@@ -105,14 +106,14 @@ class ChangePassPopup extends Component {
       isValid,
       touched,
       errors,
-      values: { password }
+      values: { newPassword }
     } = this.state;
     const hasErrors = key => touched[key] && errors[key];
     if (popup.type === AppConst.CHANGE_PASS_POPUP)
       return (
         <Mutation
           mutation={CHANGE_PASSWORD}
-          variables={{ password }}
+          variables={{ newPassword }}
           onCompleted={this.handleChangePasswordCompleted}
           onError={error => this.handleChangePasswordError(error)}
         >
@@ -134,16 +135,16 @@ class ChangePassPopup extends Component {
                     onSubmitEditing={() => this.handleSubmitEditing('oldPassword')}
                   />
                   <Input
-                    name="password"
+                    name="newPassword"
                     secure
                     placeholder={TextPackage.PASSWORD}
-                    error={hasErrors('password')}
-                    style={[generalStyles.input, hasErrors('password') && styles.hasErrors]}
-                    helperText={errors.password || ''}
+                    error={hasErrors('newPassword')}
+                    style={[generalStyles.input, hasErrors('newPassword') && styles.hasErrors]}
+                    helperText={errors.newPassword || ''}
                     ref={this.passwordRef}
-                    onChangeText={text => this.handleTextChange('password', text)}
-                    onEndEditing={() => this.handleEndEditing('password')}
-                    onSubmitEditing={() => this.handleSubmitEditing('password')}
+                    onChangeText={text => this.handleTextChange('newPassword', text)}
+                    onEndEditing={() => this.handleEndEditing('newPassword')}
+                    onSubmitEditing={() => this.handleSubmitEditing('newPassword')}
                   />
                   <Input
                     name="confirmPassword"
