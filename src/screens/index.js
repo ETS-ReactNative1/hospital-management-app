@@ -3,6 +3,7 @@
 // import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import Animated, { Easing } from 'react-native-reanimated';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants';
@@ -50,9 +51,32 @@ const configHeaderNavigatior = {
     // )
   }
 };
+
+const FadeTransition = (position, index) => {
+  const sceneRange = [index - 1, index];
+  const outputOpacity = [0, 1];
+  const transition = position.interpolate({
+    inputRange: sceneRange,
+    outputRange: outputOpacity
+  });
+  return {
+    opacity: transition
+  };
+};
+
+const TransitionOptions = () => {
+  return {
+    screenInterpolator: sceneProps => {
+      const { position, scene } = sceneProps;
+      const { index } = scene;
+      return FadeTransition(position, index);
+    }
+  };
+};
+
 const AuthStack = createStackNavigator(
   { AuthMain, SignIn, SignUp, ForgotPassword },
-  configHeaderNavigatior
+  { ...configHeaderNavigatior, transitionConfig: TransitionOptions }
 );
 
 const AppStack = createStackNavigator(
@@ -69,10 +93,7 @@ const AppStack = createStackNavigator(
     MaintainHistory,
     LiquidateInfo
   },
-  {
-    ...configHeaderNavigatior
-    // initialRouteName: 'Settings'
-  }
+  { ...configHeaderNavigatior, transitionConfig: TransitionOptions }
 );
 
 const Navigation = createSwitchNavigator(
@@ -81,7 +102,8 @@ const Navigation = createSwitchNavigator(
     App: AppStack
   },
   {
-    initialRouteName: 'Auth'
+    initialRouteName: 'Auth',
+    transitionConfig: TransitionOptions
   }
 );
 
