@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ActivityIndicator, View, StyleSheet, Image } from 'react-native';
-
-import { GradientButton, Block, Typography, Dialog } from 'src/components';
+import { GradientButton, Block, Typography } from 'src/components';
 import { theme, localization } from 'src/constants';
-import AppData from 'src/AppData';
 import { DEVICE_INFO_CONDENSE } from 'src/utils/graphqlQueries';
 import { CREATE_EVENT } from 'src/utils/graphqlMutations';
 import { useQuery, useMutation } from 'react-apollo';
+import { actions } from 'src/utils/reduxStore';
+import { connect } from 'react-redux';
+import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
 
 const TextPackage = localization[AppData.language];
 
@@ -18,12 +20,9 @@ const displayData = {
 };
 
 const SwitchDevice = props => {
-  const { navigation } = props;
+  const { navigation, showPopup, hidePopup } = props;
   const { deviceId } = navigation.state.params;
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [modalSwitchVisible, setModalSwitchVisible] = useState(false);
-  const [modalReportVisible, setModalReportVisible] = useState(false);
-  const [modalReportDoneVisible, setModalReportDoneVisible] = useState(false);
 
   const { loading, error, data, refetch } = useQuery(DEVICE_INFO_CONDENSE, {
     variables: {
@@ -32,33 +31,42 @@ const SwitchDevice = props => {
   });
 
   const handleStateSwitch = async () => {
-    setModalSwitchVisible(true);
+    showPopup({
+      type: AppConst.OK_POPUP,
+      title: TextPackage.CHANGE_SUCCESS,
+      message: data.device.activeState
+        ? TextPackage.SWITCH_OFF_MESSAGE
+        : TextPackage.SWITCH_ON_MESSAGE,
+      okText: TextPackage.CONTINUE,
+      okFunc: () => {
+        hidePopup();
+        navigation.goBack();
+      }
+    });
     await createEvent({ variables: { deviceId } });
   };
 
-  const handleDialogConfirm = async () => {
-    setModalSwitchVisible(false);
-    navigation.goBack();
+  const handleReportConfirm = async () => {
+    showPopup({
+      type: AppConst.OK_POPUP,
+      title: TextPackage.REPORT_SUCCESS,
+      message: TextPackage.REPORT_SWITCH_SUCCESS_MESSAGE,
+      okText: TextPackage.CONTINUE,
+      okFunc: async () => {
+        hidePopup();
+        await refetch();
+      }
+    });
   };
 
   const handleReport = () => {
-    console.log('report clicked');
-    setModalReportVisible(true);
-  };
-
-  const handleReportConfirm = () => {
-    setModalReportVisible(false);
-    setModalReportDoneVisible(true);
-  };
-
-  const handleReportCancel = () => {
-    setModalReportVisible(false);
-  };
-
-  const handleReportDoneConfirm = async () => {
-    setModalReportDoneVisible(false);
-    //*: Should refetch here because of muatation
-    await refetch();
+    showPopup({
+      type: AppConst.OK_CANCEL_POPUP,
+      title: TextPackage.REPORT_STATE,
+      message: TextPackage.REPORT_SWITCH_MESSAGE,
+      okText: TextPackage.CONFIRM,
+      okFunc: handleReportConfirm
+    });
   };
 
   if (loading) {
@@ -70,16 +78,10 @@ const SwitchDevice = props => {
   }
 
   if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title height={theme.sizes.title * 2}>
-          {TextPackage.DEVICE_INFO}
-        </Typography>
-        <Typography bold title>
-          Error
-        </Typography>
-      </Block>
-    );
+    showPopup({
+      type: AppConst.ERROR_POPUP,
+      errorMsg: error.message
+    });
   }
 
   if (data.device.availability === 'maintaining') {
@@ -116,45 +118,6 @@ const SwitchDevice = props => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Continue Modal after change state */}
-      <Dialog
-        hideCancel
-        visible={modalSwitchVisible}
-        title={TextPackage.CHANGE_SUCCESS}
-        confirmText={TextPackage.CONTINUE}
-        handleConfirm={handleDialogConfirm}
-      >
-        <Typography body justify>
-          {data.device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE}
-        </Typography>
-      </Dialog>
-
-      {/* Confirm Modal for report state */}
-      <Dialog
-        visible={modalReportVisible}
-        title={TextPackage.REPORT_STATE}
-        confirmText={TextPackage.CONFIRM}
-        handleConfirm={handleReportConfirm}
-        handleCancel={handleReportCancel}
-      >
-        <Typography body justify>
-          {TextPackage.REPORT_SWITCH_MESSAGE}
-        </Typography>
-      </Dialog>
-
-      {/* Continue Modal after report state */}
-      <Dialog
-        hideCancel
-        visible={modalReportDoneVisible}
-        title={TextPackage.REPORT_SUCCESS}
-        confirmText={TextPackage.CONTINUE}
-        handleConfirm={handleReportDoneConfirm}
-      >
-        <Typography body justify>
-          {TextPackage.REPORT_SWITCH_SUCCESS_MESSAGE}
-        </Typography>
-      </Dialog>
-
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
@@ -227,4 +190,7 @@ SwitchDevice.navigationOptions = () => ({
   }
 });
 
-export default SwitchDevice;
+export default connect(
+  null,
+  actions
+)(SwitchDevice);
