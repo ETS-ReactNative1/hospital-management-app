@@ -39,3 +39,9 @@ export const CHANGE_PASSWORD = gql`
     changePassword(newPassword: $newPassword)
   }
 `;
+
+export const AVATAR_UPLOAD = gql`
+  mutation AvatarUpload($file: Upload!) {
+    avatarUpload(file: $file)
+  }
+`;

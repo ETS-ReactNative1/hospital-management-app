@@ -20,6 +20,8 @@ const sizes = {
   font: 14,
   radius: 6,
   padding: 8,
+  thumbnail: 35,
+  avatar: 150,
 
   // font sizes
   header: 26,

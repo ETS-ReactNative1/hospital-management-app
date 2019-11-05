@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useQuery, useMutation } from 'react-apollo';
 
 import { GradientButton, Block, Typography, Divider } from 'src/components';
 import { theme, localization } from 'src/constants';
 import { ME } from 'src/utils/graphqlQueries';
+import { AVATAR_UPLOAD } from 'src/utils/graphqlMutations';
 import AppData from 'src/AppData';
+import ImagePicker from 'react-native-image-picker';
+import { ReactNativeFile } from 'apollo-upload-client';
 
 const styles = StyleSheet.create({
   image: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-    borderRadius: 50,
-    marginBottom: 10,
-    alignSelf: 'center'
+    width: theme.sizes.avatar,
+    height: theme.sizes.avatar,
+    borderRadius: theme.sizes.avatar * 0.5
   },
   actionButtons: {
     position: 'absolute',
     bottom: 0,
     width: '100%'
+  },
+  shadow: {
+    shadowColor: theme.colors.black, // IOS
+    shadowOffset: { height: 0, width: 2 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 75, //IOS
+    elevation: 5, // Android
+    width: theme.sizes.avatar,
+    height: theme.sizes.avatar,
+    borderRadius: theme.sizes.avatar * 0.5,
+    alignSelf: 'center'
   }
 });
 
@@ -37,9 +48,40 @@ const displayData = {
 
 const SettingsScreen = () => {
   const { loading, error, data } = useQuery(ME);
-
-  data && console.log(data);
+  const [avatarUpload] = useMutation(AVATAR_UPLOAD);
   const { userProfile } = AppData;
+
+  const [avatarSource, setAvatarSource] = useState(userProfile.avatar);
+
+  const handleAvatarSelect = () => {
+    const options = {
+      title: 'Chọn ảnh đại diện',
+      takePhotoButtonTitle: 'Chụp ảnh...',
+      chooseFromLibraryButtonTitle: 'Chọn từ Thư viện...',
+      cancelButtonTitle: 'Hủy bỏ',
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    ImagePicker.showImagePicker(options, async response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('ImagePicker Cancel');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.uri };
+        const file = new ReactNativeFile({
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName
+        });
+        await avatarUpload({ variables: { file } });
+        userProfile.avatar = source;
+        setAvatarSource(source);
+      }
+    });
+  };
 
   if (loading) {
     return (
@@ -62,7 +104,9 @@ const SettingsScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Image key="avatar" style={styles.image} source={userProfile.avatar} />
+        <TouchableOpacity style={styles.shadow} onPress={handleAvatarSelect}>
+          <Image key="avatar" style={styles.image} source={avatarSource} />
+        </TouchableOpacity>
 
         {Object.entries(displayData).map(([key, name]) => {
           if (typeof name === 'string') {

@@ -53,7 +53,6 @@ export const ME = gql`
       phone
       firstName
       lastName
-      avatar
     }
   }
 `;

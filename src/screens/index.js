@@ -41,7 +41,7 @@ const configHeaderNavigatior = {
     },
     headerRightContainerStyle: {
       alignItems: 'center',
-      paddingRight: theme.sizes.padding * 3
+      paddingRight: theme.sizes.padding * 4
     }
     // headerBackImage: <Image source={require('src/assets/icons/back.png')} />,
     // headerLeft: ({ onPress }) => (
@@ -52,6 +52,7 @@ const configHeaderNavigatior = {
   }
 };
 
+// https://dev.to/kris/custom-react-navigation-transition-implementation-and-demo-d1m
 const FadeTransition = (position, index) => {
   const sceneRange = [index - 1, index];
   const outputOpacity = [0, 1];

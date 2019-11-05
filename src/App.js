@@ -44,7 +44,10 @@ const App = () => {
         if (accessToken) {
           fetch(`${AppConst.SERVER_URL}/graphql`, {
             method: 'POST',
-            headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
               query: `{
                 me {
@@ -56,17 +59,22 @@ const App = () => {
           })
             .then(async data => {
               const {
-                data: { me }
+                data: {
+                  me: { role, avatar }
+                }
               } = await data.json();
-              Object.entries(me).forEach(([key, value]) => {
-                AppData.userProfile[key] = value;
-              });
+              AppData.userProfile.role = role;
+              if (avatar) {
+                AppData.userProfile.avatar = { uri: avatar };
+              }
+              setLoading(false);
             })
             .catch(err => {
               console.log(err);
             });
+        } else {
+          setLoading(false);
         }
-        setLoading(false);
       })
       .catch(err => {
         console.log(err);

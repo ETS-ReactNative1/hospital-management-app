@@ -1,7 +1,12 @@
 import React from 'react';
 import { Modal, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
-import { Block, Card, Typography, Divider, GradientButton } from '..';
+import Block from '../Block';
+import Card from '../Card';
+import Typography from '../Typography';
+import Divider from '../Divider';
+import GradientButton from '../GradientButton';
+
 import { theme, localization } from 'src/constants';
 import styles from './DialogStyles';
 import AppData from 'src/AppData';
