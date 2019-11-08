@@ -30,6 +30,7 @@ export default class Typography extends Component {
       center,
       right,
       justify,
+      underline,
       spacing, // letter-spacing
       height, // line-height
       // colors
@@ -44,6 +45,7 @@ export default class Typography extends Component {
       gray2,
       style,
       children,
+      disable,
       error,
       ...props
     } = this.props;
@@ -74,6 +76,7 @@ export default class Typography extends Component {
       center && styles.center,
       right && styles.right,
       justify && styles.justify,
+      underline && styles.underline,
       color && styles[color],
       color && !styles[color] && { color },
       // color shortcuts
@@ -83,7 +86,7 @@ export default class Typography extends Component {
       tertiary && styles.tertiary,
       black && styles.black,
       white && styles.white,
-      gray && styles.gray,
+      (gray || disable) && styles.gray,
       gray2 && styles.gray2,
       error && styles.error,
       style // rewrite predefined styles

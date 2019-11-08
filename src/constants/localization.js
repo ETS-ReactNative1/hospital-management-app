@@ -1,7 +1,7 @@
 const VN = {
   SIGN_OUT: 'Đăng xuất',
-  CONFIRM_SIGN_OUT: 'Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?',
-  GENERAL_INFOR: 'Thông tin chung',
+  CONFIRM_SIGN_OUT_MESSAGE: 'Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?',
+  GENERAL_INFO: 'Thông tin chung',
   EMAIL: 'Email',
   ROLE: 'Vai trò',
   EDIT: 'Chỉnh sửa',
@@ -11,6 +11,9 @@ const VN = {
   PHONE: 'Số điện thoại',
   CHANGE_PASSWORD: 'Đổi mật khẩu',
   SETUP: 'Cài đặt',
+  USER: 'Người dùng',
+  ADMIN: 'Quản lý',
+  OWNER: 'Người sở hữu',
 
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
@@ -80,7 +83,40 @@ const VN = {
     'Thiết bị này đang được bảo trì. Vui lòng thử lại khi thiết bị đã sẵn sàng.',
   DEVICE_LIQUIDATED: 'Thiết bị đã được thanh lý',
   DEVICE_LIQUIDATED_DESC:
-    'Thiết bị này đã được bệnh viện thanh lý. Vui lòng thử lại với thiết bị khác.'
+    'Thiết bị này đã được bệnh viện thanh lý. Vui lòng thử lại với thiết bị khác.',
+  SURE: 'Chắc chắn',
+  CHANGE_PASSWORD_SUCCESSFUL_MESSAGE:
+    'Mật khẩu của bạn đã được cập nhật thành công!\nĐể đảm bảo an toàn, bạn sẽ phải đăng nhập lại với mật khẩu mới.',
+  PASSWORD: 'Mật khẩu',
+  NEW_PASSWORD: 'Mật khẩu mới',
+  OLD_PASSWORD: 'Mật khẩu cũ',
+  CONFRIM_PASSWORD: 'Nhập lại mật khẩu mới',
+
+  EMAIL_REQUIRED_ERROR: '^Email là bắt buộc',
+  EMAIL_TOO_LONG_ERROR: '^Độ dài tối đa là 64 ký tự',
+  PASSWORD_REQUIRED_ERROR: '^Mật khẩu là bắt buộc',
+  PASSWORD_TOO_SHORT_ERROR: '^Độ dài tối thiểu là 6 ký tự',
+  CONFRIM_PASSWORD_REQUIRED_ERROR: '^Xác nhận mật khẩu là bắt buộc',
+  CONFRIM_PASSWORD_CONFLICT_ERROR: '^Mật khẩu xác nhận không trùng khớp',
+
+  HISTORY_ACTIVITY: 'Lịch sử hoạt động',
+  MAINTAIN_INFO: 'Thông tin bảo trì',
+  COMPLETE: 'Hoàn tất',
+  UPDATING: 'Đang cập nhật...',
+  CHANGE_INFO: 'Thay đổi thông tin',
+
+  CHANGE_INFO_SUCCESSFUL_MESSAGE: 'Thông tin của bạn đã được cập nhật thành công! ',
+  EMAIL_IS_TAKEN_ERR_TITLE: 'Email đã được sử dụng',
+  EMAIL_IS_TAKEN_ERR_MESSAGE:
+    'Email đã được sử dụng để đăng kí cho một tài khoản khác. Xin vui lòng chọn một email khác',
+  UNDEFINED_ERR_TITLE: 'Lỗi ứng dụng.',
+  UNDEFINED_ERR_MESSAGE:
+    'Thao tác của bạn không thể hoàn thành do một lỗi nào đó của ứng dụng. Chúng tôi rất tiếc vì điều đó',
+  NO_INTERNET_ERR_TITLE: 'Lỗi kết nối',
+  NO_INTERNET_ERR_MESSAGE: 'Không thể kết nối đến server. Hãy kiểm tra lại kết nối mạng của bạn.',
+  SIGN_IN_ERR: 'Lỗi đăng nhâp',
+  UNCONFIRMED_EMAIL_ERR: 'Tài khoản của bạn vẫn chưa được xác nhận.',
+  INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.'
 };
 
 export { VN };

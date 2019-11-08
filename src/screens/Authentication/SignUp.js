@@ -3,29 +3,32 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } 
 import { Mutation } from 'react-apollo';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
-import { theme } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import { SIGN_UP } from 'src/utils/graphqlMutations';
 import validate from 'src/utils/validateOverride';
+import AppData from 'src/AppData';
+
+const TextPackage = localization[AppData.language];
 
 const schema = {
   email: {
-    presence: { allowEmpty: false, message: '^Email là bắt buộc' },
+    presence: { allowEmpty: false, message: TextPackage.EMAIL_REQUIRED_ERROR },
     email: true,
     length: {
       maximum: 64,
-      message: '^Độ dài tối đa là 64 ký tự'
+      message: TextPackage.EMAIL_TOO_LONG_ERROR
     }
   },
   password: {
-    presence: { allowEmpty: false, message: '^Mật khẩu là bắt buộc' },
+    presence: { allowEmpty: false, message: TextPackage.PASSWORD_REQUIRED_ERROR },
     length: {
       minimum: 6,
-      message: '^Độ dài tối thiểu là 6 ký tự'
+      message: TextPackage.PASSWORD_TOO_SHORT_ERROR
     }
   },
   confirmPassword: {
-    presence: { allowEmpty: false, message: '^Xác nhận mật khẩu là bắt buộc' },
-    equality: { attribute: 'password', message: '^Mật khẩu xác nhận không trùng khớp' }
+    presence: { allowEmpty: false, message: TextPackage.CONFRIM_PASSWORD_REQUIRED_ERROR },
+    equality: { attribute: 'password', message: TextPackage.CONFRIM_PASSWORD_CONFLICT_ERROR }
   }
 };
 
@@ -34,15 +37,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginBottom: 56
-  },
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth
-  },
-  hasErrors: {
-    borderBottomColor: theme.colors.error
   },
   bottomBlock: {
     position: 'absolute',
@@ -149,12 +143,12 @@ export default class SignUp extends Component {
           return (
             <Block padding={[0, theme.sizes.base * 2]}>
               <KeyboardAvoidingView style={styles.signup} behavior="padding">
-                <Block middle style={{ marginTop: 0 }}>
+                <Block middle>
                   <Input
                     name="email"
-                    placeholder="Email"
+                    label="Email"
                     error={hasErrors('email')}
-                    style={[styles.input, hasErrors('email') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
                     onChangeText={text => this.handleTextChange('email', text)}
                     onEndEditing={() => this.handleEndEditing('email')}
@@ -163,9 +157,9 @@ export default class SignUp extends Component {
                   <Input
                     name="password"
                     secure
-                    placeholder="Mật khẩu"
+                    label="Mật khẩu"
                     error={hasErrors('password')}
-                    style={[styles.input, hasErrors('password') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('password') && generalStyles.hasErrors]}
                     helperText={errors.password || ''}
                     ref={this.passwordRef}
                     onChangeText={text => this.handleTextChange('password', text)}
@@ -175,9 +169,9 @@ export default class SignUp extends Component {
                   <Input
                     name="confirmPassword"
                     secure
-                    placeholder="Xác nhận mật khẩu"
+                    label="Xác nhận mật khẩu"
                     error={hasErrors('confirmPassword')}
-                    style={[styles.input, hasErrors('confirmPassword') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('confirmPassword') && styles.hasErrors]}
                     helperText={errors.confirmPassword || ''}
                     ref={this.confirmPasswordRef}
                     onChangeText={text => this.handleTextChange('confirmPassword', text)}
@@ -185,6 +179,7 @@ export default class SignUp extends Component {
                   />
                   <GradientButton
                     gradient
+                    disabled={!isValid}
                     onPress={() => {
                       Keyboard.dismiss();
                       isValid && signUp();

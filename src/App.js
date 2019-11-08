@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, View, Image, StyleSheet } from 'react-native';
-import { ApolloProvider } from 'react-apollo';
+import { Image, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+
 import { Block } from './components';
-import graphqlClient from './utils/graphqlClient';
 import AppData from './AppData';
 import AppConst from './AppConst';
 import Navigation from './screens';
-import { ME } from 'src/utils/graphqlQueries';
+import Popup from './screens/App/Popup';
+import { meActions, popupActions } from './redux/actions';
+import meQuery from './utils/meQuery';
 
 //TODO: Implement redux to manage global state through this tutorial: https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b
 
@@ -29,8 +31,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const App = () => {
+const App = ({ updateMe }) => {
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!loading) return;
 
@@ -42,39 +45,10 @@ const App = () => {
         const { accessToken } = await data.json();
         AppData.accessToken = accessToken;
         if (accessToken) {
-          fetch(`${AppConst.SERVER_URL}/graphql`, {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              query: `{
-                me {
-                  avatar
-                  role
-                }
-              }`
-            })
-          })
-            .then(async data => {
-              const {
-                data: {
-                  me: { role, avatar }
-                }
-              } = await data.json();
-              AppData.userProfile.role = role;
-              if (avatar) {
-                AppData.userProfile.avatar = { uri: avatar };
-              }
-              setLoading(false);
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        } else {
-          setLoading(false);
+          const me = await meQuery();
+          updateMe(me);
         }
+        setLoading(false);
       })
       .catch(err => {
         console.log(err);
@@ -83,20 +57,34 @@ const App = () => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Block middle center color="white">
         <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
-      </View>
+        <Popup />
+      </Block>
     );
   }
 
   return (
     <Block>
-      <ApolloProvider client={graphqlClient}>
-        <StatusBar barStyle="dark-content" backgroundColor="white" />
-        <Navigation />
-      </ApolloProvider>
+      <Navigation />
+      <Popup />
     </Block>
   );
 };
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
+  updateMe: me => {
+    dispatch(meActions.updateMe(me));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

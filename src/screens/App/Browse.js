@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
 
 import { Card, Badge, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
-import AppData from 'src/AppData';
+import { popupActions } from 'src/redux/actions';
 
 const styles = StyleSheet.create({
   avatar: {
@@ -60,6 +61,22 @@ const Browse = props => {
   );
 };
 
+// Use memo here to prevent unneccessary re-render
+const Avatar = memo(
+  ({ avatar, onPress }) => {
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.shadow}>
+        <Image source={avatar} style={styles.avatar} />
+      </TouchableOpacity>
+    );
+  },
+  (prevProps, nextProps) => nextProps.avatar === prevProps.avatar
+);
+
+const mapStateToProps = state => state.me;
+
+const AvatarComponent = connect(mapStateToProps)(Avatar);
+
 Browse.navigationOptions = ({ navigation }) => {
   return {
     title: 'Chức năng',
@@ -69,11 +86,22 @@ Browse.navigationOptions = ({ navigation }) => {
       marginLeft: theme.sizes.base * 2
     },
     headerRight: () => (
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.shadow}>
-        <Image source={AppData.userProfile.avatar} style={styles.avatar} />
-      </TouchableOpacity>
+      <AvatarComponent
+        onPress={() => {
+          navigation.navigate('Settings');
+        }}
+      />
     )
   };
 };
 
-export default Browse;
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Browse);

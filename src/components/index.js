@@ -5,7 +5,7 @@ import Card from './Card';
 import Dialog from './Dialog';
 import Divider from './Divider';
 import GradientButton from './GradientButton';
-import Input from './Input/Input';
+import Input from './Input';
 import Progress from './Progress';
 import Switch from './Switch';
 import Typography from './Typography';

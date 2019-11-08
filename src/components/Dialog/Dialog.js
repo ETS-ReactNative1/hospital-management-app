@@ -10,6 +10,8 @@ import GradientButton from '../GradientButton';
 import { theme, localization } from 'src/constants';
 import styles from './DialogStyles';
 import AppData from 'src/AppData';
+import { connect } from 'react-redux';
+import { popupActions } from 'src/redux/actions';
 
 const TextPackage = localization[AppData.language];
 
@@ -23,21 +25,15 @@ const Dialog = props => {
     handleConfirm,
     handleCancel,
     children,
-    visible,
+    hidePopup,
     ...other
   } = props;
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      visible={visible}
-      onRequestClose={handleCancel}
-      {...other}
-    >
+    <Modal animationType="fade" transparent visible onRequestClose={handleCancel} {...other}>
       <StatusBar barStyle="default" backgroundColor={theme.colors.black2} />
       <Block middle padding={[0, theme.sizes.base * 2]} backgroundColor={theme.colors.black2}>
-        <Card flex={false} shadow fullWidth>
+        <Card style={styles.cardStyle} flex={false} shadow fullWidth>
           {/* Title */}
           <Typography bold h1>
             {title}
@@ -48,19 +44,19 @@ const Dialog = props => {
           {/* Action */}
           <Block flex={false} row right>
             {!hideCancel && (
-              <GradientButton onPress={handleCancel} style={styles.actionButton}>
-                <Typography uppercase bold body color={theme.colors.gray}>
+              <GradientButton onPress={handleCancel || hidePopup} style={styles.actionButton}>
+                <Typography uppercase bold body>
                   {cancelText}
                 </Typography>
               </GradientButton>
             )}
 
             <GradientButton
-              onPress={handleConfirm}
+              onPress={handleConfirm || hidePopup}
               disable={confirmDisable}
               style={styles.actionButton}
             >
-              <Typography uppercase bold body primary>
+              <Typography uppercase bold body primary disable={confirmDisable}>
                 {confirmText}
               </Typography>
             </GradientButton>
@@ -72,7 +68,6 @@ const Dialog = props => {
 };
 
 Dialog.propTypes = {
-  visible: PropTypes.bool.isRequired,
   title: PropTypes.string,
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
@@ -88,8 +83,17 @@ Dialog.defaultProps = {
   confirmText: TextPackage.CONFIRM,
   hideCancel: false,
   confirmDisable: false,
-  handleCancel: () => console.log('cancle pressed'),
-  handleConfirm: () => console.log('confirm pressed')
+  handleCancel: null,
+  handleConfirm: null
 };
 
-export default Dialog;
+const mapDispatchToProps = dispatch => ({
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Dialog);

@@ -3,17 +3,20 @@ import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } 
 import { Mutation } from 'react-apollo';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
-import { theme } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import { FORGOT_PASSWORD } from 'src/utils/graphqlMutations';
 import validate from 'src/utils/validateOverride';
+import AppData from 'src/AppData';
+
+const TextPackage = localization[AppData.language];
 
 const schema = {
   email: {
-    presence: { allowEmpty: false, message: '^Email là bắt buộc' },
+    presence: { allowEmpty: false, message: TextPackage.EMAIL_REQUIRED_ERROR },
     email: true,
     length: {
       maximum: 64,
-      message: '^Độ dài tối đa là 64 ký tự'
+      message: TextPackage.EMAIL_TOO_LONG_ERROR
     }
   }
 };
@@ -22,15 +25,6 @@ const styles = StyleSheet.create({
   forgot: {
     flex: 1,
     justifyContent: 'center'
-  },
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth
-  },
-  hasErrors: {
-    borderBottomColor: theme.colors.error
   }
 });
 
@@ -133,13 +127,14 @@ export default class Forgot extends Component {
                     name="email"
                     placeholder="Email"
                     error={hasErrors('email')}
-                    style={[styles.input, hasErrors('email') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
                     onChangeText={text => this.handleTextChange('email', text)}
                     onEndEditing={() => this.handleEndEditing('email')}
                   />
                   <GradientButton
                     gradient
+                    disabled={!isValid}
                     onPress={() => {
                       Keyboard.dismiss();
                       isValid && forgotPassword();

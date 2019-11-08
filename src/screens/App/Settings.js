@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useQuery, useMutation } from 'react-apollo';
+import React from 'react';
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { useMutation } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { GradientButton, Block, Typography, Divider } from 'src/components';
 import { theme, localization } from 'src/constants';
-import { ME } from 'src/utils/graphqlQueries';
-import { AVATAR_UPLOAD } from 'src/utils/graphqlMutations';
+import { AVATAR_UPLOAD, SIGN_OUT } from 'src/utils/graphqlMutations';
 import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
 import ImagePicker from 'react-native-image-picker';
 import { ReactNativeFile } from 'apollo-upload-client';
+import { meActions, popupActions } from 'src/redux/actions';
 
 const styles = StyleSheet.create({
   image: {
@@ -25,8 +27,8 @@ const styles = StyleSheet.create({
     shadowColor: theme.colors.black, // IOS
     shadowOffset: { height: 0, width: 2 }, // IOS
     shadowOpacity: 1, // IOS
-    shadowRadius: 75, //IOS
-    elevation: 5, // Android
+    shadowRadius: theme.sizes.avatar * 0.5, //IOS
+    elevation: 10, // Android
     width: theme.sizes.avatar,
     height: theme.sizes.avatar,
     borderRadius: theme.sizes.avatar * 0.5,
@@ -46,12 +48,9 @@ const displayData = {
   }
 };
 
-const SettingsScreen = () => {
-  const { loading, error, data } = useQuery(ME);
+const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }) => {
   const [avatarUpload] = useMutation(AVATAR_UPLOAD);
-  const { userProfile } = AppData;
-
-  const [avatarSource, setAvatarSource] = useState(userProfile.avatar);
+  const [signOut, { client }] = useMutation(SIGN_OUT);
 
   const handleAvatarSelect = () => {
     const options = {
@@ -64,48 +63,51 @@ const SettingsScreen = () => {
     };
 
     ImagePicker.showImagePicker(options, async response => {
-      console.log('Response = ', response);
       if (response.didCancel) {
-        console.log('ImagePicker Cancel');
-      } else if (response.error) {
+        return;
+      }
+      if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        const source = { uri: response.uri };
         const file = new ReactNativeFile({
           uri: response.uri,
           type: response.type,
           name: response.fileName
         });
         await avatarUpload({ variables: { file } });
-        userProfile.avatar = source;
-        setAvatarSource(source);
+        updateMe({ avatar: response.uri });
       }
     });
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  const handleChangeInfo = () => {
+    showPopup(AppConst.CHANGE_INFO_POPUP);
+  };
 
-  if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title>
-          {error}
-        </Typography>
-      </Block>
-    );
-  }
+  const handleChangePassword = () => {
+    showPopup(AppConst.CHANGE_PASS_POPUP, { navigation });
+  };
+
+  const handleSignOut = () => {
+    showPopup(AppConst.OK_CANCEL_POPUP, {
+      title: TextPackage.SIGN_OUT,
+      message: TextPackage.CONFIRM_SIGN_OUT_MESSAGE,
+      confirmText: TextPackage.SURE,
+      handleConfirm: async () => {
+        await signOut();
+        await client.resetStore();
+        AppData.accessToken = '';
+        navigation.navigate('Auth');
+        hidePopup();
+      }
+    });
+  };
 
   return (
-    <View style={{ flex: 1 }}>
+    <Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <TouchableOpacity style={styles.shadow} onPress={handleAvatarSelect}>
-          <Image key="avatar" style={styles.image} source={avatarSource} />
+          <Image key="avatar" style={styles.image} source={userInfo.avatar} />
         </TouchableOpacity>
 
         {Object.entries(displayData).map(([key, name]) => {
@@ -115,9 +117,16 @@ const SettingsScreen = () => {
                 <Typography gray height={theme.sizes.body * 2}>
                   {name}
                 </Typography>
-                <Typography bold gray={!data.me[key]}>
-                  {data.me[key] || TextPackage.UNKNOWN}
-                </Typography>
+                {key === 'email' && (
+                  <Typography bold gray={!userInfo.email}>
+                    {userInfo.email || TextPackage.UNKNOWN}
+                  </Typography>
+                )}
+                {key === 'role' && (
+                  <Typography bold gray={!userInfo.role}>
+                    {TextPackage[userInfo.role] || TextPackage.UNKNOWN}
+                  </Typography>
+                )}
               </View>
             );
           }
@@ -130,7 +139,7 @@ const SettingsScreen = () => {
                   <Typography bold title>
                     {TextPackage.PERSONAL_INFO}
                   </Typography>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleChangeInfo}>
                     <Typography bold primary>
                       {TextPackage.EDIT}
                     </Typography>
@@ -142,8 +151,8 @@ const SettingsScreen = () => {
                       <Typography gray height={theme.sizes.body * 2}>
                         {name}
                       </Typography>
-                      <Typography bold gray={!data.me[key]}>
-                        {data.me[key] || TextPackage.UNKNOWN}
+                      <Typography bold gray={!userInfo[key]}>
+                        {userInfo[key] || TextPackage.UNKNOWN}
                       </Typography>
                     </View>
                   );
@@ -157,13 +166,14 @@ const SettingsScreen = () => {
       </Block>
 
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
-        <GradientButton shadow>
+        <GradientButton shadow onPress={handleChangePassword}>
           <Typography bold center body>
             {TextPackage.CHANGE_PASSWORD}
           </Typography>
         </GradientButton>
 
         <GradientButton
+          onPress={handleSignOut}
           gradient
           shadow
           startColor={theme.colors.redDark}
@@ -174,7 +184,7 @@ const SettingsScreen = () => {
           </Typography>
         </GradientButton>
       </Block>
-    </View>
+    </Block>
   );
 };
 
@@ -182,4 +192,23 @@ SettingsScreen.navigationOptions = {
   title: TextPackage.SETUP
 };
 
-export default SettingsScreen;
+const mapStateToProps = state => ({
+  userInfo: state.me
+});
+
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
+  updateMe: me => {
+    dispatch(meActions.updateMe(me));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SettingsScreen);

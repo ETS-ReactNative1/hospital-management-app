@@ -45,12 +45,12 @@ module.exports = {
     'no-underscore-dangle': [0],
     'no-shadow': 0,
     'no-unused-expressions': 0,
-    'import/no-cycle': 0,
     'global-require': 0,
     'func-names': 0,
     'import/prefer-default-export': [0],
     'no-useless-escape': 0,
     'no-plusplus': 0,
+    'no-case-declarations': 0,
     'no-use-before-define': [
       0,
       {

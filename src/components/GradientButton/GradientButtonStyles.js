@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5 // android
   },
+  disabled: {
+    backgroundColor: theme.colors.gray
+  },
   accent: { backgroundColor: theme.colors.accent },
   primary: { backgroundColor: theme.colors.primary },
   secondary: { backgroundColor: theme.colors.secondary },

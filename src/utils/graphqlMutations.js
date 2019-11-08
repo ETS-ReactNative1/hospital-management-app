@@ -35,13 +35,23 @@ export const FORGOT_PASSWORD = gql`
 `;
 
 export const CHANGE_PASSWORD = gql`
-  mutation ChangePassword($newPassword: String!) {
-    changePassword(newPassword: $newPassword)
+  mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(oldPassword: $oldPassword, newPassword: $newPassword)
   }
 `;
 
 export const AVATAR_UPLOAD = gql`
   mutation AvatarUpload($file: Upload!) {
     avatarUpload(file: $file)
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($userInput: UserInput!) {
+    updateUser(userInput: $userInput) {
+      firstName
+      lastName
+      phone
+    }
   }
 `;

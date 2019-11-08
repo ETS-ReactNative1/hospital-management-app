@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { TextInput, Platform } from 'react-native';
+import { TextInput, Platform, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants';
@@ -20,13 +20,13 @@ export default class Input extends Component {
   renderLabel() {
     const { label, error } = this.props;
     return (
-      <Block flex={false}>
+      <View>
         {label ? (
           <Typography gray={!error} error={error}>
             {label}
           </Typography>
         ) : null}
-      </Block>
+      </View>
     );
   }
 
@@ -97,20 +97,22 @@ export default class Input extends Component {
     }
 
     return (
-      <Block flex={false} margin={[theme.sizes.base * 0.5, 0]}>
+      <Block flex={false} margin={[theme.sizes.padding, 0]}>
         {this.renderLabel()}
-        <TextInput
-          style={inputStyles}
-          secureTextEntry={isSecure}
-          autoComplete="off"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={inputType}
-          ref={this.textInputRef}
-          {...props}
-        />
-        {this.renderToggle()}
-        {this.renderRight()}
+        <View>
+          <TextInput
+            style={inputStyles}
+            secureTextEntry={isSecure}
+            autoComplete="off"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType={inputType}
+            ref={this.textInputRef}
+            {...props}
+          />
+          {this.renderToggle()}
+          {this.renderRight()}
+        </View>
         {this.renderHelperText()}
       </Block>
     );

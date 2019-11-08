@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginLeft: theme.sizes.padding * 2,
     marginRight: -theme.sizes.padding
+  },
+  cardStyle: {
+    paddingBottom: theme.sizes.padding
   }
 });
 

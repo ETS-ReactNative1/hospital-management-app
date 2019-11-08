@@ -5,10 +5,10 @@ class Constants {
     let n = 0;
     this.NO_POPUP = n++;
     this.OK_POPUP = n++;
-    this.YES_NO_POPUP = n++;
+    this.ERROR_POPUP = n++;
+    this.OK_CANCEL_POPUP = n++;
     this.CHANGE_PASS_POPUP = n++;
-    this.CHANGE_INFOR_POPUP = n++;
-    this.CHANGE_SCOPE_POPUP = n++;
+    this.CHANGE_INFO_POPUP = n++;
   }
 }
 

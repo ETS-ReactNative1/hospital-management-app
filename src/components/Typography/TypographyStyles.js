@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   center: { textAlign: 'center' },
   right: { textAlign: 'right' },
   justify: { textAlign: 'justify' },
+  underline: { textDecorationLine: 'underline' },
   // colors
   accent: { color: theme.colors.accent },
   primary: { color: theme.colors.primary },

@@ -3,7 +3,6 @@
 // import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import Animated, { Easing } from 'react-native-reanimated';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants';
