@@ -17,6 +17,7 @@ export const SIGN_UP = gql`
 export const CREATE_EVENT = gql`
   mutation CreateActiveEvent($deviceId: ID!) {
     createActiveEvent(deviceId: $deviceId) {
+      id
       actionType
     }
   }
@@ -49,6 +50,7 @@ export const AVATAR_UPLOAD = gql`
 export const UPDATE_USER = gql`
   mutation UpdateUser($userInput: UserInput!) {
     updateUser(userInput: $userInput) {
+      id
       firstName
       lastName
       phone

@@ -79,8 +79,8 @@ const refreshTokenLink = new TokenRefreshLink({
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   graphQLErrors &&
-    graphQLErrors.forEach(({ message }) => {
-      console.log('GraphQL error', message);
+    graphQLErrors.forEach(error => {
+      console.log('GraphQL error', error);
     });
 
   networkError && console.log('Network error', networkError);

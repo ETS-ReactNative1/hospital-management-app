@@ -45,7 +45,7 @@ export default class Typography extends Component {
       gray2,
       style,
       children,
-      disable,
+      disabled,
       error,
       ...props
     } = this.props;
@@ -86,7 +86,7 @@ export default class Typography extends Component {
       tertiary && styles.tertiary,
       black && styles.black,
       white && styles.white,
-      (gray || disable) && styles.gray,
+      (gray || disabled) && styles.gray,
       gray2 && styles.gray2,
       error && styles.error,
       style // rewrite predefined styles

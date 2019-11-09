@@ -6,7 +6,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.sizes.padding,
     marginBottom: 0,
     marginLeft: theme.sizes.padding * 2,
-    marginRight: -theme.sizes.padding
+    marginRight: -theme.sizes.padding,
+    height: theme.sizes.base * 3,
+    justifyContent: 'center',
+    marginVertical: theme.sizes.padding
   },
   cardStyle: {
     paddingBottom: theme.sizes.padding

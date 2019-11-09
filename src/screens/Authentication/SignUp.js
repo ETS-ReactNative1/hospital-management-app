@@ -96,12 +96,24 @@ export default class SignUp extends Component {
         }
       },
       () => {
-        const { values } = this.state;
+        const { values, touched } = this.state;
         const errors = validate(values, schema);
         this.setState({
           isValid: !errors,
           errors: errors || {}
         });
+        if (
+          !touched.confirmPassword &&
+          values.confirmPassword &&
+          values.newPassword.length === values.confirmPassword.length
+        ) {
+          this.setState({
+            touched: {
+              ...touched,
+              confirmPassword: true
+            }
+          });
+        }
       }
     );
   };

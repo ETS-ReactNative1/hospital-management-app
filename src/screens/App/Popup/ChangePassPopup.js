@@ -55,7 +55,6 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
-
     setFormState(formState => ({
       ...formState,
       isValid: !errors,
@@ -72,28 +71,34 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
   };
 
   const handleChangePassword = async () => {
-    await changePassword({
-      variables: {
-        oldPassword: formState.values.oldPassword,
-        newPassword: formState.values.newPassword
-      }
-    });
-    showPopup(AppConst.OK_POPUP, {
-      title: TextPackage.CHANGE_SUCCESS,
-      message: TextPackage.CHANGE_PASSWORD_SUCCESSFUL_MESSAGE,
-      confirmText: TextPackage.CONTINUE,
-      handleConfirm: async () => {
-        await signOut();
-        await client.resetStore();
-        AppData.accessToken = '';
-        navigation.navigate('Auth');
-        hidePopup();
-      }
-    });
+    try {
+      await changePassword({
+        variables: {
+          oldPassword: formState.values.oldPassword,
+          newPassword: formState.values.newPassword
+        }
+      });
+      showPopup(AppConst.OK_POPUP, {
+        title: TextPackage.CHANGE_SUCCESS,
+        message: TextPackage.CHANGE_PASSWORD_SUCCESSFUL_MESSAGE,
+        confirmText: TextPackage.CONTINUE,
+        handleConfirm: async () => {
+          await signOut();
+          await client.resetStore();
+          AppData.accessToken = '';
+          navigation.navigate('Auth');
+          hidePopup();
+        }
+      });
+    } catch (error) {
+      const { graphQLErrors, networkError } = error;
+      graphQLErrors && handleChangePasswordError(graphQLErrors[0]);
+      networkError && handleChangePasswordError(networkError);
+    }
   };
 
   const handleTextChange = (name, text) => {
-    const { values } = formState;
+    const { values, touched } = formState;
     setFormState(formState => ({
       ...formState,
       values: {
@@ -101,6 +106,19 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
         [name]: text
       }
     }));
+    if (
+      !touched.confirmPassword &&
+      values.confirmPassword &&
+      values.newPassword.length === values.confirmPassword.length
+    ) {
+      setFormState(formState => ({
+        ...formState,
+        touched: {
+          ...touched,
+          confirmPassword: true
+        }
+      }));
+    }
   };
 
   const handleEndEditing = name => {

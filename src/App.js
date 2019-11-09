@@ -35,8 +35,7 @@ const App = ({ updateMe }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!loading) return;
-
+    // console.log('fetched refresh-token');
     fetch(`${AppConst.SERVER_URL}/refresh-token`, {
       method: 'POST',
       credentials: 'include'
@@ -45,6 +44,7 @@ const App = ({ updateMe }) => {
         const { accessToken } = await data.json();
         AppData.accessToken = accessToken;
         if (accessToken) {
+          // console.log('fetched meQuery');
           const me = await meQuery();
           updateMe(me);
         }

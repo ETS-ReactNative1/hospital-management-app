@@ -43,7 +43,7 @@ const handleError = errorMsg => {
   if (errorMsg.indexOf('Invalid old password') !== -1) {
     return {
       title: TextPackage.SIGN_IN_ERR,
-      message: TextPackage.INVALID_PASSWORD_ERR,
+      message: TextPackage.INVALID_OLD_PASSWORD_ERR,
       confirmText: TextPackage.CONTINUE
     };
   }
