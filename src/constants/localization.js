@@ -53,12 +53,17 @@ const VN = {
   MAINTAIN_COMPANY: 'Đơn vị bảo trì',
   ADDRESS: 'Địa chỉ',
   MAINTAIN_COST: 'Chi phí bảo trì',
+  MAINTAIN_COST_EXPECT: 'Chi phí dự kiến',
   NOTE: 'Ghi chú',
+  RECEIVER: 'Người nhận lại',
   UPDATE_MAINTAIN: 'Cập nhật bảo trì',
   LIQUIDATE_COMPANY: 'Đơn vị mua',
   LIQUIDATE_PRICE: 'Giá trị thanh lý',
   LIQUIDATE: 'Thanh lý',
   LIQUIDATE_INFO: 'Thông tin thanh lý',
+  MAINTAIN_DONE: 'Đã hoàn thành',
+  MAINTAIN_UNDONE: 'Chưa hoàn thành',
+  MAINTAIN_INTERVAL: 'Thời gian bảo trì',
   ACTIVE: 'Đang hoạt động',
   MAINTAINING: 'Đang bảo trì',
   LIQUIDATED: 'Đã thanh lý',
@@ -117,7 +122,13 @@ const VN = {
   SIGN_IN_ERR: 'Lỗi đăng nhâp',
   UNCONFIRMED_EMAIL_ERR: 'Tài khoản của bạn vẫn chưa được xác nhận.',
   INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.',
-  INVALID_OLD_PASSWORD_ERR: 'Mật khẩu cũ bạn đã nhập không chính xác.'
+  INVALID_OLD_PASSWORD_ERR: 'Mật khẩu cũ bạn đã nhập không chính xác.',
+
+  NO_DATA: 'Không có dữ liệu',
+  NO_DATA_MESSAGE: 'Dữ liệu về lịch sử hoạt động của thiết bị hiện chưa khả dụng.',
+  END_OF_LIST: 'Hết danh sách',
+  CREATED_AT: 'Vào lúc',
+  USED_TIME: 'Đã sử dụng'
 };
 
 export { VN };

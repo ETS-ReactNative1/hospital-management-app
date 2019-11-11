@@ -19,8 +19,32 @@ String.prototype.toLocaleDateString = function() {
     .join('/');
 };
 
+String.prototype.toLocaleDateTimeString = function() {
+  const datetime = new Date(this);
+  const hour = datetime.getHours();
+  let min = datetime.getMinutes();
+  if (min < 10) min = `0${min}`;
+  const sec = datetime.getSeconds();
+  const date = datetime.getDate();
+  const month = datetime.getMonth();
+  const year = datetime.getFullYear();
+  return `${hour}:${min}:${sec} - ${date}/${month}/${year}`;
+};
+
 Number.prototype.currencyFormat = function() {
   return `${this.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&.')} VND`;
+};
+
+Number.prototype.milliSecToDuration = function() {
+  let seconds = Math.floor((this / 1000) % 60);
+  let minutes = Math.floor((this / (1000 * 60)) % 60);
+  let hours = Math.floor((this / (1000 * 60 * 60)) % 24);
+  let dates = Math.floor(this / (1000 * 60 * 60 * 24));
+  seconds = seconds ? `${seconds} Giây` : '';
+  minutes = minutes ? `${minutes} Phút ` : '';
+  hours = hours ? `${hours} Tiếng ` : '';
+  dates = dates ? `${dates} Ngày ` : '';
+  return `${dates}${hours}${minutes}${seconds}`;
 };
 
 const styles = StyleSheet.create({

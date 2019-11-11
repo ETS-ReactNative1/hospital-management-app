@@ -1,9 +1,5 @@
-// import React from 'react';
-// import { Image } from 'react-native';
-// import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants';
 import AuthMain from './Authentication/AuthMain';

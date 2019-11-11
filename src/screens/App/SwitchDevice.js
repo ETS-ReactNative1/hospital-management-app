@@ -64,7 +64,7 @@ const SwitchDevice = props => {
           }
         />
         <Block center padding={[0, theme.sizes.base * 5]}>
-          <Typography title transform="uppercase">
+          <Typography bold title uppercase>
             {data.device.availability === 'maintaining'
               ? TextPackage.DEVICE_MAINTAINING
               : TextPackage.DEVICE_LIQUIDATED}

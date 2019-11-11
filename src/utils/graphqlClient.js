@@ -60,13 +60,10 @@ const refreshTokenLink = new TokenRefreshLink({
     }
   },
   fetchAccessToken: () => {
-    return (
-      fetch(`${AppConst.SERVER_URL}/refresh-token`),
-      {
-        method: 'POST',
-        credentials: 'include'
-      }
-    );
+    return fetch(`${AppConst.SERVER_URL}/refresh-token`, {
+      method: 'POST',
+      credentials: 'include'
+    });
   },
   handleFetch: accessToken => {
     AppData.accessToken = accessToken;
@@ -100,4 +97,4 @@ const defaultOptions = {
 const link = ApolloLink.from([refreshTokenLink, authLink, errorLink, httpLink]);
 const cache = new InMemoryCache();
 
-export default new ApolloClient({ link, cache, defaultOptions });
+export default new ApolloClient({ link, cache });

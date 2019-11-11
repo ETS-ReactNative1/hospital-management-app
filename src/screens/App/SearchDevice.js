@@ -32,8 +32,7 @@ const availabilityVN = {
 
 const formatStrings = ['startUseTime', 'availability'];
 
-const SearchDevice = props => {
-  const { navigation } = props;
+const SearchDevice = ({ navigation }) => {
   const { deviceId } = navigation.state.params;
 
   const { loading, error, data } = useQuery(DEVICE_INFO, {
@@ -44,9 +43,9 @@ const SearchDevice = props => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Block middle center>
         <ActivityIndicator />
-      </View>
+      </Block>
     );
   }
 
@@ -64,7 +63,7 @@ const SearchDevice = props => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
@@ -122,18 +121,28 @@ const SearchDevice = props => {
             </Typography>
           </GradientButton>
         )}
-        <GradientButton shadow gradient onPress={() => navigation.navigate('ActiveHistory')}>
+        <GradientButton
+          shadow
+          gradient
+          onPress={() => navigation.navigate('ActiveHistory', { deviceId })}
+        >
           <Typography body bold white center>
             {TextPackage.ACTIVE_HISTORY}
           </Typography>
         </GradientButton>
-        <GradientButton shadow onPress={() => navigation.navigate('MaintainHistory')}>
+        <GradientButton
+          gradient
+          startColor={theme.colors.yellowDark}
+          endColor={theme.colors.yellowLight}
+          shadow
+          onPress={() => navigation.navigate('MaintainHistory', { deviceId })}
+        >
           <Typography body bold center>
             {TextPackage.MAINTAIN_HISTORY}
           </Typography>
         </GradientButton>
       </Block>
-    </View>
+    </Block>
   );
 };
 

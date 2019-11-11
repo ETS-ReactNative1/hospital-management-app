@@ -15,7 +15,6 @@ export default async () => {
         query: ME.loc.source.body
       })
     });
-
     const {
       data: { me }
     } = await data.json();

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import { Card, Badge, Block, Typography } from 'src/components';
@@ -43,8 +43,8 @@ const Browse = props => {
       {mocks.categories.map(category => (
         <TouchableOpacity key={category.id} onPress={() => navigation.navigate('QRScan', category)}>
           <Card flex={false} center middle shadow row fullWidth>
-            <Badge size={50} color="rgba(41,216,143,0.20)">
-              <Icon name={category.icon} size={24} color={theme.colors.green} />
+            <Badge size={56} color="rgba(41,216,143,0.20)">
+              <Icon name={category.icon} size={36} color={theme.colors.green} />
             </Badge>
             <Block padding={[0, theme.sizes.base]}>
               <Typography medium body>

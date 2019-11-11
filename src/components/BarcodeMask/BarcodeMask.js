@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './BarcodeMaskStyles';
 import GradientButton from '../GradientButton';
 import Typography from '../Typography';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class BarcodeMask extends React.Component {
   constructor(props) {
@@ -149,7 +149,7 @@ export default class BarcodeMask extends React.Component {
           <View style={[styles.maskRow, styles.maskFrame, this.applyMaskFrameTransparency()]}>
             <GradientButton style={styles.flashButtonStyle} onPress={this.onPressFlashOn} border>
               <Icon
-                name={flashState ? 'flash-off' : 'flash-on'}
+                name={flashState ? 'flash-off' : 'flash'}
                 size={16}
                 color="white"
                 style={{ paddingRight: 2 }}

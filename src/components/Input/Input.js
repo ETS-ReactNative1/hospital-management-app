@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { TextInput, Platform, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { theme } from 'src/constants';
 import styles from './InputStyles';
@@ -45,7 +45,7 @@ export default class Input extends Component {
           <Icon
             color={theme.colors.gray}
             size={theme.sizes.font * 1.35}
-            name={!toggleSecure ? 'visibility' : 'visibility-off'}
+            name={!toggleSecure ? 'eye' : 'eye-off'}
           />
         )}
       </GradientButton>
