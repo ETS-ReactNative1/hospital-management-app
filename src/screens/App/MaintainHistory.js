@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet } from 'react-native';
 import { useQuery } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Typography, Block, Card, Badge, ExpansionPanel } from 'src/components';
+import { Typography, Block, Badge, ExpansionPanel } from 'src/components';
 import { theme, localization } from 'src/constants';
 import AppData from 'src/AppData';
 import { MAINTAIN_EVENTS_BY_DEVICE } from 'src/utils/graphqlQueries';

@@ -51,9 +51,14 @@ export const UPDATE_USER = gql`
   mutation UpdateUser($userInput: UserInput!) {
     updateUser(userInput: $userInput) {
       id
-      firstName
-      lastName
-      phone
+    }
+  }
+`;
+
+export const CREATE_MAINTAIN_EVENT = gql`
+  mutation CreateMaintainEvent($deviceId: ID!, $maintainInfo: MaintainInfo!) {
+    createMaintainEvent(deviceId: $deviceId, maintainInfo: $maintainInfo) {
+      id
     }
   }
 `;

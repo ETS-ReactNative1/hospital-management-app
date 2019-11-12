@@ -97,4 +97,4 @@ const defaultOptions = {
 const link = ApolloLink.from([refreshTokenLink, authLink, errorLink, httpLink]);
 const cache = new InMemoryCache();
 
-export default new ApolloClient({ link, cache });
+export default new ApolloClient({ link, cache, defaultOptions });

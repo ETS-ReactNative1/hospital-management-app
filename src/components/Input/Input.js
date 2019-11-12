@@ -67,6 +67,18 @@ export default class Input extends Component {
     );
   }
 
+  renderRightText() {
+    const { rightText, rightTextStyle } = this.props;
+
+    if (!rightText) return null;
+
+    return (
+      <Typography style={[styles.toggle, rightTextStyle]} center middle>
+        {rightText}
+      </Typography>
+    );
+  }
+
   renderHelperText() {
     const { helperText, error } = this.props;
 
@@ -83,7 +95,12 @@ export default class Input extends Component {
     const { toggleSecure } = this.state;
     const isSecure = toggleSecure ? false : secure;
 
-    const inputStyles = [styles.input, error && { borderColor: theme.colors.error }, style];
+    const inputStyles = [
+      styles.input,
+      props.multiline && { height: theme.sizes.padding * 10 },
+      error && { borderColor: theme.colors.error },
+      style
+    ];
 
     let inputType = 'default';
     if (email || name === 'email') {
@@ -112,6 +129,7 @@ export default class Input extends Component {
           />
           {this.renderToggle()}
           {this.renderRight()}
+          {this.renderRightText()}
         </View>
         {this.renderHelperText()}
       </Block>

@@ -2,7 +2,11 @@ import { Platform } from 'react-native';
 import shorthash from 'shorthash';
 import RNFS from 'react-native-fs';
 
-export default async uri => {
+/**
+ * Caching image into local file for better loading speed
+ * @param {string} uri URI link of the image
+ */
+const cacheImage = async uri => {
   const name = shorthash.unique(uri);
   const fileType = uri.split('.').pop();
   const extension = Platform.OS === 'android' ? 'file://' : '';
@@ -14,3 +18,5 @@ export default async uri => {
   await RNFS.downloadFile({ fromUrl: uri, toFile: path }).promise;
   return path;
 };
+
+export default cacheImage;

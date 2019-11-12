@@ -64,6 +64,18 @@ const VN = {
   MAINTAIN_DONE: 'Đã hoàn thành',
   MAINTAIN_UNDONE: 'Chưa hoàn thành',
   MAINTAIN_INTERVAL: 'Thời gian bảo trì',
+  MAINTAIN_UPDATE_CONFIRM: 'Xác nhận cập nhật bảo trì',
+  MAINTAIN_FINISHED_CONFIRM: 'Xác nhận hoàn tất bảo trì',
+  MAINTAIN_UPDATE_CONFIRM_MESSAGE:
+    'Hệ thống sẽ ghi nhận thông tin bảo trì và thay đổi trạng thái của thiết bị. Hãy chắc chắn rằng bạn muốn cập nhật trạng thái bảo trì cho thiết bị này!',
+  MAINTAIN_FINISHED_CONFIRM_MESSAGE:
+    'Hệ thống sẽ ghi nhận thông tin bảo trì và thay đổi trạng thái của thiết bị. Hãy chắc chắn việc bảo trì thiết bị này đã hoàn tất! ',
+  UPDATE_SUCCESS: 'Cập nhật thành công',
+  UPDATE_SUCCESS_MESSAGE: 'Thông tin về bảo trì thiết bị đã được hệ thống ghi nhận.',
+  REPORT_MAINTAIN_MESSAGE:
+    'Bạn đang báo cáo một sai sót của hệ thống về trạng thái bảo trì. Hãy chắc chắn rằng trạng thái bào trì thực tế là khác so với ghi nhận trên hệ thống!',
+  REPORT_MAINTAIN_SUCCESS_MESSAGE:
+    'Báo cáo của bạn về sai sót của trạng thái bảo trì đã được hệ thống ghi nhận.',
   ACTIVE: 'Đang hoạt động',
   MAINTAINING: 'Đang bảo trì',
   LIQUIDATED: 'Đã thanh lý',

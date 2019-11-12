@@ -15,9 +15,10 @@ const styles = StyleSheet.create({
   toggle: {
     position: 'absolute',
     alignItems: 'center',
-    width: theme.sizes.padding * 3,
+    width: theme.sizes.padding * 4,
     height: theme.sizes.padding * 3,
-    right: 0
+    right: 0,
+    paddingTop: theme.sizes.padding
   }
 });
 

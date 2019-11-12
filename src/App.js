@@ -31,8 +31,33 @@ String.prototype.toLocaleDateTimeString = function() {
   return `${hour}:${min}:${sec} - ${date}/${month}/${year}`;
 };
 
-Number.prototype.currencyFormat = function() {
-  return `${this.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&.')} VND`;
+/**
+ * Format a Number to display as a currency type
+ * @param {boolean} isIndex  display index indicator or not, default = true
+ */
+Number.prototype.currencyFormat = function(isIndex = true) {
+  return `${this.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&.')}${isIndex ? ' VND' : ''}`;
+};
+
+String.prototype.formatMoney = function(decimalCount = 0, decimal = ',', thousands = '.') {
+  let amount = this;
+  decimalCount = Math.abs(decimalCount);
+  decimalCount = Number.isNaN(decimalCount) ? 2 : decimalCount;
+  const negativeSign = amount < 0 ? '-' : '';
+  const i = parseInt((amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)), 10).toString();
+  const j = i.length > 3 ? i.length % 3 : 0;
+
+  return (
+    negativeSign +
+    (j ? i.substr(0, j) + thousands : '') +
+    i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`) +
+    (decimalCount
+      ? decimal +
+        Math.abs(amount - i)
+          .toFixed(decimalCount)
+          .slice(2)
+      : '')
+  );
 };
 
 Number.prototype.milliSecToDuration = function() {
@@ -108,7 +133,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(App);
+export default connect(null, mapDispatchToProps)(App);

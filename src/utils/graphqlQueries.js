@@ -33,21 +33,6 @@ export const DEVICE_INFO = gql`
   }
 `;
 
-export const LASTEST_MAINTAIN_EVENT = gql`
-  query LastestMaintainEvent($deviceId: ID!) {
-    lastestMaintainEvent(deviceId: $deviceId) {
-      maintainance {
-        id
-        name
-        address
-        cost
-        phone
-        note
-      }
-    }
-  }
-`;
-
 export const ME = gql`
   query {
     me {
@@ -72,6 +57,22 @@ export const ACTIVE_EVENTS_BY_DEVICE = gql`
       creator {
         firstName
         lastName
+      }
+    }
+  }
+`;
+
+export const LASTEST_MAINTAIN_EVENT = gql`
+  query LastestMaintainEvent($deviceId: ID!) {
+    lastestMaintainEvent(deviceId: $deviceId) {
+      id
+      finished
+      maintainInfo {
+        name
+        address
+        cost
+        phone
+        note
       }
     }
   }

@@ -61,6 +61,7 @@ const SearchDevice = ({ navigation }) => {
       </Block>
     );
   }
+  const { device } = data;
 
   return (
     <Block>
@@ -75,31 +76,33 @@ const SearchDevice = ({ navigation }) => {
                 <Typography gray height={theme.sizes.body * 2}>
                   {name}
                 </Typography>
-                {typeof data.device[key] === 'string' && !formatStrings.includes(key) && (
-                  <Typography bold gray={!data.device[key]}>
-                    {data.device[key] || '(Không rõ)'}
+                {typeof device[key] === 'string' && !formatStrings.includes(key) && (
+                  <Typography bold gray={!device[key]}>
+                    {device[key] || '(Không rõ)'}
                   </Typography>
                 )}
-                {typeof data.device[key] === 'number' && (
-                  <Typography bold gray={!data.device[key]}>
-                    {data.device[key].currencyFormat() || '(Không rõ)'}
+                {typeof device[key] === 'number' && (
+                  <Typography bold gray={!device[key]}>
+                    {device[key].currencyFormat() || '(Không rõ)'}
                   </Typography>
                 )}
                 {formatStrings.includes(key) && (
-                  <Typography bold gray={!data.device[key]}>
+                  <Typography
+                    bold
+                    gray={!device[key]}
+                    color={device[key] === 'liquidated' && theme.colors.redDark}
+                  >
                     {(key === 'startUseTime'
-                      ? data.device[key].toLocaleDateString()
-                      : availabilityVN[data.device[key]]) || '(Không rõ)'}
+                      ? device[key].toLocaleDateString()
+                      : availabilityVN[device[key]]) || '(Không rõ)'}
                   </Typography>
                 )}
                 {key === 'startUseState' && (
-                  <Typography bold>
-                    {data.device[key] ? TextPackage.NEW : TextPackage.USED}
-                  </Typography>
+                  <Typography bold>{device[key] ? TextPackage.NEW : TextPackage.USED}</Typography>
                 )}
                 {key === 'activeState' && (
                   <Typography bold>
-                    {data.device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
+                    {device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
                   </Typography>
                 )}
               </View>
@@ -108,7 +111,7 @@ const SearchDevice = ({ navigation }) => {
         </ScrollView>
       </Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
-        {data.device.availability === 'liquidated' && (
+        {device.availability === 'liquidated' && (
           <GradientButton
             shadow
             gradient

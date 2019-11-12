@@ -50,6 +50,7 @@ module.exports = {
     'import/prefer-default-export': [0],
     'no-useless-escape': 0,
     'no-plusplus': 0,
+    'no-param-reassign': 0,
     'no-case-declarations': 0,
     'no-use-before-define': [
       0,
@@ -60,7 +61,7 @@ module.exports = {
       }
     ],
     'prettier/prettier': [
-      'error',
+      0,
       {
         trailingComma: 'none',
         singleQuote: true,

@@ -24,9 +24,9 @@ const ChangeInfoPopup = ({
   const [updateUser] = useMutation(UPDATE_USER);
 
   const handleChangeInfo = async () => {
-    const { data, error } = await updateUser({ variables: { userInput: newProfile } });
+    const { error } = await updateUser({ variables: { userInput: newProfile } });
     error && console.log(error);
-    data && updateMe(data.updateUser);
+    updateMe(newProfile);
     showPopup(AppConst.OK_POPUP, {
       title: TextPackage.CHANGE_SUCCESS,
       message: TextPackage.CHANGE_INFO_SUCCESSFUL_MESSAGE,
@@ -94,7 +94,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangeInfoPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangeInfoPopup);

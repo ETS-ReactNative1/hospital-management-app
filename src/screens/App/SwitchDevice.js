@@ -52,25 +52,27 @@ const SwitchDevice = props => {
     );
   }
 
-  if (data.device.availability !== 'active') {
+  const { device } = data;
+
+  if (device.availability !== 'active') {
     return (
       <Block middle center>
         <Image
           style={styles.image}
           source={
-            data.device.availability === 'maintaining'
+            device.availability === 'maintaining'
               ? require('src/assets/images/maintaining.jpg')
               : require('src/assets/images/liquidated.jpg')
           }
         />
         <Block center padding={[0, theme.sizes.base * 5]}>
           <Typography bold title uppercase>
-            {data.device.availability === 'maintaining'
+            {device.availability === 'maintaining'
               ? TextPackage.DEVICE_MAINTAINING
               : TextPackage.DEVICE_LIQUIDATED}
           </Typography>
           <Typography center gray>
-            {data.device.availability === 'maintaining'
+            {device.availability === 'maintaining'
               ? TextPackage.DEVICE_MAINTAINING_DESC
               : TextPackage.DEVICE_LIQUIDATED_DESC}
           </Typography>
@@ -80,29 +82,27 @@ const SwitchDevice = props => {
   }
 
   //Continue Modal after change state
-  const handleStateSwitch = async () => {
+  const handleStateSwitch = () => {
     showPopup(AppConst.OK_POPUP, {
       title: TextPackage.CHANGE_SUCCESS,
-      message: data.device.activeState
-        ? TextPackage.SWITCH_OFF_MESSAGE
-        : TextPackage.SWITCH_ON_MESSAGE,
+      message: device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE,
       confirmText: TextPackage.CONTINUE,
-      handleConfirm: async () => {
+      handleConfirm: () => {
         hidePopup();
-        await createEvent({ variables: { deviceId } });
+        createEvent({ variables: { deviceId } });
         navigation.goBack();
       }
     });
   };
   // Continue Modal after report state
-  const handleReportConfirm = async () => {
+  const handleReportConfirm = () => {
     showPopup(AppConst.OK_POPUP, {
       title: TextPackage.REPORT_SUCCESS,
       message: TextPackage.REPORT_SWITCH_SUCCESS_MESSAGE,
       confirmText: TextPackage.CONTINUE,
       handleConfirm: async () => {
         hidePopup();
-        //*: Should refetch here because of muatation (still not implement)
+        //*: Should refetch here because of mutation (still not implement)
         await refetch();
       }
     });
@@ -112,7 +112,6 @@ const SwitchDevice = props => {
     showPopup(AppConst.OK_CANCEL_POPUP, {
       title: TextPackage.REPORT_STATE,
       message: TextPackage.REPORT_SWITCH_MESSAGE,
-      confirmText: TextPackage.CONFIRM,
       handleConfirm: handleReportConfirm
     });
   };
@@ -129,14 +128,14 @@ const SwitchDevice = props => {
               <Typography gray height={theme.sizes.body * 2}>
                 {name}
               </Typography>
-              {typeof data.device[key] !== 'boolean' && (
-                <Typography bold gray={!data.device[key]}>
-                  {data.device[key] || '(Không rõ)'}
+              {typeof device[key] !== 'boolean' && (
+                <Typography bold gray={!device[key]}>
+                  {device[key] || '(Không rõ)'}
                 </Typography>
               )}
               {key === 'activeState' && (
                 <Typography bold>
-                  {data.device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
+                  {device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
                 </Typography>
               )}
             </View>
@@ -157,7 +156,7 @@ const SwitchDevice = props => {
         </GradientButton>
         <GradientButton gradient shadow onPress={handleStateSwitch}>
           <Typography title bold white center>
-            {data.device.activeState ? TextPackage.TURN_OFF : TextPackage.TURN_ON}
+            {device.activeState ? TextPackage.TURN_OFF : TextPackage.TURN_ON}
           </Typography>
         </GradientButton>
       </Block>
@@ -195,7 +194,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SwitchDevice);
+export default connect(null, mapDispatchToProps)(SwitchDevice);
