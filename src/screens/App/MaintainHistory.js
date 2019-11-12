@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet } from 'react-native';
 import { useQuery } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -23,8 +23,14 @@ const MaintainHistory = ({ navigation }) => {
   const { data, loading, error } = useQuery(MAINTAIN_EVENTS_BY_DEVICE, {
     variables: { deviceId }
   });
+  const [events, setEvents] = useState(null);
 
-  if (loading) {
+  useEffect(() => {
+    if (!data) return;
+    setEvents(data.maintainEventsByDevice.reverse());
+  }, [data]);
+
+  if (loading || !events) {
     return (
       <Block middle center>
         <ActivityIndicator />
@@ -45,8 +51,6 @@ const MaintainHistory = ({ navigation }) => {
     );
   }
 
-  const { maintainEventsByDevice: events } = data;
-
   if (events.length === 0) {
     return (
       <Block middle center>
@@ -66,7 +70,7 @@ const MaintainHistory = ({ navigation }) => {
   return (
     <ScrollView>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        {events.reverse().map(event => (
+        {events.map(event => (
           <ExpansionPanel
             key={event.id}
             title={
@@ -94,13 +98,13 @@ const MaintainHistory = ({ navigation }) => {
               </Typography>
               {event.finished && (
                 <Block>
-                  <Block key="receiver" flex={false} row>
+                  <Block key="receiver" row>
                     <Typography caption>{`${TextPackage.RECEIVER}: `}</Typography>
                     <Typography gray caption>
                       {`${event.receiver.lastName} ${event.receiver.firstName}`}
                     </Typography>
                   </Block>
-                  <Block key="maintainInterval" flex={false} row>
+                  <Block key="maintainInterval" row>
                     <Typography caption>{`${TextPackage.MAINTAIN_INTERVAL}: `}</Typography>
                     <Typography gray caption>
                       {event.maintainInterval.milliSecToDuration()}
@@ -110,12 +114,12 @@ const MaintainHistory = ({ navigation }) => {
               )}
               {Object.entries(maintainInfoDisplay).map(([key, value]) => {
                 return (
-                  <Block key={key} flex={false} row>
+                  <Block key={key} row>
                     {key !== 'cost' && <Typography caption>{`${value}: `}</Typography>}
                     {key === 'cost' && (
                       <Typography caption>{`${event.finished ? value[0] : value[1]}: `}</Typography>
                     )}
-                    <Typography gray caption>
+                    <Typography style={styles.valueText} gray caption>
                       {typeof event.maintainInfo[key] === 'string' &&
                         (event.maintainInfo[key] || TextPackage.UNKNOWN)}
                       {typeof event.maintainInfo[key] === 'number' &&
@@ -148,6 +152,9 @@ const styles = StyleSheet.create({
   },
   EOLPadding: {
     paddingVertical: theme.sizes.padding
+  },
+  valueText: {
+    flex: 1
   }
 });
 
