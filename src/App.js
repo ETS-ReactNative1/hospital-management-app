@@ -80,46 +80,53 @@ const styles = StyleSheet.create({
   }
 });
 
-const App = ({ updateMe }) => {
+const App = ({ updateMe, showPopup, popupType }) => {
+
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // console.log('fetched refresh-token');
-    fetch(`${AppConst.SERVER_URL}/refresh-token`, {
-      method: 'POST',
-      credentials: 'include'
-    })
-      .then(async data => {
-        const { accessToken } = await data.json();
-        AppData.accessToken = accessToken;
-        if (accessToken) {
-          // console.log('fetched meQuery');
-          const me = await meQuery();
-          updateMe(me);
-        }
-        setLoading(false);
+  const fethData = () => {
+    if(popupType === AppConst.NO_POPUP)
+    {
+      fetch(`${AppConst.SERVER_URL}/refresh-token`, {
+        method: 'POST',
+        credentials: 'include'
       })
-      .catch(err => {
-        console.log(err);
-      });
-  });
-
-  if (loading) {
-    return (
-      <Block middle center color="white">
-        <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
-        <Popup />
-      </Block>
-    );
+        .then(async data => {
+          const { accessToken } = await data.json();
+          AppData.accessToken = accessToken;
+          if (accessToken) {
+            // console.log('fetched meQuery');
+            const me = await meQuery();
+            updateMe(me);
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          showPopup( AppConst.ERROR_POPUP, {
+            errorMsg: err.message
+          });
+        });
+    }
+    else {
+      setLoading(true);
+    }
   }
+
+  useEffect(fethData);
 
   return (
     <Block>
-      <Navigation />
+      { loading ?      
+        <Block middle center color="white">
+          <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
+        </Block>:
+        <Navigation /> 
+      }
       <Popup />
     </Block>
   );
 };
+const mapStateToProps = state => state.popup
 
 const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
@@ -133,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
