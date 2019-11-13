@@ -10,22 +10,29 @@ import { useQuery } from 'react-apollo';
 const TextPackage = localization[AppData.language];
 
 const displayData = {
-  title: 'DEVICE_TITLE',
-  model: 'MODEL',
-  manufacturer: 'MANUFACTURER',
-  origin: 'ORIGIN',
-  manufacturedYear: 'MANUFACTURED_YEAR',
-  startUseTime: 'START_USE_TIME',
-  startUseState: 'START_USE_STATE',
-  originalPrice: 'ORIGINAL_PRICE',
-  currentPrice: 'CURRENT_PRICE',
-  availability: 'AVAILABILITY',
-  faculty: 'FACULTY',
-  activeState: 'ACTIVE_STATE'
+  title: TextPackage.DEVICE_TITLE,
+  model: TextPackage.MODEL,
+  manufacturer: TextPackage.MANUFACTURER,
+  origin: TextPackage.ORIGIN,
+  manufacturedYear: TextPackage.MANUFACTURED_YEAR,
+  startUseTime: TextPackage.START_USE_TIME,
+  startUseState: TextPackage.START_USE_STATE,
+  originalPrice: TextPackage.ORIGINAL_PRICE,
+  currentPrice: TextPackage.CURRENT_PRICE,
+  availability: TextPackage.AVAILABILITY,
+  faculty: TextPackage.FACULTY,
+  activeState: TextPackage.ACTIVE_STATE
 };
 
-const SearchDevice = props => {
-  const { navigation } = props;
+const availabilityVN = {
+  active: TextPackage.ACTIVE,
+  maintaining: TextPackage.MAINTAINING,
+  liquidated: TextPackage.LIQUIDATED
+};
+
+const formatStrings = ['startUseTime', 'availability'];
+
+const SearchDevice = ({ navigation }) => {
   const { deviceId } = navigation.state.params;
 
   const { loading, error, data } = useQuery(DEVICE_INFO, {
@@ -36,9 +43,9 @@ const SearchDevice = props => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Block middle center>
         <ActivityIndicator />
-      </View>
+      </Block>
     );
   }
 
@@ -49,14 +56,15 @@ const SearchDevice = props => {
           {TextPackage.DEVICE_INFO}
         </Typography>
         <Typography bold title height={theme.sizes.title * 2}>
-          Error
+          {error}
         </Typography>
       </Block>
     );
   }
+  const { device } = data;
 
   return (
-    <View style={{ flex: 1 }}>
+    <Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {TextPackage.DEVICE_INFO}
@@ -66,26 +74,35 @@ const SearchDevice = props => {
             return (
               <View key={key}>
                 <Typography gray height={theme.sizes.body * 2}>
-                  {TextPackage[name]}
+                  {name}
                 </Typography>
-                {typeof data.device[key] !== 'boolean' && key !== 'startUseTime' && (
-                  <Typography bold gray={!data.device[key]}>
-                    {data.device[key] || '(Không rõ)'}
+                {typeof device[key] === 'string' && !formatStrings.includes(key) && (
+                  <Typography bold gray={!device[key]}>
+                    {device[key] || '(Không rõ)'}
                   </Typography>
                 )}
-                {key === 'startUseTime' && (
-                  <Typography bold gray={!data.device[key]}>
-                    {data.device[key].toLocaleDateString() || '(Không rõ)'}
+                {typeof device[key] === 'number' && (
+                  <Typography bold gray={!device[key]}>
+                    {device[key].currencyFormat() || '(Không rõ)'}
+                  </Typography>
+                )}
+                {formatStrings.includes(key) && (
+                  <Typography
+                    bold
+                    gray={!device[key]}
+                    color={device[key] === 'liquidated' && theme.colors.redDark}
+                  >
+                    {(key === 'startUseTime'
+                      ? device[key].toLocaleDateString()
+                      : availabilityVN[device[key]]) || '(Không rõ)'}
                   </Typography>
                 )}
                 {key === 'startUseState' && (
-                  <Typography bold>
-                    {data.device[key] ? TextPackage.NEW : TextPackage.USED}
-                  </Typography>
+                  <Typography bold>{device[key] ? TextPackage.NEW : TextPackage.USED}</Typography>
                 )}
                 {key === 'activeState' && (
                   <Typography bold>
-                    {data.device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
+                    {device[key] ? TextPackage.STATE_ON : TextPackage.STATE_OFF}
                   </Typography>
                 )}
               </View>
@@ -93,24 +110,47 @@ const SearchDevice = props => {
           })}
         </ScrollView>
       </Block>
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButton}>
-        <GradientButton shadow gradient>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
+        {device.availability === 'liquidated' && (
+          <GradientButton
+            shadow
+            gradient
+            startColor={theme.colors.redDark}
+            endColor={theme.colors.redLight}
+            onPress={() => navigation.navigate('LiquidateInfo')}
+          >
+            <Typography title bold white center>
+              {TextPackage.LIQUIDATE_INFO}
+            </Typography>
+          </GradientButton>
+        )}
+        <GradientButton
+          shadow
+          gradient
+          onPress={() => navigation.navigate('ActiveHistory', { deviceId })}
+        >
           <Typography body bold white center>
-            {TextPackage.HISTORY_ACTIVITY}
+            {TextPackage.ACTIVE_HISTORY}
           </Typography>
         </GradientButton>
-        <GradientButton shadow>
+        <GradientButton
+          gradient
+          startColor={theme.colors.yellowDark}
+          endColor={theme.colors.yellowLight}
+          shadow
+          onPress={() => navigation.navigate('MaintainHistory', { deviceId })}
+        >
           <Typography body bold center>
-            {TextPackage.MAINTAIN_INFO}
+            {TextPackage.MAINTAIN_HISTORY}
           </Typography>
         </GradientButton>
       </Block>
-    </View>
+    </Block>
   );
 };
 
 const styles = StyleSheet.create({
-  actionButton: {
+  actionButtons: {
     position: 'absolute',
     bottom: 0,
     width: '100%'
@@ -118,12 +158,7 @@ const styles = StyleSheet.create({
 });
 
 SearchDevice.navigationOptions = () => ({
-  title: TextPackage.SEARCH_DEVICE,
-  headerTitleStyle: {
-    marginLeft: 0,
-    fontSize: theme.sizes.header,
-    fontWeight: 'bold'
-  }
+  title: TextPackage.SEARCH_DEVICE
 });
 
 export default SearchDevice;

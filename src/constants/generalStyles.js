@@ -71,6 +71,14 @@ const generalStyles = StyleSheet.create({
     borderWidth: 0,
     borderBottomColor: colors.gray2,
     borderBottomWidth: StyleSheet.hairlineWidth
+  },
+  actionButtons: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%'
+  },
+  hasErrors: {
+    borderBottomColor: colors.error
   }
 });
 

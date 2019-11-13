@@ -32,12 +32,13 @@ export default class GradientButton extends Component {
       color && !styles[color] && { backgroundColor: color }, // custom backgroundColor
       border && { borderColor: theme.colors.gray2, borderWidth: 2 }, // button border
       paddingHorizontal && { paddingHorizontal },
+      disabled && styles.disabled,
       style
     ];
 
     return (
-      <TouchableOpacity style={buttonStyles} activeOpacity={opacity} {...props}>
-        {gradient ? (
+      <TouchableOpacity disabled={disabled} style={buttonStyles} activeOpacity={opacity} {...props}>
+        {gradient && !disabled ? (
           <LinearGradient
             start={start}
             end={end}

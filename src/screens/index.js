@@ -1,8 +1,5 @@
-// import React from 'react';
-// import { TouchableOpacity } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { theme } from 'src/constants';
 import AuthMain from './Authentication/AuthMain';
@@ -17,27 +14,31 @@ import SearchDevice from './App/SearchDevice';
 import MaintainDevice from './App/MaintainDevice';
 import LiquidateDevice from './App/LiquidateDevice';
 import AccountDevice from './App/AccountDevice';
+import ActiveHistory from './App/ActiveHistory';
+import MaintainHistory from './App/MaintainHistory';
+import LiquidateInfo from './App/LiquidateInfo';
 
 const configHeaderNavigatior = {
   defaultNavigationOptions: {
     headerTitleStyle: {
       fontWeight: 'bold',
-      marginLeft: theme.sizes.padding * 4,
       fontSize: theme.sizes.header
     },
     headerStyle: {
-      height: theme.sizes.base * 3.5,
+      height: theme.sizes.base * 4,
       backgroundColor: theme.colors.white, // or 'white
       borderBottomColor: 'transparent',
       elevation: 0 // for android
     },
     headerLeftContainerStyle: {
-      alignItems: 'center'
+      alignItems: 'center',
+      marginLeft: theme.sizes.padding
     },
     headerRightContainerStyle: {
       alignItems: 'center',
-      paddingRight: theme.sizes.padding * 3
+      paddingRight: theme.sizes.padding * 4
     }
+    // headerBackImage: <Image source={require('src/assets/icons/back.png')} />,
     // headerLeft: ({ onPress }) => (
     //   <TouchableOpacity onPress={onPress}>
     //     <Icon name="keyboard-backspace" size={30} color={theme.colors.white} />
@@ -45,9 +46,33 @@ const configHeaderNavigatior = {
     // )
   }
 };
+
+// https://dev.to/kris/custom-react-navigation-transition-implementation-and-demo-d1m
+const FadeTransition = (position, index) => {
+  const sceneRange = [index - 1, index];
+  const outputOpacity = [0, 1];
+  const transition = position.interpolate({
+    inputRange: sceneRange,
+    outputRange: outputOpacity
+  });
+  return {
+    opacity: transition
+  };
+};
+
+const TransitionOptions = () => {
+  return {
+    screenInterpolator: sceneProps => {
+      const { position, scene } = sceneProps;
+      const { index } = scene;
+      return FadeTransition(position, index);
+    }
+  };
+};
+
 const AuthStack = createStackNavigator(
   { AuthMain, SignIn, SignUp, ForgotPassword },
-  configHeaderNavigatior
+  { ...configHeaderNavigatior, transitionConfig: TransitionOptions }
 );
 
 const AppStack = createStackNavigator(
@@ -59,9 +84,12 @@ const AppStack = createStackNavigator(
     SearchDevice,
     MaintainDevice,
     LiquidateDevice,
-    AccountDevice
+    AccountDevice,
+    ActiveHistory,
+    MaintainHistory,
+    LiquidateInfo
   },
-  configHeaderNavigatior
+  { ...configHeaderNavigatior, transitionConfig: TransitionOptions }
 );
 
 const Navigation = createSwitchNavigator(
@@ -70,7 +98,8 @@ const Navigation = createSwitchNavigator(
     App: AppStack
   },
   {
-    initialRouteName: 'Auth'
+    initialRouteName: 'Auth',
+    transitionConfig: TransitionOptions
   }
 );
 

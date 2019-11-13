@@ -1,6 +1,6 @@
 import { ApolloClient } from 'apollo-boost';
 import { ApolloLink, Observable } from 'apollo-link';
-import { createHttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client';
 import { onError } from 'apollo-link-error';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 import AppData from '../AppData';
 import AppConst from '../AppConst';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: `${AppConst.SERVER_URL}/graphql`,
   credentials: 'include'
 });
@@ -60,13 +60,10 @@ const refreshTokenLink = new TokenRefreshLink({
     }
   },
   fetchAccessToken: () => {
-    return (
-      fetch(`${AppConst.SERVER_URL}/refresh-token`),
-      {
-        method: 'POST',
-        credentials: 'include'
-      }
-    );
+    return fetch(`${AppConst.SERVER_URL}/refresh-token`, {
+      method: 'POST',
+      credentials: 'include'
+    });
   },
   handleFetch: accessToken => {
     AppData.accessToken = accessToken;
@@ -79,8 +76,8 @@ const refreshTokenLink = new TokenRefreshLink({
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   graphQLErrors &&
-    graphQLErrors.forEach(({ message }) => {
-      console.log('GraphQL error', message);
+    graphQLErrors.forEach(error => {
+      console.log('GraphQL error', error);
     });
 
   networkError && console.log('Network error', networkError);

@@ -1,154 +1,189 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Image, View, TouchableOpacity } from 'react-native';
-import { GradientButton, Block, Typography } from 'src/components';
-import { theme, localization, generalStyles } from 'src/constants';
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { useMutation } from 'react-apollo';
+import { connect } from 'react-redux';
+
+import { GradientButton, Block, Typography, Divider } from 'src/components';
+import { theme, localization } from 'src/constants';
+import { AVATAR_UPLOAD, SIGN_OUT } from 'src/utils/graphqlMutations';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
-import { useMutation } from 'react-apollo';
-import { SIGN_OUT } from 'src/utils/graphqlMutations';
-import { actions } from 'src/utils/reduxStore';
-import { connect } from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
+import { ReactNativeFile } from 'apollo-upload-client';
+import { meActions, popupActions } from 'src/redux/actions';
 
 const styles = StyleSheet.create({
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    resizeMode: 'contain',
-    alignSelf: 'center'
+    width: theme.sizes.avatar,
+    height: theme.sizes.avatar,
+    borderRadius: theme.sizes.avatar * 0.5
   },
-  scrollView: {
-    width: '100%',
-    paddingVertical: theme.sizes.base * 2
-  },
-  scrollElement: {
+  actionButtons: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%'
   },
-  edite_infor: {
-    textTransform: 'capitalize',
-    color: theme.colors.green,
-    textDecorationLine: 'underline',
-    fontWeight: 'normal'
+  shadow: {
+    shadowColor: theme.colors.black, // IOS
+    shadowOffset: { height: 0, width: 2 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: theme.sizes.avatar * 0.5, //IOS
+    elevation: 10, // Android
+    width: theme.sizes.avatar,
+    height: theme.sizes.avatar,
+    borderRadius: theme.sizes.avatar * 0.5,
+    alignSelf: 'center'
   }
 });
 
 const TextPackage = localization[AppData.language];
 
-const SettingsScreen = props => {
+const displayData = {
+  email: TextPackage.EMAIL,
+  role: TextPackage.ROLE,
+  personal: {
+    lastName: TextPackage.SURNAME,
+    firstName: TextPackage.NAME,
+    phone: TextPackage.PHONE
+  }
+};
+
+const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }) => {
+  const [avatarUpload] = useMutation(AVATAR_UPLOAD);
   const [signOut, { client }] = useMutation(SIGN_OUT);
-  const { navigation, showPopup, hidePopup } = props;
-  const { userProfile } = AppData;
 
-  const handleSignOut = async () => {
-    await signOut();
-    await client.resetStore();
-    AppData.accessToken = undefined;
-    navigation.navigate('Auth');
-    hidePopup();
+  const handleAvatarSelect = () => {
+    const options = {
+      title: 'Chọn ảnh đại diện',
+      takePhotoButtonTitle: 'Chụp ảnh...',
+      chooseFromLibraryButtonTitle: 'Chọn từ Thư viện...',
+      cancelButtonTitle: 'Hủy bỏ',
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    ImagePicker.showImagePicker(options, async response => {
+      if (response.didCancel) {
+        return;
+      }
+      if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const file = new ReactNativeFile({
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName
+        });
+        await avatarUpload({ variables: { file } });
+        updateMe({ avatar: response.uri });
+      }
+    });
   };
 
-  const confirmSignOut = () => {
-    showPopup({
-      type: AppConst.OK_CANCEL_POPUP,
+  const handleChangeInfo = () => {
+    showPopup(AppConst.CHANGE_INFO_POPUP);
+  };
+
+  const handleChangePassword = () => {
+    showPopup(AppConst.CHANGE_PASS_POPUP, { navigation });
+  };
+
+  const handleSignOut = () => {
+    showPopup(AppConst.OK_CANCEL_POPUP, {
       title: TextPackage.SIGN_OUT,
-      message: TextPackage.CONFIRM_SIGN_OUT,
-      okText: TextPackage.SURE,
-      okFunc: handleSignOut
+      message: TextPackage.CONFIRM_SIGN_OUT_MESSAGE,
+      confirmText: TextPackage.SURE,
+      handleConfirm: async () => {
+        await signOut();
+        await client.resetStore();
+        AppData.accessToken = '';
+        navigation.navigate('Auth');
+        hidePopup();
+      }
     });
   };
-
-  const forceSignOut = () => {
-    showPopup({
-      type: AppConst.OK_POPUP,
-      title: TextPackage.CHANGE_SUCCESSFULL,
-      message: TextPackage.CHANGE_PASSWORD_SUCCESSFULL,
-      okText: TextPackage.CONTINUE,
-      okFunc: handleSignOut,
-      closeByBackBtn: false
-    });
-  };
-
-  const changePassword = () => {
-    showPopup({
-      type: AppConst.CHANGE_PASS_POPUP,
-      callback: forceSignOut
-    });
-  };
-
-  const changeInforSuccess = () => {
-    showPopup({
-      type: AppConst.OK_POPUP,
-      title: TextPackage.CHANGE_INFOR_SUCCESSFULL_TITLE,
-      message: TextPackage.CHANGE_INFOR_SUCCESSFULL_MESSAGE,
-      okText: TextPackage.CONTINUE
-    });
-  };
-
-  const changeInfor = () => {
-    showPopup({
-      type: AppConst.CHANGE_INFOR_POPUP,
-      callback: changeInforSuccess
-    });
-  };
-
-  // const changeScope = () => {
-  //   showPopup({
-  //     type: AppConst.CHANGE_SCOPE_POPUP
-  //   });
-  // };
 
   return (
-    <Block style={generalStyles.screen_container}>
-      <Image style={styles.image} source={userProfile.avatar} />
+    <Block>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
+        <TouchableOpacity style={styles.shadow} onPress={handleAvatarSelect}>
+          <Image key="avatar" style={styles.image} source={userInfo.avatar} />
+        </TouchableOpacity>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollElement}
-        style={styles.scrollView}
-      >
-        <Typography style={generalStyles.title_infor}>{TextPackage.GENERAL_INFOR}</Typography>
-        <View style={generalStyles.divider_1px} />
-        <Typography style={generalStyles.title_infor}>{TextPackage.EMAIL}</Typography>
-        <Typography>{userProfile.email}</Typography>
-        <Typography style={generalStyles.title_infor}>{TextPackage.USER_SCOPE}</Typography>
-        <Typography>{userProfile.scope}</Typography>
-        {/* <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography>{userProfile.scope}</Typography>
-          <TouchableOpacity>
-            <Typography style={styles.edite_infor}>{TextPackage.EDIT}</Typography>
-          </TouchableOpacity>
-        </View> */}
+        {Object.entries(displayData).map(([key, name]) => {
+          if (typeof name === 'string') {
+            return (
+              <View key={key}>
+                <Typography gray height={theme.sizes.body * 2}>
+                  {name}
+                </Typography>
+                {key === 'email' && (
+                  <Typography bold gray={!userInfo.email}>
+                    {userInfo.email || TextPackage.UNKNOWN}
+                  </Typography>
+                )}
+                {key === 'role' && (
+                  <Typography bold gray={!userInfo.role}>
+                    {TextPackage[userInfo.role] || TextPackage.UNKNOWN}
+                  </Typography>
+                )}
+              </View>
+            );
+          }
 
-        <View style={generalStyles.divider_5px} />
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography style={generalStyles.title_infor}>{TextPackage.PERSONAL_INFOR}</Typography>
-          <TouchableOpacity onPress={changeInfor}>
-            <Typography style={[generalStyles.title_infor, styles.edite_infor]}>
-              {TextPackage.EDIT}
-            </Typography>
-          </TouchableOpacity>
-        </View>
-        <View style={generalStyles.divider_1px} />
-        <Typography style={generalStyles.title_infor}>{TextPackage.SURNAME}</Typography>
-        <Typography>{userProfile.surname}</Typography>
-        <Typography style={generalStyles.title_infor}>{TextPackage.NAME}</Typography>
-        <Typography>{userProfile.name}</Typography>
-        <Typography style={generalStyles.title_infor}>{TextPackage.PHONE}</Typography>
-        <Typography>{userProfile.phone}</Typography>
-        <View style={generalStyles.divider_5px} />
-      </ScrollView>
+          if (key === 'personal') {
+            return (
+              <View key={key}>
+                <Divider />
+                <Block flex={false} center row space="between">
+                  <Typography bold title>
+                    {TextPackage.PERSONAL_INFO}
+                  </Typography>
+                  <TouchableOpacity onPress={handleChangeInfo}>
+                    <Typography bold primary>
+                      {TextPackage.EDIT}
+                    </Typography>
+                  </TouchableOpacity>
+                </Block>
+                {Object.entries(name).map(([key, name]) => {
+                  return (
+                    <View key={key}>
+                      <Typography gray height={theme.sizes.body * 2}>
+                        {name}
+                      </Typography>
+                      <Typography bold gray={!userInfo[key]}>
+                        {userInfo[key] || TextPackage.UNKNOWN}
+                      </Typography>
+                    </View>
+                  );
+                })}
+              </View>
+            );
+          }
 
-      <GradientButton border style={{ width: '100%' }} onPress={changePassword}>
-        <Typography black bold center>
-          {TextPackage.CHANGE_PASSWORD}
-        </Typography>
-      </GradientButton>
+          return null;
+        })}
+      </Block>
 
-      <GradientButton gradient style={{ width: '100%' }} onPress={confirmSignOut}>
-        <Typography black bold center>
-          {TextPackage.SIGN_OUT}
-        </Typography>
-      </GradientButton>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
+        <GradientButton shadow onPress={handleChangePassword}>
+          <Typography bold center body>
+            {TextPackage.CHANGE_PASSWORD}
+          </Typography>
+        </GradientButton>
+
+        <GradientButton
+          onPress={handleSignOut}
+          gradient
+          shadow
+          startColor={theme.colors.redDark}
+          endColor={theme.colors.redLight}
+        >
+          <Typography white bold center title>
+            {TextPackage.SIGN_OUT}
+          </Typography>
+        </GradientButton>
+      </Block>
     </Block>
   );
 };
@@ -157,7 +192,23 @@ SettingsScreen.navigationOptions = {
   title: TextPackage.SETUP
 };
 
+const mapStateToProps = state => ({
+  userInfo: state.me
+});
+
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
+  updateMe: me => {
+    dispatch(meActions.updateMe(me));
+  }
+});
+
 export default connect(
-  ({ popup }) => ({ popup }),
-  actions
+  mapStateToProps,
+  mapDispatchToProps
 )(SettingsScreen);

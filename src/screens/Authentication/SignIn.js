@@ -2,29 +2,34 @@ import React, { Component, createRef } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 import { Header } from 'react-navigation-stack';
+import { connect } from 'react-redux';
+
 import { GradientButton, Block, Input, Typography } from 'src/components';
-import { theme } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import { SIGN_IN } from 'src/utils/graphqlMutations';
 import { actions } from 'src/utils/reduxStore';
 import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
-import AppData from 'src/AppData';
-import AppConst from 'src/AppConst';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import meQuery from 'src/utils/meQuery';
+import { meActions } from 'src/redux/actions';
+
+const TextPackage = localization[AppData.language];
 
 const schema = {
   email: {
-    presence: { allowEmpty: false, message: '^Email là bắt buộc' },
+    presence: { allowEmpty: false, message: TextPackage.EMAIL_REQUIRED_ERROR },
     email: true,
     length: {
       maximum: 64,
-      message: '^Độ dài tối đa là 64 ký tự'
+      message: TextPackage.EMAIL_TOO_LONG_ERROR
     }
   },
   password: {
-    presence: { allowEmpty: false, message: '^Mật khẩu là bắt buộc' },
+    presence: { allowEmpty: false, message: TextPackage.PASSWORD_REQUIRED_ERROR },
     length: {
       minimum: 6,
-      message: '^Độ dài tối thiểu là 6 ký tự'
+      message: TextPackage.PASSWORD_TOO_SHORT_ERROR
     }
   }
 };
@@ -34,17 +39,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth
-  },
-  hasErrors: {
-    borderBottomColor: theme.colors.error
-  },
   forgotPasswordStyle: {
-    height: 24
+    marginTop: theme.sizes.padding
   },
   textStyle: {
     marginTop: 48
@@ -53,6 +49,10 @@ const styles = StyleSheet.create({
 });
 
 class SignIn extends Component {
+  static navigationOptions = {
+    title: 'Đăng nhập'
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -71,6 +71,8 @@ class SignIn extends Component {
     const { navigation } = this.props;
 
     AppData.accessToken = data.signIn.accessToken;
+    const me = await meQuery();
+    this.props.updateMe(me);
     navigation.navigate('App');
   };
 
@@ -149,9 +151,9 @@ class SignIn extends Component {
                   <Input
                     name="email"
                     error={hasErrors('email')}
-                    style={[styles.input, hasErrors('email') && styles.hasErrors]}
+                    label="Email"
+                    style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
-                    placeholder="Email"
                     onChangeText={text => this.handleTextChange('email', text)}
                     onEndEditing={() => this.handleEndEditing('email')}
                     onSubmitEditing={() => this.handleSubmitEditing('email')}
@@ -159,9 +161,9 @@ class SignIn extends Component {
                   <Input
                     name="password"
                     secure
-                    placeholder="Mật khẩu"
+                    label="Mật khẩu"
                     error={hasErrors('password')}
-                    style={[styles.input, hasErrors('password') && styles.hasErrors]}
+                    style={[generalStyles.input, hasErrors('password') && generalStyles.hasErrors]}
                     helperText={errors.password || ''}
                     ref={this.passwordRef}
                     onChangeText={text => this.handleTextChange('password', text)}
@@ -170,12 +172,13 @@ class SignIn extends Component {
                   />
 
                   <GradientButton
+                    shadow
                     gradient
                     onPress={() => {
                       Keyboard.dismiss();
                       isValid && signIn();
                     }}
-                    disabled={this.state.isValid}
+                    disabled={!isValid}
                   >
                     {loading ? (
                       <ActivityIndicator size="small" color="white" />
@@ -186,14 +189,14 @@ class SignIn extends Component {
                     )}
                   </GradientButton>
 
-                  <GradientButton
+                  <TouchableOpacity
                     style={styles.forgotPasswordStyle}
                     onPress={() => navigation.navigate('ForgotPassword')}
                   >
-                    <Typography gray caption center style={{ textDecorationLine: 'underline' }}>
+                    <Typography gray caption center underline>
                       Quên mật khẩu?
                     </Typography>
-                  </GradientButton>
+                  </TouchableOpacity>
                 </Block>
               </KeyboardAvoidingView>
               {/* <Block style={styles.bottomBlock}>
@@ -201,7 +204,7 @@ class SignIn extends Component {
                   {'Chưa có tài khoản?'}
                 </Typography>
 
-                <GradientButton border onPress={() => navigation.navigate('SignUp')}>
+                <GradientButton shadow border onPress={() => navigation.navigate('SignUp')}>
                   <Typography black bold center>
                     Đăng ký
                   </Typography>
@@ -215,7 +218,19 @@ class SignIn extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  // showPopup: (popupType, popupProps) => {
+  //   dispatch(popupActions.showPopup(popupType, popupProps));
+  // },
+  // hidePopup: () => {
+  //   dispatch(popupActions.hidePopup());
+  // },
+  updateMe: me => {
+    dispatch(meActions.updateMe(me));
+  }
+});
+
 export default connect(
   null,
-  actions
+  mapDispatchToProps
 )(SignIn);

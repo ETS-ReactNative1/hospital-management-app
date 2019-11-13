@@ -8,8 +8,7 @@ class Constants {
     this.ERROR_POPUP = n++;
     this.OK_CANCEL_POPUP = n++;
     this.CHANGE_PASS_POPUP = n++;
-    this.CHANGE_INFOR_POPUP = n++;
-    this.CHANGE_SCOPE_POPUP = n++;
+    this.CHANGE_INFO_POPUP = n++;
   }
 }
 

@@ -1,10 +1,10 @@
-import React, { Component, createRef } from 'react';
-import { Input } from 'src/components';
-import { View, TouchableOpacity, Keyboard, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Input, Dialog } from 'src/components';
+import { View, StyleSheet } from 'react-native';
 import { localization, generalStyles, theme } from 'src/constants';
-import { CHANGE_PASSWORD } from 'src/utils/graphqlMutations';
-import { Mutation } from 'react-apollo';
-import { actions } from 'src/utils/reduxStore';
+import { CHANGE_PASSWORD, SIGN_OUT } from 'src/utils/graphqlMutations';
+import { useMutation } from 'react-apollo';
+import { popupActions, meActions } from 'src/redux/actions';
 import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
 import AppData from 'src/AppData';
@@ -29,164 +29,175 @@ const schema = {
   },
   confirmPassword: {
     presence: { allowEmpty: false, message: TextPackage.CONFRIM_PASSWORD_REQUIRED_ERROR },
-    equality: { attribute: 'newPassword', message: TextPackage.CONFRIM_PASSWORD_CONFLIT_ERROR }
+    equality: { attribute: 'newPassword', message: TextPackage.CONFRIM_PASSWORD_CONFLICT_ERROR }
   }
 };
 
 const styles = StyleSheet.create({
   hasErrors: {
     borderBottomColor: theme.colors.error
-  },
-  bottomBlock: {
-    position: 'absolute',
-    bottom: 32,
-    width: '100%',
-    alignSelf: 'center'
   }
 });
 
-class ChangePassPopup extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isValid: false,
-      values: {},
-      touched: {},
-      errors: {}
-    };
-    this.passwordRef = createRef();
-    this.confirmPasswordRef = createRef();
-  }
+const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
+  const [formState, setFormState] = useState({
+    isValid: false,
+    values: {},
+    touched: {},
+    errors: {}
+  });
 
-  handleChangePasswordCompleted = () => {
-    this.props.hidePopup();
-    this.props.popup.callback();
-  };
+  const newPasswordRef = useRef();
+  const confirmPasswordRef = useRef();
 
-  handleChangePasswordError = error => {
-    this.props.showPopup({
-      type: AppConst.ERROR_POPUP,
+  const [changePassword] = useMutation(CHANGE_PASSWORD);
+  const [signOut, { client }] = useMutation(SIGN_OUT);
+
+  useEffect(() => {
+    const errors = validate(formState.values, schema);
+    setFormState(formState => ({
+      ...formState,
+      isValid: !errors,
+      errors: errors || {}
+    }));
+  }, [formState.values]);
+
+  const hasErrors = key => formState.touched[key] && formState.errors[key];
+
+  const handleChangePasswordError = error => {
+    showPopup(AppConst.ERROR_POPUP, {
       errorMsg: error.message
     });
   };
 
-  handleTextChange = (name, text) => {
-    const { values } = this.state;
-    this.setState(
-      {
-        values: {
-          ...values,
-          [name]: text
+  const handleChangePassword = async () => {
+    try {
+      await changePassword({
+        variables: {
+          oldPassword: formState.values.oldPassword,
+          newPassword: formState.values.newPassword
         }
-      },
-      () => {
-        const { values } = this.state;
-        const errors = validate(values, schema);
-        this.setState({
-          isValid: !errors,
-          errors: errors || {}
-        });
-      }
-    );
+      });
+      showPopup(AppConst.OK_POPUP, {
+        title: TextPackage.CHANGE_SUCCESS,
+        message: TextPackage.CHANGE_PASSWORD_SUCCESSFUL_MESSAGE,
+        confirmText: TextPackage.CONTINUE,
+        handleConfirm: async () => {
+          await signOut();
+          await client.resetStore();
+          AppData.accessToken = '';
+          navigation.navigate('Auth');
+          hidePopup();
+        }
+      });
+    } catch (error) {
+      const { graphQLErrors, networkError } = error;
+      graphQLErrors && handleChangePasswordError(graphQLErrors[0]);
+      networkError && handleChangePasswordError(networkError);
+    }
   };
 
-  handleEndEditing = name => {
-    const { touched } = this.state;
-    this.setState({
+  const handleTextChange = (name, text) => {
+    const { values, touched } = formState;
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        ...values,
+        [name]: text
+      }
+    }));
+    if (
+      !touched.confirmPassword &&
+      values.confirmPassword &&
+      values.newPassword.length === values.confirmPassword.length
+    ) {
+      setFormState(formState => ({
+        ...formState,
+        touched: {
+          ...touched,
+          confirmPassword: true
+        }
+      }));
+    }
+  };
+
+  const handleEndEditing = name => {
+    const { touched } = formState;
+    setFormState(formState => ({
+      ...formState,
       touched: {
         ...touched,
         [name]: true
       }
-    });
+    }));
   };
 
-  render() {
-    const { popup, hidePopup } = this.props;
-    const {
-      isValid,
-      touched,
-      errors,
-      values: { newPassword }
-    } = this.state;
-    const hasErrors = key => touched[key] && errors[key];
-    if (popup.type === AppConst.CHANGE_PASS_POPUP)
-      return (
-        <Mutation
-          mutation={CHANGE_PASSWORD}
-          variables={{ newPassword }}
-          onCompleted={this.handleChangePasswordCompleted}
-          onError={error => this.handleChangePasswordError(error)}
-        >
-          {(changePassword, { loading }) => {
-            return (
-              <View>
-                <Text style={generalStyles.popup_title}>{TextPackage.CHANGE_PASSWORD}</Text>
-                <View style={generalStyles.divider_1px} />
-                <View style={generalStyles.popup_body}>
-                  <Input
-                    name="oldPassword"
-                    secure
-                    placeholder={TextPackage.OLD_PASSWORD}
-                    error={hasErrors('oldPassword')}
-                    style={[generalStyles.input, hasErrors('oldPassword') && styles.hasErrors]}
-                    helperText={errors.oldPassword || ''}
-                    onChangeText={text => this.handleTextChange('oldPassword', text)}
-                    onEndEditing={() => this.handleEndEditing('oldPassword')}
-                    onSubmitEditing={() => this.handleSubmitEditing('oldPassword')}
-                  />
-                  <Input
-                    name="newPassword"
-                    secure
-                    placeholder={TextPackage.PASSWORD}
-                    error={hasErrors('newPassword')}
-                    style={[generalStyles.input, hasErrors('newPassword') && styles.hasErrors]}
-                    helperText={errors.newPassword || ''}
-                    ref={this.passwordRef}
-                    onChangeText={text => this.handleTextChange('newPassword', text)}
-                    onEndEditing={() => this.handleEndEditing('newPassword')}
-                    onSubmitEditing={() => this.handleSubmitEditing('newPassword')}
-                  />
-                  <Input
-                    name="confirmPassword"
-                    secure
-                    placeholder={TextPackage.CONFRIM_PASSWORD}
-                    error={hasErrors('confirmPassword')}
-                    style={[generalStyles.input, hasErrors('confirmPassword') && styles.hasErrors]}
-                    helperText={errors.confirmPassword || ''}
-                    ref={this.confirmPasswordRef}
-                    onChangeText={text => this.handleTextChange('confirmPassword', text)}
-                    onEndEditing={() => this.handleEndEditing('confirmPassword')}
-                  />
-                </View>
-                {loading ? (
-                  <Text style={[generalStyles.popup_cancel_btn, { alignSelf: 'center' }]}>
-                    {TextPackage.UPDATING}
-                  </Text>
-                ) : (
-                  <View style={generalStyles.popup_group_btn}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        Keyboard.dismiss();
-                        isValid && changePassword();
-                      }}
-                    >
-                      <Text style={generalStyles.popup_ok_btn}>{TextPackage.COMPLETE}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={hidePopup}>
-                      <Text style={generalStyles.popup_cancel_btn}>{TextPackage.CANCEL}</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            );
-          }}
-        </Mutation>
-      );
-    return <View />;
+  const handleSubmitEditing = name => {
+    if (name === 'oldPassword') newPasswordRef.current.textInputRef.current.focus();
+    if (name === 'newPassword') confirmPasswordRef.current.textInputRef.current.focus();
+  };
+
+  return (
+    <Dialog
+      title={TextPackage.CHANGE_PASSWORD}
+      confrimText={TextPackage.COMPLETE}
+      handleConfirm={handleChangePassword}
+      confirmDisable={!formState.isValid}
+      onRequestClose={hidePopup}
+    >
+      <View>
+        <Input
+          name="oldPassword"
+          secure
+          label={TextPackage.OLD_PASSWORD}
+          error={hasErrors('oldPassword')}
+          style={[generalStyles.input, hasErrors('oldPassword') && styles.hasErrors]}
+          helperText={formState.errors.oldPassword || ''}
+          onChangeText={text => handleTextChange('oldPassword', text)}
+          onEndEditing={() => handleEndEditing('oldPassword')}
+          onSubmitEditing={() => handleSubmitEditing('oldPassword')}
+        />
+        <Input
+          name="newPassword"
+          secure
+          label={TextPackage.PASSWORD}
+          error={hasErrors('newPassword')}
+          style={[generalStyles.input, hasErrors('newPassword') && styles.hasErrors]}
+          helperText={formState.errors.newPassword || ''}
+          ref={newPasswordRef}
+          onChangeText={text => handleTextChange('newPassword', text)}
+          onEndEditing={() => handleEndEditing('newPassword')}
+          onSubmitEditing={() => handleSubmitEditing('newPassword')}
+        />
+        <Input
+          name="confirmPassword"
+          secure
+          label={TextPackage.CONFRIM_PASSWORD}
+          error={hasErrors('confirmPassword')}
+          style={[generalStyles.input, hasErrors('confirmPassword') && styles.hasErrors]}
+          helperText={formState.errors.confirmPassword || ''}
+          ref={confirmPasswordRef}
+          onChangeText={text => handleTextChange('confirmPassword', text)}
+          onEndEditing={() => handleEndEditing('confirmPassword')}
+        />
+      </View>
+    </Dialog>
+  );
+};
+
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
+  updateMe: me => {
+    dispatch(meActions.updateMe(me));
   }
-}
+});
 
 export default connect(
-  ({ popup }) => ({ popup }),
-  actions
+  null,
+  mapDispatchToProps
 )(ChangePassPopup);

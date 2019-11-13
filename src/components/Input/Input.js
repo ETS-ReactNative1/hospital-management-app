@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
-import { TextInput, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { TextInput, Platform, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { theme } from 'src/constants';
 import styles from './InputStyles';
@@ -20,13 +20,13 @@ export default class Input extends Component {
   renderLabel() {
     const { label, error } = this.props;
     return (
-      <Block flex={false}>
+      <View>
         {label ? (
           <Typography gray={!error} error={error}>
             {label}
           </Typography>
         ) : null}
-      </Block>
+      </View>
     );
   }
 
@@ -45,7 +45,7 @@ export default class Input extends Component {
           <Icon
             color={theme.colors.gray}
             size={theme.sizes.font * 1.35}
-            name={!toggleSecure ? 'visibility' : 'visibility-off'}
+            name={!toggleSecure ? 'eye' : 'eye-off'}
           />
         )}
       </GradientButton>
@@ -67,6 +67,18 @@ export default class Input extends Component {
     );
   }
 
+  renderRightText() {
+    const { rightText, rightTextStyle } = this.props;
+
+    if (!rightText) return null;
+
+    return (
+      <Typography style={[styles.toggle, rightTextStyle]} center middle>
+        {rightText}
+      </Typography>
+    );
+  }
+
   renderHelperText() {
     const { helperText, error } = this.props;
 
@@ -83,7 +95,12 @@ export default class Input extends Component {
     const { toggleSecure } = this.state;
     const isSecure = toggleSecure ? false : secure;
 
-    const inputStyles = [styles.input, error && { borderColor: theme.colors.error }, style];
+    const inputStyles = [
+      styles.input,
+      props.multiline && { height: theme.sizes.padding * 10 },
+      error && { borderColor: theme.colors.error },
+      style
+    ];
 
     let inputType = 'default';
     if (email || name === 'email') {
@@ -97,20 +114,23 @@ export default class Input extends Component {
     }
 
     return (
-      <Block flex={false} margin={[theme.sizes.base * 0.5, 0]}>
+      <Block flex={false} margin={[theme.sizes.padding, 0]}>
         {this.renderLabel()}
-        <TextInput
-          style={inputStyles}
-          secureTextEntry={isSecure}
-          autoComplete="off"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={inputType}
-          ref={this.textInputRef}
-          {...props}
-        />
-        {this.renderToggle()}
-        {this.renderRight()}
+        <View>
+          <TextInput
+            style={inputStyles}
+            secureTextEntry={isSecure}
+            autoComplete="off"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType={inputType}
+            ref={this.textInputRef}
+            {...props}
+          />
+          {this.renderToggle()}
+          {this.renderRight()}
+          {this.renderRightText()}
+        </View>
         {this.renderHelperText()}
       </Block>
     );
