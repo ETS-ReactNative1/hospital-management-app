@@ -95,6 +95,7 @@ const VN = {
   CONFIRM: 'Xác nhận',
   CANCEL: 'Hủy bỏ',
   TRY_AGAIN: 'Thử lại',
+  UNDEFINED_EMAIL_ERR: 'Email của bạn chưa đc đăng kí',
   CHANGE_SUCCESS: 'Thay đổi thành công',
   DEVICE_MAINTAINING: 'Thiết bị đang được bảo trì',
   DEVICE_MAINTAINING_DESC:

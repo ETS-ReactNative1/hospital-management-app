@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   }
 });
 
-const App = ({ updateMe, showPopup, popupType }) => {
-
-  const [loading, setLoading] = useState(true);
+const App = ({ updateMe, showPopup, hidePopup }) => {
+  const [loading, setLoading] = useState(true);  
+  const [refetch, setRefetch] = useState(true);  
 
   const fethData = () => {
-    if(popupType === AppConst.NO_POPUP)
-    {
+    if(refetch) {
+      setRefetch(false)
       fetch(`${AppConst.SERVER_URL}/refresh-token`, {
         method: 'POST',
         credentials: 'include'
@@ -95,38 +95,38 @@ const App = ({ updateMe, showPopup, popupType }) => {
           const { accessToken } = await data.json();
           AppData.accessToken = accessToken;
           if (accessToken) {
-            // console.log('fetched meQuery');
             const me = await meQuery();
             updateMe(me);
           }
           setLoading(false);
         })
         .catch(err => {
-          showPopup( AppConst.ERROR_POPUP, {
-            errorMsg: err.message
+          showPopup(AppConst.ERROR_POPUP, {
+            errorMsg: err.message,
+            callback: () => { 
+              setRefetch(true)
+              hidePopup()
+            }
           });
         });
     }
-    else {
-      setLoading(true);
-    }
-  }
+  };
 
   useEffect(fethData);
 
   return (
     <Block>
-      { loading ?      
+      {loading ? (
         <Block middle center color="white">
           <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
-        </Block>:
-        <Navigation /> 
-      }
+        </Block>
+      ) : (
+        <Navigation />
+      )}
       <Popup />
     </Block>
   );
 };
-const mapStateToProps = state => state.popup
 
 const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
@@ -140,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

@@ -1,12 +1,15 @@
 import React, { Component, createRef } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { Mutation } from 'react-apollo';
+
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme, localization, generalStyles } from 'src/constants';
 import { SIGN_UP } from 'src/utils/graphqlMutations';
-import { actions } from 'src/utils/reduxStore';
+import { popupActions } from 'src/redux/actions';
 import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
 import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
 
 const TextPackage = localization[AppData.language];
 
@@ -47,6 +50,10 @@ const styles = StyleSheet.create({
 });
 
 class SignUp extends Component {
+  static navigationOptions = {
+    title: 'Đăng ký'
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -78,8 +85,7 @@ class SignUp extends Component {
   };
 
   handleSignUpError = error => {
-    this.props.showPopup({
-      type: AppConst.ERROR_POPUP,
+    this.props.showPopup(AppConst.ERROR_POPUP, {
       errorMsg: error.message
     });
   };
@@ -101,10 +107,11 @@ class SignUp extends Component {
           isValid: !errors,
           errors: errors || {}
         });
+
         if (
           !touched.confirmPassword &&
           values.confirmPassword &&
-          values.newPassword.length === values.confirmPassword.length
+          values.password.length === values.confirmPassword.length
         ) {
           this.setState({
             touched: {
@@ -131,10 +138,6 @@ class SignUp extends Component {
   handleSubmitEditing = name => {
     if (name === 'email') this.passwordRef.current.textInputRef.current.focus();
     if (name === 'password') this.confirmPasswordRef.current.textInputRef.current.focus();
-  };
-
-  static navigationOptions = {
-    title: 'Đăng ký'
   };
 
   render() {
@@ -218,7 +221,16 @@ class SignUp extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
+});
+
 export default connect(
   null,
-  actions
+  mapDispatchToProps
 )(SignUp);

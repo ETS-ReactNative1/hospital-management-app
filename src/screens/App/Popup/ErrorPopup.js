@@ -32,6 +32,14 @@ const handleError = errorMsg => {
     };
   }
 
+  if (errorMsg.indexOf('No user found with this login credentials') !== -1) {
+    return {
+      title: TextPackage.SIGN_IN_ERR,
+      message: TextPackage.UNDEFINED_EMAIL_ERR,
+      confirmText: TextPackage.CONTINUE
+    };
+  }
+
   if (errorMsg.indexOf('Invalid password') !== -1) {
     return {
       title: TextPackage.SIGN_IN_ERR,
@@ -57,9 +65,9 @@ const handleError = errorMsg => {
 
 const ErrorPopup = ({ popupProps, hidePopup }) => {
   const { message, ...otherProps } = handleError(popupProps.errorMsg);
-
+  const callbackFc = popupProps.callback || hidePopup
   return (
-    <Dialog hideCancel onRequestClose={hidePopup} {...otherProps}>
+    <Dialog hideCancel handleConfirm = {callbackFc} {...otherProps}>
       <Typography body justify>
         {message}
       </Typography>
