@@ -105,7 +105,7 @@ export default class SignUp extends Component {
         if (
           !touched.confirmPassword &&
           values.confirmPassword &&
-          values.newPassword.length === values.confirmPassword.length
+          values.password.length === values.confirmPassword.length
         ) {
           this.setState({
             touched: {
