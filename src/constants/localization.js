@@ -140,7 +140,11 @@ const VN = {
   NO_DATA_MESSAGE: 'Dữ liệu về lịch sử hoạt động của thiết bị hiện chưa khả dụng.',
   END_OF_LIST: 'Hết danh sách',
   CREATED_AT: 'Vào lúc',
-  USED_TIME: 'Đã sử dụng'
+  USED_TIME: 'Đã sử dụng',
+
+  UNDERSTOOD: 'Đã hiểu',
+  NO_PERMISSION: 'Không có quyền truy cập',
+  NO_PERMISSION_MESSAGE: 'Bạn không thể truy cập chức năng này với vai trò hiện tại của bạn!'
 };
 
 export { VN };

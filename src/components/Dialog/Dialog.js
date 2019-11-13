@@ -32,7 +32,7 @@ const Dialog = props => {
     <Modal animationType="fade" transparent visible onRequestClose={handleCancel} {...other}>
       <StatusBar barStyle="default" backgroundColor={theme.colors.black2} />
       <Block middle padding={[0, theme.sizes.base * 2]} backgroundColor={theme.colors.black2}>
-        <Card style={styles.cardStyle} flex={false} shadow fullWidth>
+        <Card flex={false} shadow fullWidth>
           {/* Title */}
           <Typography bold h1>
             {title}
@@ -92,7 +92,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Dialog);
+export default connect(null, mapDispatchToProps)(Dialog);

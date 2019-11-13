@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
+import AppConst from 'src/AppConst';
 import { Card, Badge, Block, Typography } from 'src/components';
 import { theme, mocks } from 'src/constants';
 import { popupActions } from 'src/redux/actions';
@@ -30,9 +31,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const Browse = props => {
-  const { navigation } = props;
-
+const Browse = ({ role, showPopup, navigation }) => {
+  const handleCategoryPressed = category => {
+    if (category.role.includes(role)) navigation.navigate('QRScan', category);
+    else showPopup(AppConst.NO_PERMISSION_POPUP);
+  };
   return (
     <Block
       flex={false}
@@ -41,7 +44,7 @@ const Browse = props => {
       style={styles.categories}
     >
       {mocks.categories.map(category => (
-        <TouchableOpacity key={category.id} onPress={() => navigation.navigate('QRScan', category)}>
+        <TouchableOpacity key={category.id} onPress={() => handleCategoryPressed(category)}>
           <Card flex={false} center middle shadow row fullWidth>
             <Badge size={56} color="rgba(41,216,143,0.20)">
               <Icon name={category.icon} size={36} color={theme.colors.green} />
@@ -101,7 +104,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Browse);
+export default connect(mapStateToProps, mapDispatchToProps)(Browse);

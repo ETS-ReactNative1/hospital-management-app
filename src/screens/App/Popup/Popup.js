@@ -4,6 +4,7 @@ import AppConst from 'src/AppConst';
 import ChangePassPopup from './ChangePassPopup';
 import ChangeInfoPopup from './ChangeInfoPopup';
 import ErrorPopup from './ErrorPopup';
+import NoPermissionPopup from './NoPermissionPopup';
 import { Dialog, Typography } from 'src/components';
 import { popupActions } from 'src/redux/actions';
 
@@ -32,6 +33,8 @@ const Popup = ({ popupType, popupProps, hidePopup }) => {
       return <ChangePassPopup {...popupProps} />;
     case AppConst.CHANGE_INFO_POPUP:
       return <ChangeInfoPopup {...popupProps} />;
+    case AppConst.NO_PERMISSION_POPUP:
+      return <NoPermissionPopup {...popupProps} />;
   }
 };
 
@@ -43,7 +46,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Popup);
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);

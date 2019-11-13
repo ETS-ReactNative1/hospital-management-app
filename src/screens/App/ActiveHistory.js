@@ -4,7 +4,7 @@ import { useQuery } from 'react-apollo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Typography, Block, Card, Badge } from 'src/components';
-import { theme, localization } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import AppData from 'src/AppData';
 import { ACTIVE_EVENTS_BY_DEVICE } from 'src/utils/graphqlQueries';
 
@@ -42,7 +42,7 @@ const ActiveHistory = ({ navigation }) => {
   if (events.length === 0) {
     return (
       <Block middle center>
-        <Image style={styles.image} source={require('src/assets/images/no_data.jpg')} />
+        <Image style={generalStyles.image} source={require('src/assets/images/no_data.jpg')} />
         <Block center padding={[0, theme.sizes.base * 5]}>
           <Typography bold title uppercase>
             {TextPackage.NO_DATA}
@@ -59,7 +59,7 @@ const ActiveHistory = ({ navigation }) => {
     <ScrollView>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         {events.reverse().map(event => (
-          <Card key={event.id} center middle shadow row fullWidth style={styles.card}>
+          <Card key={event.id} center middle shadow row fullWidth padding={theme.sizes.base}>
             <Badge
               size={56}
               color={event.actionType ? 'rgba(41,216,143,0.20)' : 'rgba(243,83,74,0.2)'}
@@ -94,18 +94,6 @@ const ActiveHistory = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '50%',
-    resizeMode: 'contain',
-    shadowColor: theme.colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 10
-  },
-  card: {
-    padding: theme.sizes.base
-  },
   EOLPadding: {
     paddingVertical: theme.sizes.base
   }

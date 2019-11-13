@@ -79,6 +79,15 @@ const generalStyles = StyleSheet.create({
   },
   hasErrors: {
     borderBottomColor: colors.error
+  },
+  image: {
+    width: '100%',
+    height: '50%',
+    resizeMode: 'contain',
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10
   }
 });
 
