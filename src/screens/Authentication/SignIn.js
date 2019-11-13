@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 import { GradientButton, Block, Input, Typography } from 'src/components';
 import { theme, localization, generalStyles } from 'src/constants';
 import { SIGN_IN } from 'src/utils/graphqlMutations';
-import { actions } from 'src/utils/reduxStore';
-import { connect } from 'react-redux';
+import AppData from 'src/AppData';
+import AppConst from 'src/AppConst'
 import validate from 'src/utils/validateOverride';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import meQuery from 'src/utils/meQuery';
-import { meActions } from 'src/redux/actions';
+import { meActions, popupActions } from 'src/redux/actions';
 
 const TextPackage = localization[AppData.language];
 
@@ -77,8 +77,7 @@ class SignIn extends Component {
   };
 
   handleSignInError = error => {
-    this.props.showPopup({
-      type: AppConst.ERROR_POPUP,
+    this.props.showPopup(AppConst.ERROR_POPUP, {
       errorMsg: error.message
     });
   };
@@ -119,10 +118,7 @@ class SignIn extends Component {
     if (name === 'email') this.passwordRef.current.textInputRef.current.focus();
   };
 
-  static navigationOptions = {
-    title: 'Đăng nhập'
-  };
-
+  
   render() {
     const { navigation } = this.props;
     const {
@@ -199,17 +195,6 @@ class SignIn extends Component {
                   </TouchableOpacity>
                 </Block>
               </KeyboardAvoidingView>
-              {/* <Block style={styles.bottomBlock}>
-                <Typography black center style={styles.textStyle}>
-                  {'Chưa có tài khoản?'}
-                </Typography>
-
-                <GradientButton shadow border onPress={() => navigation.navigate('SignUp')}>
-                  <Typography black bold center>
-                    Đăng ký
-                  </Typography>
-                </GradientButton>
-              </Block> */}
             </Block>
           );
         }}
@@ -219,12 +204,12 @@ class SignIn extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  // showPopup: (popupType, popupProps) => {
-  //   dispatch(popupActions.showPopup(popupType, popupProps));
-  // },
-  // hidePopup: () => {
-  //   dispatch(popupActions.hidePopup());
-  // },
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  },
   updateMe: me => {
     dispatch(meActions.updateMe(me));
   }

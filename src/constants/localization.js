@@ -25,6 +25,7 @@ const VN = {
   LIQUIDATE_DEVICE_DESC: 'Ghi nhận thông tin thanh lý',
   ACCOUNT_DEVICE: 'Kiểm kể thiết bị',
   ACCOUNT_DEVICE_DESC: 'Ghi nhận kiểm kê thiết bị',
+
   DEVICE_INFO: 'Thông tin thiết bị',
   DEVICE_TITLE: 'Tên thiết bị',
   MODEL: 'Mẫu thiết bị',
@@ -90,7 +91,10 @@ const VN = {
     'Báo cáo của bạn về sai sót của trạng thái thiết bị đã được hệ thống ghi nhận.',
   REPORT_SUCCESS: 'Báo cáo thành công',
   TITLE: 'Tiêu đề',
+  CONTINUE: 'Tiếp tục',
   CONFIRM: 'Xác nhận',
+  CANCEL: 'Hủy bỏ',
+  TRY_AGAIN: 'Thử lại',
   CHANGE_SUCCESS: 'Thay đổi thành công',
   DEVICE_MAINTAINING: 'Thiết bị đang được bảo trì',
   DEVICE_MAINTAINING_DESC:

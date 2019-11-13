@@ -20,7 +20,7 @@ const handleError = errorMsg => {
     return {
       title: TextPackage.NO_INTERNET_ERR_TITLE,
       message: TextPackage.NO_INTERNET_ERR_MESSAGE,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.TRY_AGAIN
     };
   }
 
