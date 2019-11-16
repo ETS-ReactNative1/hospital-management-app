@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity, PermissionsAndroid } from 'react-native';
 import { useMutation } from 'react-apollo';
 import { connect } from 'react-redux';
 
@@ -48,16 +48,44 @@ const displayData = {
   }
 };
 
+async function requestCameraPermission() {
+  try {
+    const granted = await PermissionsAndroid.requestMultiple(
+      [
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      ],
+      {
+        title: 'Cool Photo App Camera Permission',
+        message:
+          'Cool Photo App needs access to your camera ' + 'so you can take awesome pictures.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK'
+      }
+    );
+    console.log(granted);
+  } catch (err) {
+    console.warn(err);
+  }
+}
+
 const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }) => {
   const [avatarUpload] = useMutation(AVATAR_UPLOAD);
   const [signOut, { client }] = useMutation(SIGN_OUT);
 
   const handleAvatarSelect = () => {
     const options = {
-      title: 'Chọn ảnh đại diện',
-      takePhotoButtonTitle: 'Chụp ảnh...',
-      chooseFromLibraryButtonTitle: 'Chọn từ Thư viện...',
-      cancelButtonTitle: 'Hủy bỏ',
+      title: TextPackage.CHOSE_AVATAR,
+      takePhotoButtonTitle: TextPackage.TAKE_PICTURE,
+      chooseFromLibraryButtonTitle: TextPackage.CHOSE_PICTURE,
+      cancelButtonTitle: TextPackage.CANCEL,
+      permissionDenied: {
+        title: TextPackage.PERMISSION_DENIED,
+        text: TextPackage.PERMISSION_DENIED_MESSAGE,
+        reTryTitle: TextPackage.RETRY,
+        okTitle: TextPackage.CANCEL
+      },
       noData: true,
       mediaType: 'photo'
     };
@@ -68,6 +96,9 @@ const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }
       }
       if (response.error) {
         console.log('ImagePicker Error: ', response.error);
+        if (response.error === "Permissions weren't granted") {
+          // await requestCameraPermission();
+        }
       } else {
         const file = new ReactNativeFile({
           uri: response.uri,
@@ -208,7 +239,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SettingsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

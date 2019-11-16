@@ -1,9 +1,8 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { View, TouchableOpacity, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './AnimatedPanelStyles';
-import Typography from '../Typography';
 
 export default class AnimatedPanel extends Component {
   constructor(props) {
@@ -19,7 +18,6 @@ export default class AnimatedPanel extends Component {
     const initialValue = this.state.expanded ? maxHeight + minHeight : minHeight;
     const finalValue = this.state.expanded ? minHeight : maxHeight + minHeight;
     this.setState({ expanded: !expanded });
-    // console.log(minHeight);
     this.state.animation.setValue(initialValue);
     Animated.spring(this.state.animation, {
       toValue: finalValue,

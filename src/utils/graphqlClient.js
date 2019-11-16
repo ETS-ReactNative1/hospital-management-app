@@ -1,7 +1,6 @@
 import { ApolloClient } from 'apollo-boost';
 import { ApolloLink, Observable } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import { onError } from 'apollo-link-error';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import jwtDecode from 'jwt-decode';
@@ -74,15 +73,6 @@ const refreshTokenLink = new TokenRefreshLink({
   }
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  graphQLErrors &&
-    graphQLErrors.forEach(error => {
-      console.log('GraphQL error', error);
-    });
-
-  networkError && console.log('Network error', networkError);
-});
-
 const defaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
@@ -94,7 +84,7 @@ const defaultOptions = {
   }
 };
 
-const link = ApolloLink.from([refreshTokenLink, authLink, errorLink, httpLink]);
+const link = ApolloLink.from([refreshTokenLink, authLink, httpLink]);
 const cache = new InMemoryCache();
 
 export default new ApolloClient({ link, cache, defaultOptions });

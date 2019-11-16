@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, Image, View } from 'react-native';
-import { useQuery } from 'react-apollo';
-import { ME } from 'src/utils/graphqlQueries';
+import { StyleSheet, Image } from 'react-native';
 
 import { GradientButton, Block, Typography } from 'src/components';
-import { theme } from 'src/constants';
+import { theme, localization } from 'src/constants';
 import AppData from 'src/AppData';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -27,6 +25,8 @@ const styles = StyleSheet.create({
   }
 });
 
+const TextPackage = localization[AppData.language];
+
 const AuthMain = props => {
   const { navigation } = props;
 
@@ -36,15 +36,15 @@ const AuthMain = props => {
 
   return (
     <Block center padding={[0, theme.sizes.base * 2]}>
-      <Typography color={theme.colors.black} style={styles.title}>
-        QUẢN LÝ
+      <Typography black uppercase style={styles.title}>
+        {TextPackage.MANAGE}
       </Typography>
 
-      <Typography color={theme.colors.green} style={styles.title}>
-        THIẾT BỊ BỆNH VIỆN
+      <Typography primary uppercase style={styles.title}>
+        {TextPackage.HOSPITAL_EQUIPMENT}
       </Typography>
 
-      <Typography gray>Vận hành hiệu quả hơn</Typography>
+      <Typography gray>{TextPackage.OPERATE_MORE_EFFICIENT}</Typography>
 
       <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
 
@@ -55,7 +55,7 @@ const AuthMain = props => {
         onPress={() => navigation.navigate('SignIn')}
       >
         <Typography white body bold center>
-          Đăng nhập
+          {TextPackage.SIGN_IN}
         </Typography>
       </GradientButton>
 
@@ -65,13 +65,13 @@ const AuthMain = props => {
         onPress={() => navigation.navigate('SignUp')}
       >
         <Typography bold body center>
-          Đăng ký
+          {TextPackage.SIGN_UP}
         </Typography>
       </GradientButton>
 
       <TouchableOpacity style={styles.termCondition}>
         <Typography gray center>
-          Điều khoản dịch vụ
+          {TextPackage.TERMS_OF_SERVICE}
         </Typography>
       </TouchableOpacity>
     </Block>

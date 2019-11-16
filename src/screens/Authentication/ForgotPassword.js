@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
@@ -7,6 +7,10 @@ import { theme, localization, generalStyles } from 'src/constants';
 import { FORGOT_PASSWORD } from 'src/utils/graphqlMutations';
 import validate from 'src/utils/validateOverride';
 import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
+import { popupActions } from 'src/redux/actions';
+import { connect } from 'react-redux';
 
 const TextPackage = localization[AppData.language];
 
@@ -14,6 +18,7 @@ const schema = {
   email: {
     presence: { allowEmpty: false, message: TextPackage.EMAIL_REQUIRED_ERROR },
     email: true,
+    exclusion: { within: [], message: `^${TextPackage.EMAIL_NOT_EXIST_ERR}` },
     length: {
       maximum: 64,
       message: TextPackage.EMAIL_TOO_LONG_ERROR
@@ -28,9 +33,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Forgot extends Component {
+class Forgot extends Component {
   static navigationOptions = {
-    title: 'Quên mật khẩu'
+    title: TextPackage.FORGOT_PASSWORD
   };
 
   constructor(props) {
@@ -75,31 +80,30 @@ export default class Forgot extends Component {
   };
 
   handleForgotError = error => {
-    console.log(error);
-    Alert.alert('Lỗi', 'Hãy kiểm tra lại địa chỉ email của bạn.', [{ text: 'Thử lại' }], {
-      cancelable: false
-    });
+    graphqlErrorHandler(error);
+    if (error.graphQLErrors[0].message.indexOf('No user exist') !== -1) {
+      const { values } = this.state;
+      schema.email.exclusion.within.push(values.email);
+      const errors = validate(values, schema);
+      this.setState({
+        isValid: !errors,
+        errors
+      });
+    }
   };
 
   handleForgotCompleted() {
-    const { navigation } = this.props;
-    const { isValid } = this.state;
+    const { navigation, showPopup, hidePopup } = this.props;
 
-    if (isValid) {
-      Alert.alert(
-        'Thành công!',
-        'Hãy kiểm tra email để lấy lại mật khẩu',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              navigation.navigate('SignIn');
-            }
-          }
-        ],
-        { cancelable: false }
-      );
-    }
+    showPopup(AppConst.OK_CANCEL_POPUP, {
+      title: TextPackage.SUCCESS,
+      message: TextPackage.FORGOT_PASSWORD_SUCCESS_MESSAGE,
+      confirmText: TextPackage.CONTINUE,
+      handleConfirm: () => {
+        hidePopup();
+        navigation.goBack();
+      }
+    });
   }
 
   render() {
@@ -125,7 +129,7 @@ export default class Forgot extends Component {
                 <Block middle>
                   <Input
                     name="email"
-                    placeholder="Email"
+                    label={TextPackage.EMAIL}
                     error={hasErrors('email')}
                     style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
@@ -134,6 +138,7 @@ export default class Forgot extends Component {
                   />
                   <GradientButton
                     gradient
+                    shadow
                     disabled={!isValid}
                     onPress={() => {
                       Keyboard.dismiss();
@@ -157,3 +162,14 @@ export default class Forgot extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  }
+});
+
+export default connect(null, mapDispatchToProps)(Forgot);

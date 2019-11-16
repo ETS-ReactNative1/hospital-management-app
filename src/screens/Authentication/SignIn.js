@@ -12,6 +12,7 @@ import validate from 'src/utils/validateOverride';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import meQuery from 'src/utils/meQuery';
 import { meActions } from 'src/redux/actions';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 
 class SignIn extends Component {
   static navigationOptions = {
-    title: 'Đăng nhập'
+    title: TextPackage.SIGN_IN
   };
 
   constructor(props) {
@@ -73,10 +74,6 @@ class SignIn extends Component {
     const me = await meQuery();
     this.props.updateMe(me);
     navigation.navigate('App');
-  };
-
-  handleSignInError = error => {
-    console.log(error.message);
   };
 
   handleTextChange = (name, text) => {
@@ -129,7 +126,7 @@ class SignIn extends Component {
         mutation={SIGN_IN}
         variables={{ email, password }}
         onCompleted={data => this.handleSignInCompleted(data)}
-        onError={error => this.handleSignInError(error)}
+        onError={error => graphqlErrorHandler(error)}
       >
         {(signIn, { loading }) => {
           return (
@@ -143,7 +140,7 @@ class SignIn extends Component {
                   <Input
                     name="email"
                     error={hasErrors('email')}
-                    label="Email"
+                    label={TextPackage.EMAIL}
                     style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
                     onChangeText={text => this.handleTextChange('email', text)}
@@ -153,7 +150,7 @@ class SignIn extends Component {
                   <Input
                     name="password"
                     secure
-                    label="Mật khẩu"
+                    label={TextPackage.PASSWORD}
                     error={hasErrors('password')}
                     style={[generalStyles.input, hasErrors('password') && generalStyles.hasErrors]}
                     helperText={errors.password || ''}
@@ -211,18 +208,9 @@ class SignIn extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  // showPopup: (popupType, popupProps) => {
-  //   dispatch(popupActions.showPopup(popupType, popupProps));
-  // },
-  // hidePopup: () => {
-  //   dispatch(popupActions.hidePopup());
-  // },
   updateMe: me => {
     dispatch(meActions.updateMe(me));
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignIn);
+export default connect(null, mapDispatchToProps)(SignIn);

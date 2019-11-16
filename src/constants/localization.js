@@ -14,6 +14,15 @@ const VN = {
   USER: 'Người dùng',
   ADMIN: 'Quản lý',
   OWNER: 'Người sở hữu',
+  ERROR: 'Lỗi',
+  SIGN_IN: 'Đăng nhập',
+  SIGN_UP: 'Đăng ký',
+  PASSWORD: 'Mật khẩu',
+  CONFIRM_PASSWORD: 'Xác nhận mật khẩu',
+  TERMS_OF_SERVICE: 'Điều khoản dịch vụ',
+  OPERATE_MORE_EFFICIENT: 'Vận hành hiệu quả hơn',
+  MANAGE: 'Quản lý',
+  HOSPITAL_EQUIPMENT: 'Thiết bị bệnh viện',
 
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
@@ -80,6 +89,7 @@ const VN = {
   MAINTAINING: 'Đang bảo trì',
   LIQUIDATED: 'Đã thanh lý',
   UNKNOWN: '(Không rõ)',
+  SUCCESS: 'Thành công',
 
   SWITCH_OFF_MESSAGE:
     'Thiết bị đã được ghi nhận chuyển sang trạng thái Tắt. Hãy chắc chắn  rằng bạn đã tắt thiết bị!',
@@ -108,6 +118,7 @@ const VN = {
   NEW_PASSWORD: 'Mật khẩu mới',
   OLD_PASSWORD: 'Mật khẩu cũ',
   CONFRIM_PASSWORD: 'Nhập lại mật khẩu mới',
+  FORGOT_PASSWORD: 'Quên mật khẩu',
 
   EMAIL_REQUIRED_ERROR: '^Email là bắt buộc',
   EMAIL_TOO_LONG_ERROR: '^Độ dài tối đa là 64 ký tự',
@@ -123,16 +134,22 @@ const VN = {
   CHANGE_INFO: 'Thay đổi thông tin',
 
   CHANGE_INFO_SUCCESSFUL_MESSAGE: 'Thông tin của bạn đã được cập nhật thành công! ',
-  EMAIL_IS_TAKEN_ERR_TITLE: 'Email đã được sử dụng',
+  EMAIL_IS_TAKEN_ERR: 'Email đã được sử dụng',
   EMAIL_IS_TAKEN_ERR_MESSAGE:
     'Email đã được sử dụng để đăng kí cho một tài khoản khác. Xin vui lòng chọn một email khác',
-  UNDEFINED_ERR_TITLE: 'Lỗi ứng dụng.',
+  EMAIL_NOT_EXIST_ERR: 'Tài khoản với email này chưa được đăng ký!',
+  FORGOT_PASSWORD_SUCCESS_MESSAGE: 'Hãy kiểm tra email của bạn để lấy lại mật khẩu.',
+  UNDEFINED_ERR_TITLE: 'Lỗi ứng dụng',
   UNDEFINED_ERR_MESSAGE:
     'Thao tác của bạn không thể hoàn thành do một lỗi nào đó của ứng dụng. Chúng tôi rất tiếc vì điều đó',
   NO_INTERNET_ERR_TITLE: 'Lỗi kết nối',
   NO_INTERNET_ERR_MESSAGE: 'Không thể kết nối đến server. Hãy kiểm tra lại kết nối mạng của bạn.',
   SIGN_IN_ERR: 'Lỗi đăng nhâp',
+  SIGN_UP_SUCCESS: 'Đăng ký thành công',
+  SIGN_UP_SUCCESS_MESSAGE: 'Tài khoản của bạn đã được tạo. Hãy kiểm tra email để kích hoạt!',
+  VALIDATION_ERR: 'Lỗi xác thực',
   UNCONFIRMED_EMAIL_ERR: 'Tài khoản của bạn vẫn chưa được xác nhận.',
+  INVALID_EMAIL_ERR: 'Email bạn đã nhập không chính xác hoặc chưa được đăng ký.',
   INVALID_PASSWORD_ERR: 'Mật khẩu bạn đã nhập không chính xác.',
   INVALID_OLD_PASSWORD_ERR: 'Mật khẩu cũ bạn đã nhập không chính xác.',
 
@@ -143,8 +160,22 @@ const VN = {
   USED_TIME: 'Đã sử dụng',
 
   UNDERSTOOD: 'Đã hiểu',
+  RETRY: 'Thử lại',
   NO_PERMISSION: 'Không có quyền truy cập',
-  NO_PERMISSION_MESSAGE: 'Bạn không thể truy cập chức năng này với vai trò hiện tại của bạn!'
+  NO_PERMISSION_MESSAGE: 'Bạn không thể truy cập chức năng này với vai trò hiện tại của bạn!',
+  NO_INTERNET: 'Không có kết nối mạng',
+  NO_INTERNET_MESSAGE:
+    'Vui lòng kiểm tra lại kết nối mạng, ứng dụng chỉ hoạt động khi có kết nối mạng!',
+
+  CHOSE_AVATAR: 'Chọn ảnh đại diện',
+  TAKE_PICTURE: 'Chụp ảnh...',
+  CHOSE_PICTURE: 'Chọn từ Thư viện...',
+  PERMISSION_DENIED: 'Quyền truy cập bị từ chối',
+  PERMISSION_DENIED_MESSAGE:
+    'Để hoạt động được, ứng dụng cần bạn cấp quyền cho phép chụp ảnh từ camera và chọn hình ảnh từ thư viện của bạn',
+  NO_CAMERA_PERMISSION: 'Không có quyền truy cập Camera',
+  NO_CAMERA_PERMISSION_MESSAGE:
+    'Chức năng này không thể hoạt động nếu bạn không cấp quyền truy cập camera cho ứng dụng'
 };
 
 export { VN };

@@ -10,16 +10,8 @@ const TextPackage = localization[AppData.language];
 const handleError = errorMsg => {
   if (errorMsg.indexOf('Email is already taken') !== -1) {
     return {
-      title: TextPackage.EMAIL_IS_TAKEN_ERR_TITLE,
+      title: TextPackage.EMAIL_IS_TAKEN_ERR,
       message: TextPackage.EMAIL_IS_TAKEN_ERR_MESSAGE,
-      confirmText: TextPackage.CONTINUE
-    };
-  }
-
-  if (errorMsg.indexOf('Network request failed') !== -1) {
-    return {
-      title: TextPackage.NO_INTERNET_ERR_TITLE,
-      message: TextPackage.NO_INTERNET_ERR_MESSAGE,
       confirmText: TextPackage.CONTINUE
     };
   }
@@ -28,6 +20,22 @@ const handleError = errorMsg => {
     return {
       title: TextPackage.SIGN_IN_ERR,
       message: TextPackage.UNCONFIRMED_EMAIL_ERR,
+      confirmText: TextPackage.CONTINUE
+    };
+  }
+
+  if (errorMsg.indexOf('No user found') !== -1) {
+    return {
+      title: TextPackage.SIGN_IN_ERR,
+      message: TextPackage.INVALID_EMAIL_ERR,
+      confirmText: TextPackage.CONTINUE
+    };
+  }
+
+  if (errorMsg.indexOf('No user exist') !== -1) {
+    return {
+      title: TextPackage.ERROR,
+      message: TextPackage.EMAIL_NOT_EXIST_ERR,
       confirmText: TextPackage.CONTINUE
     };
   }
@@ -42,8 +50,16 @@ const handleError = errorMsg => {
 
   if (errorMsg.indexOf('Invalid old password') !== -1) {
     return {
-      title: TextPackage.SIGN_IN_ERR,
+      title: TextPackage.VALIDATION_ERR,
       message: TextPackage.INVALID_OLD_PASSWORD_ERR,
+      confirmText: TextPackage.CONTINUE
+    };
+  }
+
+  if (errorMsg.indexOf('Network request failed') !== -1) {
+    return {
+      title: TextPackage.NO_INTERNET_ERR_TITLE,
+      message: TextPackage.NO_INTERNET_ERR_MESSAGE,
       confirmText: TextPackage.CONTINUE
     };
   }
@@ -75,7 +91,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ErrorPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorPopup);

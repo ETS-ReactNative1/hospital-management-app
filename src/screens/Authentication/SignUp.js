@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Mutation } from 'react-apollo';
 
 import { GradientButton, Block, Input, Typography } from 'src/components';
@@ -7,6 +7,10 @@ import { theme, localization, generalStyles } from 'src/constants';
 import { SIGN_UP } from 'src/utils/graphqlMutations';
 import validate from 'src/utils/validateOverride';
 import AppData from 'src/AppData';
+import AppConst from 'src/AppConst';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
+import { connect } from 'react-redux';
+import { popupActions } from 'src/redux/actions';
 
 const TextPackage = localization[AppData.language];
 
@@ -14,6 +18,7 @@ const schema = {
   email: {
     presence: { allowEmpty: false, message: TextPackage.EMAIL_REQUIRED_ERROR },
     email: true,
+    exclusion: { within: [], message: `^${TextPackage.EMAIL_IS_TAKEN_ERR}` },
     length: {
       maximum: 64,
       message: TextPackage.EMAIL_TOO_LONG_ERROR
@@ -46,9 +51,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   static navigationOptions = {
-    title: 'Đăng ký'
+    title: TextPackage.SIGN_UP
   };
 
   constructor(props) {
@@ -64,25 +69,17 @@ export default class SignUp extends Component {
   }
 
   handleSignUpCompleted = async () => {
-    const { navigation } = this.props;
+    const { navigation, showPopup, hidePopup } = this.props;
 
-    Alert.alert(
-      'Thành công!',
-      'Tài khoản của bạn đã được tạo. Hãy kiểm tra email để kích hoạt!',
-      [
-        {
-          text: 'Tiếp tục',
-          onPress: () => {
-            navigation.navigate('SignIn');
-          }
-        }
-      ],
-      { cancelable: false }
-    );
-  };
-
-  handleSignUpError = error => {
-    console.log(error); // Need to test to define what to do with error
+    showPopup(AppConst.OK_POPUP, {
+      title: TextPackage.SIGN_UP_SUCCESS,
+      message: TextPackage.SIGN_UP_SUCCESS_MESSAGE,
+      confirmText: TextPackage.CONTINUE,
+      handleConfirm: () => {
+        hidePopup();
+        navigation.goBack();
+      }
+    });
   };
 
   handleTextChange = (name, text) => {
@@ -134,6 +131,19 @@ export default class SignUp extends Component {
     if (name === 'password') this.confirmPasswordRef.current.textInputRef.current.focus();
   };
 
+  handleSignUpError = error => {
+    graphqlErrorHandler(error);
+    if (error.graphQLErrors[0].message.indexOf('Email is already taken') !== -1) {
+      const { values } = this.state;
+      schema.email.exclusion.within.push(values.email);
+      const errors = validate(values, schema);
+      this.setState({
+        isValid: !errors,
+        errors
+      });
+    }
+  };
+
   render() {
     const {
       touched,
@@ -158,7 +168,7 @@ export default class SignUp extends Component {
                 <Block middle>
                   <Input
                     name="email"
-                    label="Email"
+                    label={TextPackage.EMAIL}
                     error={hasErrors('email')}
                     style={[generalStyles.input, hasErrors('email') && generalStyles.hasErrors]}
                     helperText={errors.email || ''}
@@ -169,7 +179,7 @@ export default class SignUp extends Component {
                   <Input
                     name="password"
                     secure
-                    label="Mật khẩu"
+                    label={TextPackage.PASSWORD}
                     error={hasErrors('password')}
                     style={[generalStyles.input, hasErrors('password') && generalStyles.hasErrors]}
                     helperText={errors.password || ''}
@@ -181,7 +191,7 @@ export default class SignUp extends Component {
                   <Input
                     name="confirmPassword"
                     secure
-                    label="Xác nhận mật khẩu"
+                    label={TextPackage.CONFIRM_PASSWORD}
                     error={hasErrors('confirmPassword')}
                     style={[generalStyles.input, hasErrors('confirmPassword') && styles.hasErrors]}
                     helperText={errors.confirmPassword || ''}
@@ -191,6 +201,7 @@ export default class SignUp extends Component {
                   />
                   <GradientButton
                     gradient
+                    shadow
                     disabled={!isValid}
                     onPress={() => {
                       Keyboard.dismiss();
@@ -214,3 +225,14 @@ export default class SignUp extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  },
+  hidePopup: () => {
+    dispatch(popupActions.hidePopup());
+  }
+});
+
+export default connect(null, mapDispatchToProps)(SignUp);

@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { memo, useEffect } from 'react';
+import { Image, StyleSheet, TouchableOpacity, PermissionsAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -36,6 +36,23 @@ const Browse = ({ role, showPopup, navigation }) => {
     if (category.role.includes(role)) navigation.navigate('QRScan', category);
     else showPopup(AppConst.NO_PERMISSION_POPUP);
   };
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      ]);
+      console.log(granted);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    requestCameraPermission();
+  }, []);
+
   return (
     <Block
       flex={false}

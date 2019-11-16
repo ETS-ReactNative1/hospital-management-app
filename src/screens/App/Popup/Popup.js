@@ -5,6 +5,7 @@ import ChangePassPopup from './ChangePassPopup';
 import ChangeInfoPopup from './ChangeInfoPopup';
 import ErrorPopup from './ErrorPopup';
 import NoPermissionPopup from './NoPermissionPopup';
+import NoInternetPopup from './NoInternetPopup';
 import { Dialog, Typography } from 'src/components';
 import { popupActions } from 'src/redux/actions';
 
@@ -35,6 +36,8 @@ const Popup = ({ popupType, popupProps, hidePopup }) => {
       return <ChangeInfoPopup {...popupProps} />;
     case AppConst.NO_PERMISSION_POPUP:
       return <NoPermissionPopup {...popupProps} />;
+    case AppConst.NO_INTERNET_POPUP:
+      return <NoInternetPopup {...popupProps} />;
   }
 };
 
