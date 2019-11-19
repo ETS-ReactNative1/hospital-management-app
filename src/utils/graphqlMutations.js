@@ -62,3 +62,11 @@ export const CREATE_MAINTAIN_EVENT = gql`
     }
   }
 `;
+
+export const CREATE_LIQUIDATE_EVENT = gql`
+  mutation CreateLiquidateEvent($deviceId: ID!, $liquidateInfo: LiquidateInfo!) {
+    createLiquidateEvent(deviceId: $deviceId, liquidateInfo: $liquidateInfo) {
+      id
+    }
+  }
+`;

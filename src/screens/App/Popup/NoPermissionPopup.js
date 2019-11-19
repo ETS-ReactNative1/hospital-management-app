@@ -10,7 +10,7 @@ const TextPackage = localization[AppData.language];
 
 const NoPermissionPopup = () => {
   return (
-    <Dialog title={TextPackage.NO_PERMISSION} confirmText={TextPackage.UNDERSTOOD} hideCancel>
+    <Dialog title={TextPackage.NO_PERMISSION} confirmText={TextPackage.UNDERSTOOD}>
       <View>
         <Image style={styles.image} source={require('src/assets/images/no_permission.png')} />
         <Typography gray center>

@@ -93,14 +93,13 @@ class Forgot extends Component {
   };
 
   handleForgotCompleted() {
-    const { navigation, showPopup, hidePopup } = this.props;
+    const { navigation, showPopup } = this.props;
 
     showPopup(AppConst.OK_CANCEL_POPUP, {
       title: TextPackage.SUCCESS,
       message: TextPackage.FORGOT_PASSWORD_SUCCESS_MESSAGE,
       confirmText: TextPackage.CONTINUE,
       handleConfirm: () => {
-        hidePopup();
         navigation.goBack();
       }
     });
@@ -166,9 +165,6 @@ class Forgot extends Component {
 const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
-  },
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
   }
 });
 

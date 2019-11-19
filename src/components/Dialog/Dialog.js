@@ -23,13 +23,23 @@ const Dialog = props => {
     confirmDisable,
     handleConfirm,
     handleCancel,
+    onRequestClose,
     children,
     hidePopup,
     ...other
   } = props;
 
   return (
-    <Modal animationType="fade" transparent visible onRequestClose={handleCancel} {...other}>
+    <Modal
+      animationType="fade"
+      transparent
+      visible
+      onRequestClose={() => {
+        hidePopup();
+        onRequestClose && onRequestClose();
+      }}
+      {...other}
+    >
       <StatusBar barStyle="default" backgroundColor={theme.colors.black2} />
       <Block middle padding={[0, theme.sizes.base * 2]} backgroundColor={theme.colors.black2}>
         <Card flex={false} shadow fullWidth>
@@ -43,7 +53,13 @@ const Dialog = props => {
           {/* Action */}
           <Block flex={false} row right>
             {!hideCancel && (
-              <TouchableOpacity onPress={handleCancel || hidePopup} style={styles.actionButton}>
+              <TouchableOpacity
+                onPress={() => {
+                  hidePopup();
+                  handleCancel && handleCancel();
+                }}
+                style={styles.actionButton}
+              >
                 <Typography uppercase bold body>
                   {cancelText}
                 </Typography>
@@ -51,7 +67,10 @@ const Dialog = props => {
             )}
 
             <TouchableOpacity
-              onPress={handleConfirm || hidePopup}
+              onPress={() => {
+                hidePopup();
+                handleConfirm && handleConfirm();
+              }}
               disabled={confirmDisable}
               style={styles.actionButton}
             >
@@ -73,7 +92,8 @@ Dialog.propTypes = {
   hideCancel: PropTypes.bool,
   confirmDisable: PropTypes.bool,
   handleCancel: PropTypes.func,
-  handleConfirm: PropTypes.func
+  handleConfirm: PropTypes.func,
+  onRequestClose: PropTypes.func
 };
 
 Dialog.defaultProps = {
@@ -83,7 +103,8 @@ Dialog.defaultProps = {
   hideCancel: false,
   confirmDisable: false,
   handleCancel: null,
-  handleConfirm: null
+  handleConfirm: null,
+  onRequestClose: null
 };
 
 const mapDispatchToProps = dispatch => ({

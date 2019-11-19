@@ -31,14 +31,14 @@ const categories = [
     description: TextPackage.LIQUIDATE_DEVICE_DESC,
     icon: 'currency-usd',
     role: ['ACCOUNTANT', 'ADMIN']
-  },
-  {
-    id: 5,
-    name: TextPackage.ACCOUNT_DEVICE,
-    description: TextPackage.ACCOUNT_DEVICE_DESC,
-    icon: 'clipboard-text',
-    role: ['ACCOUNTANT']
   }
+  // {
+  //   id: 5,
+  //   name: TextPackage.ACCOUNT_DEVICE,
+  //   description: TextPackage.ACCOUNT_DEVICE_DESC,
+  //   icon: 'clipboard-text',
+  //   role: ['ACCOUNTANT']
+  // }
 ];
 
 export { categories };

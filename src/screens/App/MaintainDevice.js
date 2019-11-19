@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { useQuery, useMutation } from 'react-apollo';
 import { connect } from 'react-redux';
 
@@ -10,6 +10,7 @@ import AppConst from 'src/AppConst';
 import { LASTEST_MAINTAIN_EVENT } from 'src/utils/graphqlQueries';
 import { CREATE_MAINTAIN_EVENT } from 'src/utils/graphqlMutations';
 import { popupActions } from 'src/redux/actions';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
@@ -21,14 +22,14 @@ const displayData = {
   note: TextPackage.NOTE
 };
 
-const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
+const MaintainDevice = ({ navigation, showPopup }) => {
   const { deviceId } = navigation.state.params;
   const [newMaintainInfo, setNewMaintainInfo] = useState({
-    name: null,
-    address: null,
-    phone: null,
-    cost: null,
-    note: null
+    name: '',
+    address: '',
+    phone: '',
+    cost: '0',
+    note: ''
   });
 
   const refMap = {
@@ -47,30 +48,39 @@ const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
       return;
     }
     const { maintainInfo, finished } = data.lastestMaintainEvent;
-    delete maintainInfo.__typename;
-    setMaintainState(finished);
-    setNewMaintainInfo({
-      ...maintainInfo,
-      cost: maintainInfo.cost.currencyFormat(false)
-    });
+    if (!finished) {
+      delete maintainInfo.__typename;
+      setMaintainState(finished);
+      setNewMaintainInfo({
+        ...maintainInfo,
+        cost: maintainInfo.cost.currencyFormat(false)
+      });
+    }
   }, [data]);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Block center middle>
         <ActivityIndicator />
-      </View>
+      </Block>
     );
   }
 
   if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title height={theme.sizes.title * 2}>
-          Error
-        </Typography>
-      </Block>
-    );
+    graphqlErrorHandler(error, () => {
+      navigation.goBack();
+    });
+    return null;
+  }
+
+  if (data.lastestMaintainEvent.device.availability === 'liquidated') {
+    showPopup(AppConst.NO_ACTIVE_POPUP, {
+      availability: 'liquidated',
+      handleConfirm: () => {
+        navigation.goBack();
+      }
+    });
+    return null;
   }
 
   /**
@@ -82,7 +92,6 @@ const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
       message: TextPackage.REPORT_MAINTAIN_SUCCESS_MESSAGE,
       confirmText: TextPackage.CONTINUE,
       handleConfirm: () => {
-        hidePopup();
         //TODO: Implement report function
       }
     });
@@ -102,25 +111,28 @@ const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
   /**
    * Show Continue Modal for update maintain
    */
-  const handleUpdateMaintainConfirm = () => {
-    createMaintainEvent({
-      variables: {
-        deviceId,
-        maintainInfo: {
-          ...newMaintainInfo,
-          cost: parseInt(newMaintainInfo.cost.split('.').join(''), 10)
+  const handleUpdateMaintainConfirm = async () => {
+    try {
+      await createMaintainEvent({
+        variables: {
+          deviceId,
+          maintainInfo: {
+            ...newMaintainInfo,
+            cost: parseInt(newMaintainInfo.cost.split('.').join(''), 10)
+          }
         }
-      }
-    });
-    showPopup(AppConst.OK_POPUP, {
-      title: TextPackage.UPDATE_SUCCESS,
-      message: TextPackage.UPDATE_SUCCESS_MESSAGE,
-      confirmText: TextPackage.CONTINUE,
-      handleConfirm: async () => {
-        hidePopup();
-        navigation.goBack();
-      }
-    });
+      });
+      showPopup(AppConst.OK_POPUP, {
+        title: TextPackage.UPDATE_SUCCESS,
+        message: TextPackage.UPDATE_SUCCESS_MESSAGE,
+        confirmText: TextPackage.CONTINUE,
+        handleConfirm: async () => {
+          navigation.goBack();
+        }
+      });
+    } catch (error) {
+      graphqlErrorHandler(error);
+    }
   };
 
   /**
@@ -166,7 +178,7 @@ const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
         <Typography bold title height={theme.sizes.title * 2}>
           {maintainState ? TextPackage.RECORD_START_MAINTAIN : TextPackage.RECORD_END_MAINTAIN}
@@ -206,7 +218,7 @@ const MaintainDevice = ({ navigation, showPopup, hidePopup }) => {
           </Typography>
         </GradientButton>
       </Block>
-    </View>
+    </Block>
   );
 };
 
@@ -223,9 +235,6 @@ MaintainDevice.navigationOptions = () => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
-  },
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
   }

@@ -62,16 +62,14 @@ class SignIn extends Component {
       errors: {}
     };
     this.passwordRef = createRef();
-    if (AppData.accessToken) {
+    if (props.accessToken) {
       props.navigation.navigate('App');
     }
   }
 
   handleSignInCompleted = async data => {
     const { navigation } = this.props;
-
-    AppData.accessToken = data.signIn.accessToken;
-    const me = await meQuery();
+    const me = await meQuery(data.signIn.accessToken);
     this.props.updateMe(me);
     navigation.navigate('App');
   };
@@ -207,10 +205,12 @@ class SignIn extends Component {
   }
 }
 
+const mapStateToProps = state => state.me;
+
 const mapDispatchToProps = dispatch => ({
   updateMe: me => {
     dispatch(meActions.updateMe(me));
   }
 });
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

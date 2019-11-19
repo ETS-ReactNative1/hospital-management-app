@@ -7,6 +7,7 @@ import { Typography, Block, Card, Badge } from 'src/components';
 import { theme, localization, generalStyles } from 'src/constants';
 import AppData from 'src/AppData';
 import { ACTIVE_EVENTS_BY_DEVICE } from 'src/utils/graphqlQueries';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
@@ -25,16 +26,10 @@ const ActiveHistory = ({ navigation }) => {
   }
 
   if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title height={theme.sizes.title * 2}>
-          {TextPackage.DEVICE_INFO}
-        </Typography>
-        <Typography bold title height={theme.sizes.title * 2}>
-          {error}
-        </Typography>
-      </Block>
-    );
+    graphqlErrorHandler(error, () => {
+      navigation.goBack();
+    });
+    return null;
   }
 
   const { activeEventsByDevice: events } = data;

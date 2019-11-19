@@ -39,11 +39,10 @@ const Browse = ({ role, showPopup, navigation }) => {
 
   const requestCameraPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.requestMultiple([
+      await PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.CAMERA,
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
       ]);
-      console.log(granted);
     } catch (err) {
       console.warn(err);
     }
@@ -55,10 +54,12 @@ const Browse = ({ role, showPopup, navigation }) => {
 
   return (
     <Block
-      flex={false}
-      space="between"
+      // flex={false}
+      // space="between"
       padding={[theme.sizes.base, theme.sizes.base * 2]}
       style={styles.categories}
+      center
+      middle
     >
       {mocks.categories.map(category => (
         <TouchableOpacity key={category.id} onPress={() => handleCategoryPressed(category)}>

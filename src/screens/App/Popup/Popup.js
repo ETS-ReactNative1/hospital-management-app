@@ -6,10 +6,10 @@ import ChangeInfoPopup from './ChangeInfoPopup';
 import ErrorPopup from './ErrorPopup';
 import NoPermissionPopup from './NoPermissionPopup';
 import NoInternetPopup from './NoInternetPopup';
+import NoActivePopup from './NoActivePopup';
 import { Dialog, Typography } from 'src/components';
-import { popupActions } from 'src/redux/actions';
 
-const Popup = ({ popupType, popupProps, hidePopup }) => {
+const Popup = ({ popupType, popupProps }) => {
   switch (popupType) {
     default:
     case AppConst.NO_POPUP:
@@ -18,11 +18,7 @@ const Popup = ({ popupType, popupProps, hidePopup }) => {
     case AppConst.OK_CANCEL_POPUP:
       const { message, ...otherProps } = popupProps;
       return (
-        <Dialog
-          hideCancel={popupType === AppConst.OK_POPUP}
-          onRequestClose={popupType === AppConst.OK_CANCEL_POPUP && hidePopup}
-          {...otherProps}
-        >
+        <Dialog hideCancel={popupType === AppConst.OK_POPUP} {...otherProps}>
           <Typography body justify>
             {message}
           </Typography>
@@ -38,15 +34,11 @@ const Popup = ({ popupType, popupProps, hidePopup }) => {
       return <NoPermissionPopup {...popupProps} />;
     case AppConst.NO_INTERNET_POPUP:
       return <NoInternetPopup {...popupProps} />;
+    case AppConst.NO_ACTIVE_POPUP:
+      return <NoActivePopup {...popupProps} />;
   }
 };
 
 const mapStateToProps = state => state.popup;
 
-const mapDispatchToProps = dispatch => ({
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Popup);
+export default connect(mapStateToProps)(Popup);

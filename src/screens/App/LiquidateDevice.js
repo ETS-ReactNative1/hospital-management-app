@@ -1,86 +1,172 @@
-import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
-
+import React, { useState, useRef } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { GradientButton, Block, Typography, Input } from 'src/components';
-import { theme, localization } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import AppData from 'src/AppData';
-import { DEVICE_INFO } from 'src/utils/graphqlQueries';
-import { CREATE_EVENT } from 'src/utils/graphqlMutations';
+import AppConst from 'src/AppConst';
+import { DEVICE_AVAILABILITY } from 'src/utils/graphqlQueries';
+import { CREATE_LIQUIDATE_EVENT } from 'src/utils/graphqlMutations';
 import { useQuery, useMutation } from 'react-apollo';
+import { connect } from 'react-redux';
+import { popupActions } from 'src/redux/actions';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
 const displayData = {
-  name: 'LIQUIDATE_COMPANY',
-  address: 'ADDRESS',
-  phone: 'PHONE',
-  price: 'LIQUIDATE_PRICE',
-  note: 'NOTE'
+  name: TextPackage.LIQUIDATE_COMPANY,
+  address: TextPackage.ADDRESS,
+  phone: TextPackage.PHONE,
+  price: TextPackage.LIQUIDATE_PRICE,
+  note: TextPackage.NOTE
 };
 
-const LiquidateDevice = props => {
-  const { navigation } = props;
+const LiquidateDevice = ({ navigation, showPopup }) => {
   const { deviceId } = navigation.state.params;
-  const [createEvent] = useMutation(CREATE_EVENT);
-
-  const { loading, error, refetch } = useQuery(DEVICE_INFO, {
-    variables: {
-      id: deviceId
-    }
+  const { loading, error, data } = useQuery(DEVICE_AVAILABILITY, { variables: { id: deviceId } });
+  const [createLiquidateEvent] = useMutation(CREATE_LIQUIDATE_EVENT);
+  const [liquidateInfo, setLiquidateInfo] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    price: '0',
+    note: ''
   });
+  const refMap = {
+    address: useRef(),
+    phone: useRef(),
+    price: useRef(),
+    note: useRef()
+  };
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Block center middle>
         <ActivityIndicator />
-      </View>
+      </Block>
     );
   }
 
   if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title height={theme.sizes.title * 2}>
-          Error
-        </Typography>
-      </Block>
-    );
+    graphqlErrorHandler(error, () => {
+      navigation.goBack();
+    });
+    return null;
   }
 
+  if (data.device.availability === 'liquidated') {
+    showPopup(AppConst.NO_ACTIVE_POPUP, {
+      availability: 'liquidated',
+      handleConfirm: () => {
+        navigation.goBack();
+      }
+    });
+    return null;
+  }
+
+  /**
+   * Handle when text in Input changed
+   * @param {string} key name of property
+   * @param {string} text value of property
+   */
+  const handleTextChange = (key, text) => {
+    setLiquidateInfo({
+      ...liquidateInfo,
+      [key]:
+        key === 'price'
+          ? text
+              .split('.')
+              .join('')
+              .formatMoney()
+          : text
+    });
+  };
+
+  /**
+   * Handle to switch to the next Input when already submited the old Input
+   * @param {string} key name of property
+   */
+  const handleSubmitEditing = key => {
+    const ref = Object.values(refMap)[Object.keys(refMap).indexOf(key) + 1];
+    ref && ref.current.textInputRef.current.focus();
+  };
+
+  const handleLiquidateDeviceConfirm = async () => {
+    try {
+      await createLiquidateEvent({
+        variables: {
+          deviceId,
+          liquidateInfo: {
+            ...liquidateInfo,
+            price: parseInt(liquidateInfo.price.split('.').join(''), 10)
+          }
+        }
+      });
+      showPopup(AppConst.OK_POPUP, {
+        title: TextPackage.LIQUIDATE_SUCCESS,
+        message: TextPackage.LIQUIDATE_SUCCESS_MESSAGE,
+        confirmText: TextPackage.CONTINUE,
+        handleConfirm: async () => {
+          navigation.goBack();
+        }
+      });
+    } catch (error) {
+      graphqlErrorHandler(error);
+    }
+  };
+
+  const handleLiquidateDevice = () => {
+    showPopup(AppConst.OK_CANCEL_POPUP, {
+      title: TextPackage.LIQUIDATE_CONFIRM,
+      message: TextPackage.LIQUIDATE_CONFIRM_MESSAGE,
+      handleConfirm: handleLiquidateDeviceConfirm
+    });
+  };
+
   return (
-    <View style={{ flex: 1 }}>
+    <Block>
       <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        {Object.entries(displayData).map(([key, title]) => {
-          return <Input key={key} name={key} label={TextPackage[title]} style={styles.input} />;
+        {Object.entries(displayData).map(([key, value]) => {
+          return (
+            <Input
+              key={key}
+              name={key}
+              label={value}
+              style={generalStyles.input}
+              value={liquidateInfo[key]}
+              rightText={key === 'price' && 'VND'}
+              onChangeText={text => handleTextChange(key, text)}
+              onSubmitEditing={() => handleSubmitEditing(key)}
+              ref={refMap[key]}
+            />
+          );
         })}
       </Block>
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButton}>
-        <GradientButton gradient startColor={theme.colors.redDark} endColor={theme.colors.redLight}>
+      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={generalStyles.actionButtons}>
+        <GradientButton
+          gradient
+          shadow
+          startColor={theme.colors.redDark}
+          endColor={theme.colors.redLight}
+          onPress={handleLiquidateDevice}
+        >
           <Typography title bold white center>
             {TextPackage.LIQUIDATE}
           </Typography>
         </GradientButton>
       </Block>
-    </View>
+    </Block>
   );
 };
-
-const styles = StyleSheet.create({
-  actionButton: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%'
-  },
-  input: {
-    borderRadius: 0,
-    borderWidth: 0,
-    borderBottomColor: theme.colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth
-  }
-});
 
 LiquidateDevice.navigationOptions = () => ({
   title: TextPackage.LIQUIDATE_DEVICE
 });
 
-export default LiquidateDevice;
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  }
+});
+
+export default connect(null, mapDispatchToProps)(LiquidateDevice);

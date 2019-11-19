@@ -69,14 +69,13 @@ class SignUp extends Component {
   }
 
   handleSignUpCompleted = async () => {
-    const { navigation, showPopup, hidePopup } = this.props;
+    const { navigation, showPopup } = this.props;
 
     showPopup(AppConst.OK_POPUP, {
       title: TextPackage.SIGN_UP_SUCCESS,
       message: TextPackage.SIGN_UP_SUCCESS_MESSAGE,
       confirmText: TextPackage.CONTINUE,
       handleConfirm: () => {
-        hidePopup();
         navigation.goBack();
       }
     });
@@ -229,9 +228,6 @@ class SignUp extends Component {
 const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
-  },
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
   }
 });
 

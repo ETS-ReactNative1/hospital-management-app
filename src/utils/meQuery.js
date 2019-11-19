@@ -1,14 +1,13 @@
 import AppConst from 'src/AppConst';
-import AppData from 'src/AppData';
 import { ME } from 'src/utils/graphqlQueries';
 import cacheImage from 'src/utils/cacheImage';
 
-export default async () => {
+export default async accessToken => {
   try {
     const data = await fetch(`${AppConst.SERVER_URL}/graphql`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${AppData.accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({

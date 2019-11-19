@@ -1,15 +1,16 @@
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet, Image } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
+import { useQuery, useMutation } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { GradientButton, Block, Typography } from 'src/components';
-import { theme, localization } from 'src/constants';
+import { theme, localization, generalStyles } from 'src/constants';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
 import { DEVICE_INFO_CONDENSE } from 'src/utils/graphqlQueries';
 import { CREATE_EVENT } from 'src/utils/graphqlMutations';
-import { useQuery, useMutation } from 'react-apollo';
-import { connect } from 'react-redux';
 import { popupActions } from 'src/redux/actions';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
@@ -20,8 +21,7 @@ const displayData = {
   activeState: TextPackage.ACTIVE_STATE
 };
 
-const SwitchDevice = props => {
-  const { navigation, showPopup, hidePopup } = props;
+const SwitchDevice = ({ navigation, showPopup }) => {
   const { deviceId } = navigation.state.params;
   const [createEvent] = useMutation(CREATE_EVENT);
 
@@ -40,46 +40,28 @@ const SwitchDevice = props => {
   }
 
   if (error) {
-    return (
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>
-        <Typography bold title height={theme.sizes.title * 2}>
-          {TextPackage.DEVICE_INFO}
-        </Typography>
-        <Typography bold title>
-          {error}
-        </Typography>
-      </Block>
-    );
+    graphqlErrorHandler(error, () => {
+      navigation.goBack();
+    });
+    return null;
   }
 
   const { device } = data;
 
   if (device.availability !== 'active') {
-    return (
-      <Block middle center>
-        <Image
-          style={styles.image}
-          source={
-            device.availability === 'maintaining'
-              ? require('src/assets/images/maintaining.jpg')
-              : require('src/assets/images/liquidated.jpg')
-          }
-        />
-        <Block center padding={[0, theme.sizes.base * 5]}>
-          <Typography bold title uppercase>
-            {device.availability === 'maintaining'
-              ? TextPackage.DEVICE_MAINTAINING
-              : TextPackage.DEVICE_LIQUIDATED}
-          </Typography>
-          <Typography center gray>
-            {device.availability === 'maintaining'
-              ? TextPackage.DEVICE_MAINTAINING_DESC
-              : TextPackage.DEVICE_LIQUIDATED_DESC}
-          </Typography>
-        </Block>
-      </Block>
-    );
+    showPopup(AppConst.NO_ACTIVE_POPUP, {
+      availability: device.availability
+    });
   }
+
+  const handleStateSwitchConfirm = async () => {
+    try {
+      await createEvent({ variables: { deviceId } });
+      navigation.goBack();
+    } catch (error) {
+      graphqlErrorHandler(error);
+    }
+  };
 
   //Continue Modal after change state
   const handleStateSwitch = () => {
@@ -87,11 +69,7 @@ const SwitchDevice = props => {
       title: TextPackage.CHANGE_SUCCESS,
       message: device.activeState ? TextPackage.SWITCH_OFF_MESSAGE : TextPackage.SWITCH_ON_MESSAGE,
       confirmText: TextPackage.CONTINUE,
-      handleConfirm: () => {
-        hidePopup();
-        createEvent({ variables: { deviceId } });
-        navigation.goBack();
-      }
+      handleConfirm: handleStateSwitchConfirm
     });
   };
   // Continue Modal after report state
@@ -101,7 +79,6 @@ const SwitchDevice = props => {
       message: TextPackage.REPORT_SWITCH_SUCCESS_MESSAGE,
       confirmText: TextPackage.CONTINUE,
       handleConfirm: async () => {
-        hidePopup();
         //*: Should refetch here because of mutation (still not implement)
         await refetch();
       }
@@ -130,7 +107,7 @@ const SwitchDevice = props => {
               </Typography>
               {typeof device[key] !== 'boolean' && (
                 <Typography bold gray={!device[key]}>
-                  {device[key] || '(Không rõ)'}
+                  {device[key] || TextPackage.UNKNOWN}
                 </Typography>
               )}
               {key === 'activeState' && (
@@ -142,53 +119,38 @@ const SwitchDevice = props => {
           );
         })}
       </Block>
-      <Block padding={[theme.sizes.base, theme.sizes.base * 2]} style={styles.actionButtons}>
-        <GradientButton
-          gradient
-          shadow
-          startColor={theme.colors.redDark}
-          endColor={theme.colors.redLight}
-          onPress={handleReport}
+      {device.availability === 'active' && (
+        <Block
+          padding={[theme.sizes.base, theme.sizes.base * 2]}
+          style={generalStyles.actionButtons}
         >
-          <Typography body bold white center>
-            {TextPackage.REPORT_STATE}
-          </Typography>
-        </GradientButton>
-        <GradientButton gradient shadow onPress={handleStateSwitch}>
-          <Typography title bold white center>
-            {device.activeState ? TextPackage.TURN_OFF : TextPackage.TURN_ON}
-          </Typography>
-        </GradientButton>
-      </Block>
+          <GradientButton
+            gradient
+            shadow
+            startColor={theme.colors.redDark}
+            endColor={theme.colors.redLight}
+            onPress={handleReport}
+          >
+            <Typography body bold white center>
+              {TextPackage.REPORT_STATE}
+            </Typography>
+          </GradientButton>
+          <GradientButton gradient shadow onPress={handleStateSwitch}>
+            <Typography title bold white center>
+              {device.activeState ? TextPackage.TURN_OFF : TextPackage.TURN_ON}
+            </Typography>
+          </GradientButton>
+        </Block>
+      )}
     </Block>
   );
 };
-
-const styles = StyleSheet.create({
-  actionButtons: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%'
-  },
-  image: {
-    width: '100%',
-    height: '50%',
-    resizeMode: 'contain',
-    shadowColor: theme.colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 10
-  }
-});
 
 SwitchDevice.navigationOptions = () => ({
   title: TextPackage.SWITCH_DEVICE
 });
 
 const mapDispatchToProps = dispatch => ({
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
-  },
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
   }

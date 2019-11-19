@@ -1,13 +1,13 @@
 import React from 'react';
+import { StyleSheet, Image } from 'react-native';
 import { localization } from 'src/constants';
-import { popupActions } from 'src/redux/actions';
 import { connect } from 'react-redux';
 import AppData from 'src/AppData';
 import { Typography, Dialog } from 'src/components';
 
 const TextPackage = localization[AppData.language];
 
-const handleError = errorMsg => {
+const handleError = (errorMsg, path) => {
   if (errorMsg.indexOf('Email is already taken') !== -1) {
     return {
       title: TextPackage.EMAIL_IS_TAKEN_ERR,
@@ -25,14 +25,13 @@ const handleError = errorMsg => {
   }
 
   if (errorMsg.indexOf('No user found') !== -1) {
-    return {
-      title: TextPackage.SIGN_IN_ERR,
-      message: TextPackage.INVALID_EMAIL_ERR,
-      confirmText: TextPackage.CONTINUE
-    };
-  }
-
-  if (errorMsg.indexOf('No user exist') !== -1) {
+    if (path === 'signIn') {
+      return {
+        title: TextPackage.SIGN_IN_ERR,
+        message: TextPackage.INVALID_EMAIL_ERR,
+        confirmText: TextPackage.CONTINUE
+      };
+    }
     return {
       title: TextPackage.ERROR,
       message: TextPackage.EMAIL_NOT_EXIST_ERR,
@@ -56,7 +55,22 @@ const handleError = errorMsg => {
     };
   }
 
-  if (errorMsg.indexOf('Network request failed') !== -1) {
+  if (errorMsg.indexOf('No device found') !== -1) {
+    return {
+      title: TextPackage.NO_DEVICE_FOUND_ERR,
+      message: TextPackage.NO_DEVICE_FOUND_ERR_MESSAGE,
+      confirmText: TextPackage.BACK
+    };
+  }
+
+  if (errorMsg.indexOf('Database leaked') !== -1) {
+    return {
+      title: TextPackage.DATABASE_LEAKED_ERR,
+      message: TextPackage.DATABASE_LEAKED_ERR_MESSAGE
+    };
+  }
+
+  if (errorMsg.indexOf('Response not successful: Received status code 400') !== -1) {
     return {
       title: TextPackage.NO_INTERNET_ERR_TITLE,
       message: TextPackage.NO_INTERNET_ERR_MESSAGE,
@@ -71,24 +85,34 @@ const handleError = errorMsg => {
   };
 };
 
-const ErrorPopup = ({ popupProps, hidePopup }) => {
-  const { message, ...otherProps } = handleError(popupProps.errorMsg);
+const ErrorPopup = ({ popupProps }) => {
+  const { message, ...otherProps } = handleError(popupProps.errorMsg, popupProps.path);
 
   return (
-    <Dialog hideCancel onRequestClose={hidePopup} {...otherProps}>
+    <Dialog
+      hideCancel
+      onRequestClose={popupProps.handleConfirm}
+      handleConfirm={popupProps.handleConfirm}
+      {...otherProps}
+    >
       <Typography body justify>
+        {popupProps.errorMsg.indexOf('No device found') !== -1 && (
+          <Image style={styles.image} source={require('src/assets/images/not_found.png')} />
+        )}
         {message}
       </Typography>
     </Dialog>
   );
 };
 
-const mapStateToProps = state => state.popup;
-
-const mapDispatchToProps = dispatch => ({
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 250,
+    resizeMode: 'cover'
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ErrorPopup);
+const mapStateToProps = state => state.popup;
+
+export default connect(mapStateToProps)(ErrorPopup);

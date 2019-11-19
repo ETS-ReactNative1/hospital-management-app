@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, View, TouchableOpacity, PermissionsAndroid } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { useMutation } from 'react-apollo';
 import { connect } from 'react-redux';
 
@@ -48,29 +48,7 @@ const displayData = {
   }
 };
 
-async function requestCameraPermission() {
-  try {
-    const granted = await PermissionsAndroid.requestMultiple(
-      [
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      ],
-      {
-        title: 'Cool Photo App Camera Permission',
-        message:
-          'Cool Photo App needs access to your camera ' + 'so you can take awesome pictures.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK'
-      }
-    );
-    console.log(granted);
-  } catch (err) {
-    console.warn(err);
-  }
-}
-
-const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }) => {
+const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, reduxSignOut }) => {
   const [avatarUpload] = useMutation(AVATAR_UPLOAD);
   const [signOut, { client }] = useMutation(SIGN_OUT);
 
@@ -97,7 +75,7 @@ const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }
       if (response.error) {
         console.log('ImagePicker Error: ', response.error);
         if (response.error === "Permissions weren't granted") {
-          // await requestCameraPermission();
+          //TODO: handle later in the future
         }
       } else {
         const file = new ReactNativeFile({
@@ -127,9 +105,8 @@ const SettingsScreen = ({ navigation, userInfo, updateMe, showPopup, hidePopup }
       handleConfirm: async () => {
         await signOut();
         await client.resetStore();
-        AppData.accessToken = '';
+        reduxSignOut();
         navigation.navigate('Auth');
-        hidePopup();
       }
     });
   };
@@ -231,11 +208,11 @@ const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
   },
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
-  },
   updateMe: me => {
     dispatch(meActions.updateMe(me));
+  },
+  reduxSignOut: () => {
+    dispatch(meActions.signOut());
   }
 });
 

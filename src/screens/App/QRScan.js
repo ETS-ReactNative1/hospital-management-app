@@ -3,7 +3,7 @@ import { RNCamera } from 'react-native-camera';
 import { StyleSheet, Vibration, Image } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 
-import { theme, localization, generalStyles } from 'src/constants';
+import { theme, localization } from 'src/constants';
 import { BarcodeMask, Block, Typography } from 'src/components';
 import AppData from 'src/AppData';
 

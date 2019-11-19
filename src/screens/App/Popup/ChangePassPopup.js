@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import validate from 'src/utils/validateOverride';
 import AppData from 'src/AppData';
 import AppConst from 'src/AppConst';
+import graphqlErrorHandler from 'src/utils/graphqlErrorHandler';
 
 const TextPackage = localization[AppData.language];
 
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
+const ChangePassPopup = ({ navigation, showPopup, reduxSignOut }) => {
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -64,12 +65,6 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
 
   const hasErrors = key => formState.touched[key] && formState.errors[key];
 
-  const handleChangePasswordError = error => {
-    showPopup(AppConst.ERROR_POPUP, {
-      errorMsg: error.message
-    });
-  };
-
   const handleChangePassword = async () => {
     try {
       await changePassword({
@@ -85,15 +80,12 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
         handleConfirm: async () => {
           await signOut();
           await client.resetStore();
-          AppData.accessToken = '';
+          reduxSignOut();
           navigation.navigate('Auth');
-          hidePopup();
         }
       });
     } catch (error) {
-      const { graphQLErrors, networkError } = error;
-      graphQLErrors && handleChangePasswordError(graphQLErrors[0]);
-      networkError && handleChangePasswordError(networkError);
+      graphqlErrorHandler(error);
     }
   };
 
@@ -143,7 +135,6 @@ const ChangePassPopup = ({ navigation, showPopup, hidePopup }) => {
       confrimText={TextPackage.COMPLETE}
       handleConfirm={handleChangePassword}
       confirmDisable={!formState.isValid}
-      onRequestClose={hidePopup}
     >
       <View>
         <Input
@@ -189,15 +180,12 @@ const mapDispatchToProps = dispatch => ({
   showPopup: (popupType, popupProps) => {
     dispatch(popupActions.showPopup(popupType, popupProps));
   },
-  hidePopup: () => {
-    dispatch(popupActions.hidePopup());
-  },
   updateMe: me => {
     dispatch(meActions.updateMe(me));
+  },
+  reduxSignOut: () => {
+    dispatch(meActions.signOut());
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ChangePassPopup);
+export default connect(null, mapDispatchToProps)(ChangePassPopup);

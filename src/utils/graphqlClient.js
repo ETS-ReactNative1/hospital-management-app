@@ -5,8 +5,10 @@ import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import jwtDecode from 'jwt-decode';
 
-import AppData from '../AppData';
 import AppConst from '../AppConst';
+import store from 'src/redux/store';
+import meQuery from './meQuery';
+import { meActions } from 'src/redux/actions';
 
 const httpLink = createUploadLink({
   uri: `${AppConst.SERVER_URL}/graphql`,
@@ -19,7 +21,7 @@ const authLink = new ApolloLink(
       let handle;
       Promise.resolve(operation)
         .then(operation => {
-          const accessToken = AppData.accessToken;
+          const { accessToken } = store.getState().me;
 
           if (accessToken) {
             operation.setContext({
@@ -47,12 +49,12 @@ const authLink = new ApolloLink(
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: 'accessToken',
   isTokenValidOrUndefined: () => {
-    const token = AppData.accessToken;
+    const { accessToken } = store.getState().me;
 
-    if (!token) return true;
+    if (!accessToken) return true;
 
     try {
-      const { exp } = jwtDecode(token);
+      const { exp } = jwtDecode(accessToken);
       return !(Date.now() >= exp * 1000);
     } catch {
       return false;
@@ -64,8 +66,10 @@ const refreshTokenLink = new TokenRefreshLink({
       credentials: 'include'
     });
   },
-  handleFetch: accessToken => {
-    AppData.accessToken = accessToken;
+  handleFetch: async accessToken => {
+    const me = await meQuery(accessToken);
+    me.accessToken = accessToken;
+    store.dispatch(meActions.updateMe(me));
   },
   handleError: err => {
     console.warn('Your refresh token is invalid. Try to relogin');
@@ -76,7 +80,7 @@ const refreshTokenLink = new TokenRefreshLink({
 const defaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
-    errorPolicy: 'ignore'
+    errorPolicy: 'all'
   },
   query: {
     fetchPolicy: 'no-cache',

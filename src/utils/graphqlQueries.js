@@ -1,5 +1,14 @@
 import gql from 'graphql-tag';
 
+export const DEVICE_AVAILABILITY = gql`
+  query Device($id: ID!) {
+    device(id: $id) {
+      id
+      availability
+    }
+  }
+`;
+
 export const DEVICE_INFO_CONDENSE = gql`
   query Device($id: ID!) {
     device(id: $id) {
@@ -67,6 +76,9 @@ export const LASTEST_MAINTAIN_EVENT = gql`
     lastestMaintainEvent(deviceId: $deviceId) {
       id
       finished
+      device {
+        availability
+      }
       maintainInfo {
         name
         address
@@ -86,6 +98,7 @@ export const MAINTAIN_EVENTS_BY_DEVICE = gql`
       createdAt
       maintainInterval
       creator {
+        email
         lastName
         firstName
       }
@@ -99,6 +112,27 @@ export const MAINTAIN_EVENTS_BY_DEVICE = gql`
       receiver {
         firstName
         lastName
+      }
+    }
+  }
+`;
+
+export const LIQUIDATE_EVENT_BY_DEVICE = gql`
+  query LiquidateEventByDevice($deviceId: ID!) {
+    liquidateEventByDevice(deviceId: $deviceId) {
+      id
+      createdAt
+      creator {
+        lastName
+        firstName
+        email
+      }
+      liquidateInfo {
+        name
+        address
+        price
+        phone
+        note
       }
     }
   }

@@ -5,6 +5,7 @@ import { GradientButton, Block, Typography } from 'src/components';
 import { theme, localization } from 'src/constants';
 import AppData from 'src/AppData';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   title: {
@@ -27,10 +28,8 @@ const styles = StyleSheet.create({
 
 const TextPackage = localization[AppData.language];
 
-const AuthMain = props => {
-  const { navigation } = props;
-
-  if (AppData.accessToken) {
+const AuthMain = ({ navigation, accessToken }) => {
+  if (accessToken) {
     navigation.navigate('App');
   }
 
@@ -78,4 +77,6 @@ const AuthMain = props => {
   );
 };
 
-export default AuthMain;
+const mapStateToProps = state => state.me;
+
+export default connect(mapStateToProps)(AuthMain);

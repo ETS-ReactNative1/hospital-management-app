@@ -4,7 +4,9 @@ const initialState = {
   firstName: null,
   lastName: null,
   phone: null,
-  avatar: require('src/assets/images/avatar.png')
+  avatar: require('src/assets/images/avatar.png'),
+  accessToken: '',
+  language: 'VN'
 };
 
 export default (state = initialState, action) => {
@@ -18,6 +20,9 @@ export default (state = initialState, action) => {
       }
       // console.log(newState);
       return newState;
+    case 'SIGN_OUT': {
+      return initialState;
+    }
     default:
       return state;
   }

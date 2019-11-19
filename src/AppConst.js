@@ -10,7 +10,8 @@ class Constants {
     this.CHANGE_PASS_POPUP = n++;
     this.CHANGE_INFO_POPUP = n++;
     this.NO_PERMISSION_POPUP = n++;
-    this.NO_INTERNET_CONNECTION = n++;
+    this.NO_INTERNET_POPUP = n++;
+    this.NO_ACTIVE_POPUP = n++;
   }
 }
 

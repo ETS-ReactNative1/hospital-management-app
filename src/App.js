@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
 
 import { Block } from './components';
-import AppData from './AppData';
 import AppConst from './AppConst';
 import Navigation from './screens';
 import Popup from './screens/App/Popup';
@@ -46,10 +45,10 @@ const App = ({ updateMe, showPopup, hidePopup }) => {
     })
       .then(async data => {
         const { accessToken } = await data.json();
-        AppData.accessToken = accessToken;
         if (accessToken) {
           // console.log('fetched meQuery');
-          const me = await meQuery();
+          const me = await meQuery(accessToken);
+          me.accessToken = accessToken;
           updateMe(me);
         }
         setLoading(false);

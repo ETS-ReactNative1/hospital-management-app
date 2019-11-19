@@ -23,6 +23,7 @@ const VN = {
   OPERATE_MORE_EFFICIENT: 'Vận hành hiệu quả hơn',
   MANAGE: 'Quản lý',
   HOSPITAL_EQUIPMENT: 'Thiết bị bệnh viện',
+  BACK: 'Quay lại',
 
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
@@ -64,7 +65,9 @@ const VN = {
   MAINTAIN_COST: 'Chi phí bảo trì',
   MAINTAIN_COST_EXPECT: 'Chi phí dự kiến',
   NOTE: 'Ghi chú',
-  RECEIVER: 'Người nhận lại',
+  RECEIVER: 'Nhân viên nhận lại',
+  LIQUIDATE_CREATOR: 'Nhân viên thanh lý',
+  LIQUIDATE_TIME: 'Thời điểm thanh lý',
   UPDATE_MAINTAIN: 'Cập nhật bảo trì',
   LIQUIDATE_COMPANY: 'Đơn vị mua',
   LIQUIDATE_PRICE: 'Giá trị thanh lý',
@@ -79,6 +82,11 @@ const VN = {
     'Hệ thống sẽ ghi nhận thông tin bảo trì và thay đổi trạng thái của thiết bị. Hãy chắc chắn rằng bạn muốn cập nhật trạng thái bảo trì cho thiết bị này!',
   MAINTAIN_FINISHED_CONFIRM_MESSAGE:
     'Hệ thống sẽ ghi nhận thông tin bảo trì và thay đổi trạng thái của thiết bị. Hãy chắc chắn việc bảo trì thiết bị này đã hoàn tất! ',
+  LIQUIDATE_CONFIRM: 'Xác nhận thanh lý',
+  LIQUIDATE_CONFIRM_MESSAGE:
+    'Hệ thống sẽ ghi nhận thông tin thanh lý của thiết bị này. Hãy chắc chắn rằng bạn đã thanh lý thiết bị!',
+  LIQUIDATE_SUCCESS: 'Thanh lý thành công',
+  LIQUIDATE_SUCCESS_MESSAGE: 'Thông tin về việc thanh lý thiết bị đã được hệ thống ghi nhận.',
   UPDATE_SUCCESS: 'Cập nhật thành công',
   UPDATE_SUCCESS_MESSAGE: 'Thông tin về bảo trì thiết bị đã được hệ thống ghi nhận.',
   REPORT_MAINTAIN_MESSAGE:
@@ -114,7 +122,6 @@ const VN = {
   SURE: 'Chắc chắn',
   CHANGE_PASSWORD_SUCCESSFUL_MESSAGE:
     'Mật khẩu của bạn đã được cập nhật thành công!\nĐể đảm bảo an toàn, bạn sẽ phải đăng nhập lại với mật khẩu mới.',
-  PASSWORD: 'Mật khẩu',
   NEW_PASSWORD: 'Mật khẩu mới',
   OLD_PASSWORD: 'Mật khẩu cũ',
   CONFRIM_PASSWORD: 'Nhập lại mật khẩu mới',
@@ -175,7 +182,13 @@ const VN = {
     'Để hoạt động được, ứng dụng cần bạn cấp quyền cho phép chụp ảnh từ camera và chọn hình ảnh từ thư viện của bạn',
   NO_CAMERA_PERMISSION: 'Không có quyền truy cập Camera',
   NO_CAMERA_PERMISSION_MESSAGE:
-    'Chức năng này không thể hoạt động nếu bạn không cấp quyền truy cập camera cho ứng dụng'
+    'Chức năng này không thể hoạt động nếu bạn không cấp quyền truy cập camera cho ứng dụng',
+  NO_DEVICE_FOUND_ERR: 'Không tìm thấy thiết bị',
+  NO_DEVICE_FOUND_ERR_MESSAGE:
+    'Hệ thống không tìm thấy thiết bị với mã qrcode này. Vui lòng kiểm tra lại với quản lý!',
+  DATABASE_LEAKED_ERR: 'Lỗi cơ sở dữ liệu',
+  DATABASE_LEAKED_ERR_MESSAGE:
+    'Tồn tại một lỗ hổng trong cơ sở dữ liệu. Hãy báo cáo với nhân viên quản lý thiết bị về vấn đề này!'
 };
 
 export { VN };

@@ -10,7 +10,7 @@ const TextPackage = localization[AppData.language];
 
 const NoInternetPopup = () => {
   return (
-    <Dialog title={TextPackage.NO_INTERNET} confirmText={TextPackage.RETRY} hideCancel>
+    <Dialog title={TextPackage.NO_INTERNET} confirmText={TextPackage.RETRY}>
       <View>
         <Image style={styles.image} source={require('src/assets/images/no_internet.png')} />
         <Typography gray center>
