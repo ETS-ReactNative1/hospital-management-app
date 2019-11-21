@@ -37,7 +37,9 @@ const LiquidateInfo = ({ navigation }) => {
     return null;
   }
 
-  const { liquidateEventByDevice: event } = data;
+  const {
+    liquidateEventByDevice: { data: event }
+  } = data;
 
   return (
     <Block padding={[theme.sizes.base, theme.sizes.base * 2]}>

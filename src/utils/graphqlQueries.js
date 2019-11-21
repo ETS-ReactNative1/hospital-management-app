@@ -59,13 +59,15 @@ export const ME = gql`
 export const ACTIVE_EVENTS_BY_DEVICE = gql`
   query ActiveEventsByDevice($deviceId: ID!) {
     activeEventsByDevice(deviceId: $deviceId) {
-      id
-      actionType
-      createdAt
-      usedInterval
-      creator {
-        firstName
-        lastName
+      data {
+        id
+        actionType
+        createdAt
+        usedInterval
+        creator {
+          firstName
+          lastName
+        }
       }
     }
   }
@@ -93,25 +95,27 @@ export const LASTEST_MAINTAIN_EVENT = gql`
 export const MAINTAIN_EVENTS_BY_DEVICE = gql`
   query MaintainEventsByDevice($deviceId: ID!) {
     maintainEventsByDevice(deviceId: $deviceId) {
-      id
-      finished
-      createdAt
-      maintainInterval
-      creator {
-        email
-        lastName
-        firstName
-      }
-      maintainInfo {
-        name
-        address
-        cost
-        phone
-        note
-      }
-      receiver {
-        firstName
-        lastName
+      data {
+        id
+        finished
+        createdAt
+        maintainInterval
+        creator {
+          email
+          lastName
+          firstName
+        }
+        maintainInfo {
+          name
+          address
+          cost
+          phone
+          note
+        }
+        receiver {
+          firstName
+          lastName
+        }
       }
     }
   }
@@ -120,19 +124,21 @@ export const MAINTAIN_EVENTS_BY_DEVICE = gql`
 export const LIQUIDATE_EVENT_BY_DEVICE = gql`
   query LiquidateEventByDevice($deviceId: ID!) {
     liquidateEventByDevice(deviceId: $deviceId) {
-      id
-      createdAt
-      creator {
-        lastName
-        firstName
-        email
-      }
-      liquidateInfo {
-        name
-        address
-        price
-        phone
-        note
+      data {
+        id
+        createdAt
+        creator {
+          lastName
+          firstName
+          email
+        }
+        liquidateInfo {
+          name
+          address
+          price
+          phone
+          note
+        }
       }
     }
   }

@@ -32,7 +32,9 @@ const ActiveHistory = ({ navigation }) => {
     return null;
   }
 
-  const { activeEventsByDevice: events } = data;
+  const {
+    activeEventsByDevice: { data: events }
+  } = data;
 
   if (events.length === 0) {
     return (

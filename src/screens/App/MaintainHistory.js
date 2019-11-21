@@ -28,7 +28,7 @@ const MaintainHistory = ({ navigation }) => {
 
   useEffect(() => {
     if (!data) return;
-    setEvents(data.maintainEventsByDevice.reverse());
+    setEvents(data.maintainEventsByDevice.data);
   }, [data]);
 
   if (loading || !events) {
