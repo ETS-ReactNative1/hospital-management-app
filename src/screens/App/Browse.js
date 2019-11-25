@@ -1,11 +1,12 @@
 import React, { memo, useEffect } from 'react';
-import { Image, StyleSheet, TouchableOpacity, PermissionsAndroid } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, PermissionsAndroid, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import AppConst from 'src/AppConst';
+import AppData from 'src/AppData';
 import { Card, Badge, Block, Typography } from 'src/components';
-import { theme, mocks } from 'src/constants';
+import { theme, mocks, localization } from 'src/constants';
 import { popupActions } from 'src/redux/actions';
 
 const styles = StyleSheet.create({
@@ -31,6 +32,8 @@ const styles = StyleSheet.create({
   }
 });
 
+const TextPackage = localization[AppData.language];
+
 const Browse = ({ role, showPopup, navigation }) => {
   const handleCategoryPressed = category => {
     if (category.role.includes(role)) navigation.navigate('QRScan', category);
@@ -48,8 +51,26 @@ const Browse = ({ role, showPopup, navigation }) => {
     }
   };
 
+  const handleBackButtonPressAndroid = () => {
+    if (navigation.isFocused()) {
+      showPopup(AppConst.OK_CANCEL_POPUP, {
+        title: TextPackage.EXIT_CONFIRM,
+        message: TextPackage.EXIT_CONFIRM_MESSAGE,
+        handleConfirm: () => {
+          BackHandler.exitApp();
+        }
+      });
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     requestCameraPermission();
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonPressAndroid);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonPressAndroid);
+    };
   }, []);
 
   return (

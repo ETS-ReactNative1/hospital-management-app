@@ -95,10 +95,10 @@ const ErrorPopup = ({ popupProps }) => {
       handleConfirm={popupProps.handleConfirm}
       {...otherProps}
     >
+      {popupProps.errorMsg.indexOf('No device found') !== -1 && (
+        <Image style={styles.image} source={require('src/assets/images/not_found.png')} />
+      )}
       <Typography body justify>
-        {popupProps.errorMsg.indexOf('No device found') !== -1 && (
-          <Image style={styles.image} source={require('src/assets/images/not_found.png')} />
-        )}
         {message}
       </Typography>
     </Dialog>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 250,
-    resizeMode: 'cover'
+    resizeMode: 'center'
   }
 });
 

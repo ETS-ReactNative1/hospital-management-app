@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
+import axios from 'axios';
 
 import { Block } from './components';
 import AppConst from './AppConst';
+import AppData from './AppData';
 import Navigation from './screens';
+import { localization, generalStyles } from './constants';
 import Popup from './screens/App/Popup';
 import { meActions, popupActions } from './redux/actions';
 import meQuery from './utils/meQuery';
 
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '50%',
-    resizeMode: 'contain'
-  }
-});
+const TextPackage = localization[AppData.language];
 
 const App = ({ updateMe, showPopup, hidePopup }) => {
   const [loading, setLoading] = useState(true);
-  const [popupState, setPopupState] = useState(false);
+  const [retry, setRetry] = useState(false);
   // Subscribe
   NetInfo.addEventListener(state => {
     // console.log('Connection type', state.type);
@@ -28,40 +25,57 @@ const App = ({ updateMe, showPopup, hidePopup }) => {
     const disconnected = !state.isConnected || !state.isInternetReachable;
     if (disconnected) {
       showPopup(AppConst.NO_INTERNET_POPUP);
-      setPopupState(true);
     }
 
-    if (popupState && !disconnected) {
+    if (!disconnected) {
       hidePopup();
-      setPopupState(false);
     }
   });
 
   useEffect(() => {
-    // console.log('fetched refresh-token');
-    fetch(`${AppConst.SERVER_URL}/refresh-token`, {
-      method: 'POST',
-      credentials: 'include'
-    })
-      .then(async data => {
-        const { accessToken } = await data.json();
-        if (accessToken) {
-          // console.log('fetched meQuery');
-          const me = await meQuery(accessToken);
-          me.accessToken = accessToken;
-          updateMe(me);
-        }
-        setLoading(false);
+    if (loading) {
+      // console.log('axios called');
+      axios({
+        method: 'POST',
+        withCredentials: true,
+        url: `${AppConst.SERVER_URL}/refresh-token`,
+        timeout: 4000
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(async response => {
+          if (response.status === 200) {
+            const { accessToken } = response.data;
+            if (accessToken) {
+              // console.log('fetched meQuery');
+              const me = await meQuery(accessToken);
+              me.accessToken = accessToken;
+              updateMe(me);
+            }
+            setLoading(false);
+          }
+        })
+        .catch(err => {
+          if (err.message === 'timeout of 4000ms exceeded') {
+            showPopup(AppConst.OK_CANCEL_POPUP, {
+              title: TextPackage.TIMEOUT_ERR,
+              message: TextPackage.TIMEOUT_ERR_MESSAGE,
+              confirmText: TextPackage.RETRY,
+              cancelText: TextPackage.EXIT,
+              handleCancel: () => {
+                BackHandler.exitApp();
+              },
+              handleConfirm: () => {
+                setRetry(!retry);
+              }
+            });
+          }
+        });
+    }
   });
 
   if (loading) {
     return (
       <Block middle center color="white">
-        <Image style={styles.image} source={require('src/assets/images/auth.jpg')} />
+        <Image style={generalStyles.image} source={require('src/assets/images/auth.jpg')} />
         <Popup />
       </Block>
     );

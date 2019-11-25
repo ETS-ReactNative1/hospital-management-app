@@ -52,6 +52,7 @@ const QRScanScreen = props => {
   const switchFlashState = state => {
     setFlashState(state ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off);
   };
+
   if (isFocused) {
     return (
       <RNCamera

@@ -1,11 +1,13 @@
-import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Image, BackHandler } from 'react-native';
 
 import { GradientButton, Block, Typography } from 'src/components';
 import { theme, localization } from 'src/constants';
+import AppConst from 'src/AppConst';
 import AppData from 'src/AppData';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
+import { popupActions } from 'src/redux/actions';
 
 const styles = StyleSheet.create({
   title: {
@@ -28,10 +30,31 @@ const styles = StyleSheet.create({
 
 const TextPackage = localization[AppData.language];
 
-const AuthMain = ({ navigation, accessToken }) => {
+const AuthMain = ({ navigation, accessToken, showPopup }) => {
   if (accessToken) {
     navigation.navigate('App');
   }
+
+  const handleBackButtonPressAndroid = () => {
+    if (navigation.isFocused()) {
+      showPopup(AppConst.OK_CANCEL_POPUP, {
+        title: TextPackage.EXIT_CONFIRM,
+        message: TextPackage.EXIT_CONFIRM_MESSAGE,
+        handleConfirm: () => {
+          BackHandler.exitApp();
+        }
+      });
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonPressAndroid);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonPressAndroid);
+    };
+  }, []);
 
   return (
     <Block center padding={[0, theme.sizes.base * 2]}>
@@ -79,4 +102,10 @@ const AuthMain = ({ navigation, accessToken }) => {
 
 const mapStateToProps = state => state.me;
 
-export default connect(mapStateToProps)(AuthMain);
+const mapDispatchToProps = dispatch => ({
+  showPopup: (popupType, popupProps) => {
+    dispatch(popupActions.showPopup(popupType, popupProps));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthMain);

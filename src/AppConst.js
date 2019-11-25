@@ -1,6 +1,6 @@
 class Constants {
   constructor() {
-    this.SERVER_URL = 'http://192.168.1.24:8000';
+    this.SERVER_URL = 'http://171.244.142.172:8000';
 
     let n = 0;
     this.NO_POPUP = n++;
