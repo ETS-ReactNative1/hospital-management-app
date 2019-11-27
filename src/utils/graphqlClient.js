@@ -67,6 +67,7 @@ const refreshTokenLink = new TokenRefreshLink({
     });
   },
   handleFetch: async accessToken => {
+    console.log('client: ', accessToken);
     const me = await meQuery(accessToken);
     me.accessToken = accessToken;
     store.dispatch(meActions.updateMe(me));

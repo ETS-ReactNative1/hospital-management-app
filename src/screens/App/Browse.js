@@ -121,7 +121,7 @@ const AvatarComponent = connect(mapStateToProps)(Avatar);
 
 Browse.navigationOptions = ({ navigation }) => {
   return {
-    title: 'Chức năng',
+    title: TextPackage.FUNCTION,
     headerTitleStyle: {
       fontWeight: 'bold',
       fontSize: theme.sizes.header,

@@ -68,10 +68,12 @@ class SignIn extends Component {
   }
 
   handleSignInCompleted = async data => {
-    const { navigation } = this.props;
-    const me = await meQuery(data.signIn.accessToken);
-    this.props.updateMe(me);
+    const { navigation, updateMe } = this.props;
     navigation.navigate('App');
+    //Should navigate before await or it will cause warning 'Cannot update during an existing state transition'
+    const me = await meQuery(data.signIn.accessToken);
+    me.accessToken = data.signIn.accessToken;
+    updateMe(me);
   };
 
   handleTextChange = (name, text) => {

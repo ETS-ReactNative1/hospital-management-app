@@ -33,43 +33,41 @@ const App = ({ updateMe, showPopup, hidePopup }) => {
   });
 
   useEffect(() => {
-    if (loading) {
-      // console.log('axios called');
-      axios({
-        method: 'POST',
-        withCredentials: true,
-        url: `${AppConst.SERVER_URL}/refresh-token`,
-        timeout: 4000
+    // console.log('axios called');
+    axios({
+      method: 'POST',
+      withCredentials: true,
+      url: `${AppConst.SERVER_URL}/refresh-token`,
+      timeout: 4000
+    })
+      .then(async response => {
+        if (response.status === 200) {
+          const { accessToken } = response.data;
+          if (accessToken) {
+            // console.log('fetched meQuery');
+            const me = await meQuery(accessToken);
+            me.accessToken = accessToken;
+            updateMe(me);
+          }
+          setLoading(false);
+        }
       })
-        .then(async response => {
-          if (response.status === 200) {
-            const { accessToken } = response.data;
-            if (accessToken) {
-              // console.log('fetched meQuery');
-              const me = await meQuery(accessToken);
-              me.accessToken = accessToken;
-              updateMe(me);
+      .catch(err => {
+        if (err.message === 'timeout of 4000ms exceeded' || err.message === 'Network Error') {
+          showPopup(AppConst.OK_CANCEL_POPUP, {
+            title: TextPackage.TIMEOUT_ERR,
+            message: TextPackage.TIMEOUT_ERR_MESSAGE,
+            confirmText: TextPackage.RETRY,
+            cancelText: TextPackage.EXIT,
+            handleCancel: () => {
+              BackHandler.exitApp();
+            },
+            handleConfirm: () => {
+              setRetry(!retry);
             }
-            setLoading(false);
-          }
-        })
-        .catch(err => {
-          if (err.message === 'timeout of 4000ms exceeded') {
-            showPopup(AppConst.OK_CANCEL_POPUP, {
-              title: TextPackage.TIMEOUT_ERR,
-              message: TextPackage.TIMEOUT_ERR_MESSAGE,
-              confirmText: TextPackage.RETRY,
-              cancelText: TextPackage.EXIT,
-              handleCancel: () => {
-                BackHandler.exitApp();
-              },
-              handleConfirm: () => {
-                setRetry(!retry);
-              }
-            });
-          }
-        });
-    }
+          });
+        }
+      });
   });
 
   if (loading) {

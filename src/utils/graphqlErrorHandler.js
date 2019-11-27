@@ -5,7 +5,7 @@ import AppConst from '../AppConst';
 const graphqlErrorHandler = ({ graphQLErrors, networkError }, handleConfirm) => {
   graphQLErrors &&
     graphQLErrors.forEach(error => {
-      console.log('Graphql Error: ', error);
+      // console.log('Graphql Error: ', error);
       if (
         error.message === 'Device was liquidated' ||
         error.message === 'Device is under maintain'

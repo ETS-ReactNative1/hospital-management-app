@@ -12,7 +12,7 @@ const handleError = (errorMsg, path) => {
     return {
       title: TextPackage.EMAIL_IS_TAKEN_ERR,
       message: TextPackage.EMAIL_IS_TAKEN_ERR_MESSAGE,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 
@@ -20,7 +20,7 @@ const handleError = (errorMsg, path) => {
     return {
       title: TextPackage.SIGN_IN_ERR,
       message: TextPackage.UNCONFIRMED_EMAIL_ERR,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 
@@ -29,13 +29,13 @@ const handleError = (errorMsg, path) => {
       return {
         title: TextPackage.SIGN_IN_ERR,
         message: TextPackage.INVALID_EMAIL_ERR,
-        confirmText: TextPackage.CONTINUE
+        confirmText: TextPackage.UNDERSTOOD
       };
     }
     return {
       title: TextPackage.ERROR,
       message: TextPackage.EMAIL_NOT_EXIST_ERR,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 
@@ -43,7 +43,7 @@ const handleError = (errorMsg, path) => {
     return {
       title: TextPackage.SIGN_IN_ERR,
       message: TextPackage.INVALID_PASSWORD_ERR,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 
@@ -51,7 +51,7 @@ const handleError = (errorMsg, path) => {
     return {
       title: TextPackage.VALIDATION_ERR,
       message: TextPackage.INVALID_OLD_PASSWORD_ERR,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 
@@ -74,7 +74,15 @@ const handleError = (errorMsg, path) => {
     return {
       title: TextPackage.NO_INTERNET_ERR_TITLE,
       message: TextPackage.NO_INTERNET_ERR_MESSAGE,
-      confirmText: TextPackage.CONTINUE
+      confirmText: TextPackage.UNDERSTOOD
+    };
+  }
+
+  if (errorMsg.indexOf('Network request failed') !== -1) {
+    return {
+      title: TextPackage.TIMEOUT_ERR,
+      message: TextPackage.TIMEOUT_ERR_MESSAGE,
+      confirmText: TextPackage.UNDERSTOOD
     };
   }
 

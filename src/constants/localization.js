@@ -25,6 +25,7 @@ const VN = {
   HOSPITAL_EQUIPMENT: 'Thiết bị bệnh viện',
   BACK: 'Quay lại',
   EXIT: 'Thoát',
+  FUNCTION: 'Chức năng',
 
   SWITCH_DEVICE: 'Bật/Tắt thiết bị',
   SWITCH_DEVICE_DESC: 'Ghi nhận quá trình bật/tắt thiết bị',
@@ -175,7 +176,8 @@ const VN = {
   NO_INTERNET_MESSAGE:
     'Vui lòng kiểm tra lại kết nối mạng, ứng dụng chỉ hoạt động khi có kết nối mạng!',
   TIMEOUT_ERR: 'Kết nối thất bại',
-  TIMEOUT_ERR_MESSAGE: 'Kết nối tới máy chủ thất bại, vui lòng thử lại!',
+  TIMEOUT_ERR_MESSAGE:
+    'Kết nối tới máy chủ thất bại, vui lòng thử lại hoặc liên hệ với quản lý thiết bị vật tư!',
   EXIT_CONFIRM: 'Thoát ứng dụng',
   EXIT_CONFIRM_MESSAGE: 'Bạn có chắc chắn là muốn thoát khỏi ứng dụng?',
 

@@ -13,10 +13,10 @@ import { popupActions } from 'src/redux/actions';
 const TextPackage = localization[AppData.language];
 
 const NoInternetPopup = ({ showPopup, hidePopup }) => {
+  const netInfo = useNetInfo();
   const handleRetry = () => {
     hidePopup();
     setTimeout(() => {
-      const netInfo = useNetInfo();
       const disconnected = !netInfo.isConnected || !netInfo.isInternetReachable;
       if (disconnected) {
         showPopup(AppConst.NO_INTERNET_POPUP);
