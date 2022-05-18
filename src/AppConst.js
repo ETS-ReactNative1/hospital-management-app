@@ -1,6 +1,7 @@
 class Constants {
   constructor() {
-    this.SERVER_URL = 'http://171.244.142.172:8000';
+    // this.SERVER_URL = 'http://171.244.142.172:8000';
+    this.SERVER_URL = 'https://hospital-management-2022.herokuapp.com';
 
     let n = 0;
     this.NO_POPUP = n++;

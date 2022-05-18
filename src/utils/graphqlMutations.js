@@ -10,7 +10,7 @@ export const SIGN_IN = gql`
 
 export const SIGN_UP = gql`
   mutation SignUp($email: String!, $password: String!) {
-    signUp(email: $email, password: $password)
+    signUp(userInput: { email: $email, password: $password })
   }
 `;
 
